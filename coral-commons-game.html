@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Coral Commons — A Public Goods Dilemma</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+3:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ocean-deep: #0a1628;
+  --ocean-mid: #0f2847;
+  --ocean-light: #1a4a7a;
+  --coral-warm: #ff6b6b;
+  --coral-pink: #ee5a9a;
+  --coral-orange: #ff8c42;
+  --sand: #f4e4c1;
+  --sand-light: #faf3e3;
+  --factory-grey: #4a5568;
+  --factory-dark: #2d3748;
+  --money-green: #48bb78;
+  --danger-red: #fc5c65;
+  --warning-amber: #f7b731;
+  --text-light: #e2e8f0;
+  --text-muted: #a0aec0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--ocean-deep);
+  color: var(--text-light);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ANIMATED OCEAN BACKGROUND */
+.ocean-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ocean-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: 
+    radial-gradient(ellipse at 30% 50%, rgba(26, 74, 122, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(15, 40, 71, 0.6) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(238, 90, 154, 0.08) 0%, transparent 40%);
+  animation: oceanDrift 20s ease-in-out infinite;
+}
+
+@keyframes oceanDrift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-2%, 1%) rotate(0.5deg); }
+  66% { transform: translate(1%, -1%) rotate(-0.3deg); }
+}
+
+/* BUBBLES */
+.bubbles {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.08);
+  animation: rise linear infinite;
+}
+
+@keyframes rise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+}
+
+/* MAIN CONTAINER */
+.game-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* TITLE SCREEN */
+.title-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.title-screen h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--coral-warm), var(--coral-pink), var(--coral-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.title-screen .subtitle {
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.title-screen .concept-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  border: 1px solid rgba(255,107,107,0.3);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--coral-warm);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.start-btn {
+  padding: 16px 48px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--coral-warm), var(--coral-pink));
+  color: white;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255, 107, 107, 0.3);
+}
+
+/* GAME PANEL */
+.game-panel {
+  display: none;
+  animation: fadeIn 0.8s ease;
+}
+
+.game-panel.active { display: block; }
+
+/* TOP BAR — STATUS */
+.status-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 20px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+}
+
+.stat-card {
+  text-align: center;
+  padding: 12px 8px;
+}
+
+.stat-card .stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.stat-card .stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.stat-card .stat-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.stat-card .stat-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease, background 0.5s ease;
+}
+
+/* ROUND INFO */
+.round-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.round-header .round-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.round-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 8px;
+  color: var(--sand-light);
+}
+
+/* SCENARIO */
+.scenario-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scenario-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(to bottom, var(--coral-warm), var(--coral-pink));
+  border-radius: 4px 0 0 4px;
+}
+
+.scenario-card .scenario-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-light);
+  padding-left: 16px;
+}
+
+.scenario-card .scenario-text em {
+  color: var(--coral-orange);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* STAKEHOLDERS */
+.stakeholder-voices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.voice-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.voice-card .voice-name {
+  font-weight: 700;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.voice-card .voice-quote {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.voice-card.fisher .voice-name { color: var(--ocean-light); }
+.voice-card.worker .voice-name { color: var(--warning-amber); }
+.voice-card.scientist .voice-name { color: var(--money-green); }
+.voice-card.politician .voice-name { color: var(--coral-pink); }
+
+/* CHOICES */
+.choices-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 700px) {
+  .choices-container { grid-template-columns: 1fr; }
+}
+
+.choice-btn {
+  position: relative;
+  padding: 24px;
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  color: var(--text-light);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.choice-btn:hover {
+  border-color: var(--coral-warm);
+  background: rgba(255, 107, 107, 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.choice-btn .choice-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.choice-btn .choice-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.choice-btn .choice-impact {
+  display: flex;
+  gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+.choice-btn .impact-tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+}
+
+.impact-tag.positive { color: var(--money-green); }
+.impact-tag.negative { color: var(--danger-red); }
+.impact-tag.neutral { color: var(--warning-amber); }
+
+/* OUTCOME */
+.outcome-card {
+  display: none;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.6s ease;
+}
+
+.outcome-card.active { display: block; }
+
+.outcome-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  color: var(--sand-light);
+}
+
+.outcome-card .outcome-text {
+  line-height: 1.8;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.outcome-card .poli-sci-note {
+  padding: 16px;
+  background: rgba(72, 187, 120, 0.08);
+  border-left: 3px solid var(--money-green);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.9rem;
+  color: var(--money-green);
+  line-height: 1.6;
+}
+
+.outcome-card .poli-sci-note strong {
+  display: block;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+}
+
+.next-btn {
+  display: none;
+  margin: 0 auto;
+  padding: 14px 40px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--coral-warm);
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--coral-warm);
+  transition: all 0.3s ease;
+}
+
+.next-btn.active { display: block; }
+
+.next-btn:hover {
+  background: var(--coral-warm);
+  color: white;
+}
+
+/* FINALE */
+.finale-panel {
+  display: none;
+  text-align: center;
+  animation: fadeIn 1s ease;
+  padding: 40px 0;
+}
+
+.finale-panel.active { display: block; }
+
+.finale-panel h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  margin-bottom: 16px;
+  color: var(--sand-light);
+}
+
+.finale-panel .final-status {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 700px;
+  margin: 0 auto 32px;
+}
+
+.final-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.final-stat {
+  padding: 20px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.final-stat .fs-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.final-stat .fs-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.lesson-box {
+  max-width: 700px;
+  margin: 0 auto 32px;
+  padding: 28px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  text-align: left;
+}
+
+.lesson-box h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+  color: var(--sand-light);
+}
+
+.lesson-box p {
+  line-height: 1.8;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.lesson-box .concept {
+  display: inline-block;
+  padding: 2px 10px;
+  background: rgba(255,107,107,0.12);
+  border-radius: 4px;
+  color: var(--coral-warm);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.restart-btn {
+  padding: 14px 40px;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--coral-warm), var(--coral-pink));
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255,107,107,0.3);
+}
+
+/* VISUAL REEF */
+.reef-visual {
+  height: 120px;
+  position: relative;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, var(--ocean-mid), var(--ocean-deep));
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.reef-layer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 20px;
+  transition: all 1s ease;
+}
+
+.coral-piece {
+  border-radius: 50% 50% 4px 4px;
+  transition: all 1s ease;
+}
+
+.fish {
+  position: absolute;
+  font-size: 16px;
+  transition: all 2s ease;
+  animation: swim 4s ease-in-out infinite;
+}
+
+@keyframes swim {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(15px); }
+}
+
+.factory-smoke {
+  position: absolute;
+  top: 8px;
+  right: 20px;
+  font-size: 24px;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+/* Attribution */
+.attribution {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.attribution a { color: var(--coral-warm); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="ocean-bg"></div>
+<div class="bubbles" id="bubbles"></div>
+
+<div class="game-container">
+  
+  <!-- TITLE SCREEN -->
+  <div class="title-screen" id="titleScreen">
+    <div class="concept-tag">Public Goods &amp; Collective Action</div>
+    <h1>The Coral<br>Commons</h1>
+    <p class="subtitle">You are the newly elected governor of Nusa Karang, a Pacific island whose economy depends on a coastal reef. A multinational corporation wants to build a processing plant. Your people need jobs. The reef needs to survive. You have 5 rounds.</p>
+    <button class="start-btn" onclick="startGame()">Begin Governing</button>
+  </div>
+
+  <!-- GAME PANEL -->
+  <div class="game-panel" id="gamePanel">
+    
+    <div class="status-bar" id="statusBar">
+      <div class="stat-card">
+        <div class="stat-label">Reef Health</div>
+        <div class="stat-value" id="reefVal" style="color: var(--coral-warm)">100%</div>
+        <div class="stat-bar"><div class="stat-fill" id="reefBar" style="width:100%; background: var(--coral-warm);"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Employment</div>
+        <div class="stat-value" id="empVal" style="color: var(--warning-amber)">42%</div>
+        <div class="stat-bar"><div class="stat-fill" id="empBar" style="width:42%; background: var(--warning-amber);"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Public Approval</div>
+        <div class="stat-value" id="appVal" style="color: var(--money-green)">65%</div>
+        <div class="stat-bar"><div class="stat-fill" id="appBar" style="width:65%; background: var(--money-green);"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Treasury</div>
+        <div class="stat-value" id="treasVal" style="color: var(--sand)">$2.4M</div>
+        <div class="stat-bar"><div class="stat-fill" id="treasBar" style="width:48%; background: var(--sand);"></div></div>
+      </div>
+    </div>
+
+    <div class="reef-visual" id="reefVisual"></div>
+
+    <div class="round-header">
+      <div class="round-label" id="roundLabel">Round 1 of 5</div>
+      <h2 id="roundTitle">Loading...</h2>
+    </div>
+
+    <div class="scenario-card">
+      <div class="scenario-text" id="scenarioText"></div>
+    </div>
+
+    <div class="stakeholder-voices" id="stakeholderVoices"></div>
+
+    <div class="choices-container" id="choicesContainer"></div>
+
+    <div class="outcome-card" id="outcomeCard">
+      <h3 id="outcomeTitle"></h3>
+      <div class="outcome-text" id="outcomeText"></div>
+      <div class="poli-sci-note" id="poliSciNote"></div>
+    </div>
+
+    <button class="next-btn" id="nextBtn" onclick="nextRound()">Continue to Next Round →</button>
+  </div>
+
+  <!-- FINALE -->
+  <div class="finale-panel" id="finalePanel">
+    <h2 id="finaleTitle"></h2>
+    <p class="final-status" id="finaleStatus"></p>
+    <div class="final-stats" id="finalStats"></div>
+    <div class="lesson-box" id="lessonBox"></div>
+    <button class="restart-btn" onclick="location.reload()">Play Again With Different Choices</button>
+  </div>
+
+  <div class="attribution">
+    Built by <a href="#">Claude</a> as a pedagogical demonstration for AI in Social Science Inquiry — Nazarbayev University
+  </div>
+</div>
+
+<script>
+// GAME STATE
+let state = {
+  reef: 100,
+  employment: 42,
+  approval: 65,
+  treasury: 2.4,
+  round: 0,
+  choices: [],
+  pollution: 0,
+  factoryBuilt: false,
+  coralProtection: false,
+  communityFund: false
+};
+
+// BUBBLE GENERATOR
+function createBubbles() {
+  const container = document.getElementById('bubbles');
+  for (let i = 0; i < 15; i++) {
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    const size = Math.random() * 12 + 4;
+    bubble.style.width = size + 'px';
+    bubble.style.height = size + 'px';
+    bubble.style.left = Math.random() * 100 + '%';
+    bubble.style.animationDuration = (Math.random() * 8 + 8) + 's';
+    bubble.style.animationDelay = (Math.random() * 10) + 's';
+    container.appendChild(bubble);
+  }
+}
+createBubbles();
+
+// ROUNDS DATA
+const rounds = [
+  {
+    title: "The Proposal",
+    scenario: `OceanCorp International has approached your government with a proposal: a <em>$50 million chemical processing plant</em> on the coast, promising <em>800 jobs</em> for your island of 12,000 people. The plant will process rare earth minerals shipped from Indonesia. The proposed site is 2km from the reef that sustains your fishing industry and tourist economy. Environmental assessments are "pending."`,
+    voices: [
+      { name: "Maria Chen — Fisher's Union", type: "fisher", quote: "That reef feeds 200 families. If it dies, we have nothing. Those factory jobs won't last forever either." },
+      { name: "Tomas Rai — Unemployed Youth", type: "worker", quote: "Easy for Maria to say, she owns a boat. I've got nothing. My whole generation has nothing. We need those 800 jobs." },
+      { name: "Dr. Anya Lal — Marine Biologist", type: "scientist", quote: "Chemical runoff from rare earth processing is devastating to coral polyps. Even with safeguards, the risk to the reef is substantial." },
+      { name: "James Holt — OceanCorp VP", type: "politician", quote: "We've operated responsibly across 14 countries. We'll invest in local infrastructure and training programs." }
+    ],
+    choices: [
+      {
+        title: "Approve the Plant",
+        desc: "Accept OceanCorp's proposal. The island needs economic development, and the environmental review can happen alongside construction.",
+        impacts: [
+          { label: "Employment +30%", type: "positive" },
+          { label: "Reef −20", type: "negative" },
+          { label: "Treasury +$1.8M", type: "positive" }
+        ],
+        effect: (s) => { s.employment += 30; s.reef -= 20; s.treasury += 1.8; s.approval += 5; s.factoryBuilt = true; s.pollution += 25; },
+        outcome: {
+          title: "Construction Begins",
+          text: "Cranes appear on the coastline within weeks. OceanCorp brings in engineers and begins hiring locally. Unemployment drops sharply. But fishers report unusual sediment clouds near the reef, and Dr. Lal's monitoring stations show a 15% increase in water acidity near the construction site.",
+          concept: "<strong>Political Science Concept: The Tragedy of the Commons</strong> Garrett Hardin (1968) described how individuals acting in rational self-interest can deplete shared resources. The reef is a <em>common-pool resource</em>: non-excludable but rivalrous. Economic development benefits are concentrated (OceanCorp shareholders, employed workers) while environmental costs are diffused across all reef-dependent communities."
+        }
+      },
+      {
+        title: "Reject the Plant",
+        desc: "Protect the reef. The environmental risks are too high and the benefits flow primarily to a foreign corporation.",
+        impacts: [
+          { label: "Reef Stable", type: "positive" },
+          { label: "Employment unchanged", type: "neutral" },
+          { label: "Approval −10", type: "negative" }
+        ],
+        effect: (s) => { s.approval -= 10; s.treasury -= 0.2; },
+        outcome: {
+          title: "OceanCorp Withdraws",
+          text: "OceanCorp issues a terse statement and shifts negotiations to a neighboring island. Local media runs the headline: 'Governor Kills 800 Jobs.' Young people stage a protest outside your office. The fisher's union sends a quiet thank-you letter that nobody publishes.",
+          concept: "<strong>Political Science Concept: Concentrated Benefits vs. Diffused Costs</strong> Mancur Olson's logic of collective action: small groups with concentrated interests (unemployed workers wanting jobs) are better at organizing political pressure than large groups with diffused interests (everyone who benefits from the reef). The fishers' gratitude is real but politically invisible."
+        }
+      },
+      {
+        title: "Conditional Approval",
+        desc: "Approve only with strict environmental monitoring, a $5M environmental bond, and mandatory quarterly reef health reports.",
+        impacts: [
+          { label: "Employment +20%", type: "positive" },
+          { label: "Reef −8", type: "negative" },
+          { label: "Treasury +$1.2M", type: "positive" }
+        ],
+        effect: (s) => { s.employment += 20; s.reef -= 8; s.treasury += 1.2; s.approval += 8; s.factoryBuilt = true; s.pollution += 12; s.coralProtection = true; },
+        outcome: {
+          title: "A Careful Bargain",
+          text: "OceanCorp pushes back on the bond amount but eventually agrees. Construction begins with an environmental officer on site. Employment rises. Dr. Lal is cautiously optimistic about the monitoring framework, though she warns that 'monitoring is not the same as preventing.'",
+          concept: "<strong>Political Science Concept: Regulatory Capture Risk</strong> Regulations look good on paper, but their effectiveness depends entirely on enforcement. George Stigler's theory of regulatory capture warns that over time, the regulated industry often gains influence over its regulators. Your environmental officer is paid by your government, but the information they monitor comes from OceanCorp's own systems."
+        }
+      },
+      {
+        title: "Counter-Propose Eco-Tourism",
+        desc: "Reject the plant but propose a $3M government investment in reef-based eco-tourism infrastructure instead.",
+        impacts: [
+          { label: "Reef +5", type: "positive" },
+          { label: "Employment +8%", type: "positive" },
+          { label: "Treasury −$3M", type: "negative" }
+        ],
+        effect: (s) => { s.reef += 5; s.employment += 8; s.treasury -= 1.5; s.approval -= 2; },
+        outcome: {
+          title: "A Long Bet",
+          text: "Critics call it naive. 'You can't eat coral,' says the opposition leader. But dive shops open, a marine research station breaks ground, and international conservation NGOs take notice. The jobs come slowly, maybe 80 in the first year, not 800. The reef, meanwhile, thrives.",
+          concept: "<strong>Political Science Concept: Time Horizon Problem</strong> Democratic leaders face pressure to deliver results within election cycles. Eco-tourism takes 3-5 years to generate the same employment as a factory that opens in 6 months. The economically superior long-term choice is politically inferior in the short term. This asymmetry systematically biases democratic decision-making toward extractive industries."
+        }
+      }
+    ]
+  },
+  {
+    title: "The Bleaching Event",
+    scenario: `Six months into your term, ocean temperatures spike. Satellite imagery shows <em>30% of the reef is bleaching</em>. Scientists say coral can recover from bleaching if other stressors are minimized, but combined stress from warming water AND ${state.factoryBuilt ? 'industrial runoff' : 'coastal development'} could push it past a <em>tipping point</em>. Public attention is suddenly focused on the reef.`,
+    voices: [
+      { name: "Dr. Anya Lal — Marine Biologist", type: "scientist", quote: "Bleaching is reversible IF we reduce every other stressor immediately. This is the window. It won't stay open long." },
+      { name: "Ray Simmons — OceanCorp Site Manager", type: "politician", quote: "Our operations are within legal limits. Bleaching is caused by climate change, not by us. Shutting us down won't save the reef." },
+      { name: "Lena Voss — Tourism Board", type: "fisher", quote: "Cancellations are pouring in. If divers hear the reef is dying, we lose next year's bookings entirely." },
+      { name: "Tomas Rai — Now Employed", type: "worker", quote: "I finally have a paycheck. My sister starts next month. Please don't take this away." }
+    ],
+    getChoices: function() {
+      let choices = [
+        {
+          title: "Emergency Reef Protection Zone",
+          desc: "Declare a 5km no-discharge zone around the reef. Factories must halt waste output for 90 days. Fishing restricted in bleached areas.",
+          impacts: [
+            { label: "Reef +15", type: "positive" },
+            { label: "Employment −10%", type: "negative" },
+            { label: "Approval varies", type: "neutral" }
+          ],
+          effect: (s) => { s.reef += 15; s.employment -= 10; s.approval += 3; s.pollution -= 15; s.coralProtection = true; },
+          outcome: {
+            title: "The Reef Breathes",
+            text: "Factory workers are furious. Fishers are frustrated. But within weeks, the bleaching slows. Dr. Lal's team documents new coral growth at the reef margins. International media covers the story: 'Small Island Takes Bold Stand for Reef.' Eco-tourism bookings for next year spike.",
+            concept: "<strong>Political Science Concept: The Precautionary Principle</strong> When scientific evidence suggests serious or irreversible damage, lack of complete certainty should not delay protective action. This principle, enshrined in the 1992 Rio Declaration, directly conflicts with economic logic that demands proven harm before restricting profitable activity. Your decision forced a choice between two legitimate frameworks."
+          }
+        },
+        {
+          title: "Fund Scientific Intervention",
+          desc: "Invest $800K in coral restoration: heat-resistant coral transplants, artificial reef structures, and water quality monitoring.",
+          impacts: [
+            { label: "Reef +8", type: "positive" },
+            { label: "Treasury −$0.8M", type: "negative" },
+            { label: "Employment +3%", type: "positive" }
+          ],
+          effect: (s) => { s.reef += 8; s.treasury -= 0.8; s.employment += 3; s.approval += 5; },
+          outcome: {
+            title: "Technology to the Rescue?",
+            text: "Scientists begin transplanting heat-resistant coral varieties. It creates a handful of research jobs and great press. But Dr. Lal privately warns: 'We're putting bandaids on a patient while someone else keeps poisoning the water supply.' The intervention helps, but doesn't address the root stressor.",
+            concept: "<strong>Political Science Concept: Technological Fix vs. Structural Change</strong> Governments often prefer technological solutions because they avoid the political cost of restricting powerful actors. But technical fixes that don't address root causes create a 'treadmill of production' (Schnaiberg, 1980) — we innovate to fix damage while continuing the activity that causes it."
+          }
+        },
+        {
+          title: "Do Nothing New",
+          desc: "The bleaching is a natural event caused by global ocean temperatures, not local policy. Existing regulations are sufficient.",
+          impacts: [
+            { label: "Reef −15", type: "negative" },
+            { label: "Employment stable", type: "neutral" },
+            { label: "Treasury stable", type: "neutral" }
+          ],
+          effect: (s) => { s.reef -= 15; s.approval -= 5; s.pollution += 5; },
+          outcome: {
+            title: "The Window Closes",
+            text: "OceanCorp's PR team amplifies the 'climate change, not us' message. Local media splits. Over the next two months, bleaching spreads to 50% of the reef. Tourist operators quietly begin looking at other career options. Dr. Lal publishes a paper titled 'The Preventable Collapse of the Nusa Karang Reef System.'",
+            concept: "<strong>Political Science Concept: Strategic Blame Displacement</strong> OceanCorp's argument is technically partially true — warming IS a global problem. But attributing local damage entirely to global causes is a documented corporate strategy for avoiding responsibility. This mirrors fossil fuel companies funding climate denial: the argument isn't 'there's no problem,' it's 'the problem isn't us specifically.'"
+          }
+        }
+      ];
+      return choices;
+    }
+  },
+  {
+    title: "The Petition",
+    scenario: `A coalition of fisher families, dive operators, and environmental activists has gathered <em>3,400 signatures</em> (28% of the island population) demanding a binding referendum on industrial activity near the reef. Meanwhile, OceanCorp has quietly donated $200K to the island's youth sports program and is funding scholarships for workers' children.`,
+    voices: [
+      { name: "Maria Chen — Fisher's Union", type: "fisher", quote: "Let the people decide. That's democracy. Or is democracy only for election day?" },
+      { name: "James Holt — OceanCorp VP", type: "politician", quote: "A referendum creates investment uncertainty. We may need to reconsider our long-term commitment to this island." },
+      { name: "Prof. K. Naidu — Constitutional Law", type: "scientist", quote: "The petition meets your legal threshold. Refusing it would be constitutionally questionable and politically explosive." },
+      { name: "Your Chief of Staff", type: "worker", quote: "If the referendum happens and the plant wins, you're covered politically. If the plant loses, OceanCorp leaves and takes the jobs. Either way, the decision isn't yours anymore." }
+    ],
+    getChoices: function() {
+      return [
+        {
+          title: "Allow the Referendum",
+          desc: "Honor the petition. Let the people vote on whether industrial activity within 5km of the reef should be permanently banned.",
+          impacts: [
+            { label: "Approval +15", type: "positive" },
+            { label: "Uncertainty high", type: "neutral" },
+            { label: "Democracy wins", type: "positive" }
+          ],
+          effect: (s) => {
+            s.approval += 15;
+            if (s.reef < 60) { s.factoryBuilt = false; s.employment -= 15; s.reef += 10; s.pollution -= 20; }
+            else { s.employment += 5; s.reef -= 5; }
+          },
+          outcome: {
+            title: s => s.reef < 60 ? "The People Choose the Reef" : "The People Choose Jobs",
+            text: s => s.reef < 60 
+              ? "Voter turnout: 71%. Result: 58% vote to ban industrial activity near the reef. OceanCorp begins decommissioning. Workers are devastated. But the democratic legitimacy of the decision is unassailable. You announce a transition fund for displaced workers."
+              : "Voter turnout: 71%. Result: 54% vote to allow continued industrial activity with enhanced monitoring. The reef coalition is disappointed but accepts the result. OceanCorp frames it as a mandate. Dr. Lal warns that democratic legitimacy doesn't change water chemistry.",
+            concept: "<strong>Political Science Concept: Direct vs. Representative Democracy</strong> Referendums transfer decisions from elected representatives to citizens. This can increase legitimacy but also creates problems: complex scientific-economic tradeoffs reduced to yes/no votes; well-funded campaigns distort information; and outcomes can reflect who mobilized rather than what's optimal. Robert Dahl's polyarchy model asks: does this process create genuine understanding, or merely aggregate uninformed preferences?"
+          }
+        },
+        {
+          title: "Reject and Compromise",
+          desc: "The referendum is legally non-binding. Instead, create a Reef Management Commission with seats for fishers, OceanCorp, scientists, and elected officials.",
+          impacts: [
+            { label: "Approval −5", type: "negative" },
+            { label: "Reef +5", type: "positive" },
+            { label: "Stability", type: "positive" }
+          ],
+          effect: (s) => { s.approval -= 5; s.reef += 5; s.employment += 3; s.treasury -= 0.3; s.communityFund = true; },
+          outcome: {
+            title: "Managed Tension",
+            text: "Protesters accuse you of suppressing democracy. OceanCorp praises your 'pragmatic leadership.' The Commission holds its first meeting. Maria Chen and James Holt sit across a table from each other for the first time. It's tense. But they're talking.",
+            concept: "<strong>Political Science Concept: Deliberative Democracy vs. Aggregative Democracy</strong> Jürgen Habermas argued that democracy's value lies not in counting votes but in the quality of public deliberation that precedes decisions. Your Commission is a deliberative body: it forces stakeholders to justify their positions to each other. This is slower than a referendum but may produce decisions that stakeholders can live with, even when they lose."
+          }
+        },
+        {
+          title: "Delay Indefinitely",
+          desc: "Acknowledge the petition but commission a 12-month 'comprehensive impact study' before any referendum can proceed.",
+          impacts: [
+            { label: "Approval −12", type: "negative" },
+            { label: "Nothing changes", type: "neutral" },
+            { label: "OceanCorp relieved", type: "neutral" }
+          ],
+          effect: (s) => { s.approval -= 12; s.pollution += 5; s.reef -= 5; },
+          outcome: {
+            title: "The Bureaucratic Pocket Veto",
+            text: "Everyone sees through it. The coalition calls it 'democracy theater.' Local trust in government drops. OceanCorp is quietly delighted. The study will take a year; by then, the plant will be fully operational and 800 families will depend on it. Reversibility shrinks with every month.",
+            concept: "<strong>Political Science Concept: Status Quo Bias and Path Dependency</strong> Delay is never neutral. In situations with ongoing environmental damage, maintaining the status quo IS a decision — it's choosing to allow continued degradation while studying it. Path dependency (Pierson, 2000) means that the longer an industry operates, the higher the political cost of removing it. Delay systematically favors the existing power arrangement."
+          }
+        }
+      ];
+    }
+  },
+  {
+    title: "The Collapse Warning",
+    scenario: `Dr. Lal's team publishes an emergency assessment: the reef has hit a critical threshold. If reef health drops below <em>30%</em>, recovery becomes functionally impossible within human timescales. Current trajectory reaches that point in <em>18 months</em>. The paper gets international coverage. A UN Special Rapporteur requests to visit the island.`,
+    voices: [
+      { name: "Dr. Anya Lal", type: "scientist", quote: "I need to be very clear: below 30%, the reef becomes a geological feature, not a living ecosystem. There is no technology that reverses this." },
+      { name: "UN Rapporteur", type: "politician", quote: "Small island developing states face the sharpest edge of the climate-industry nexus. The world is watching how you handle this." },
+      { name: "OceanCorp Board (leaked memo)", type: "worker", quote: "If the plant is closed, write-down is $35M. Litigation budget authorized. Local PR campaign: emphasize jobs, community investment, scholarships." },
+      { name: "Opposition Leader", type: "fisher", quote: "Whether you save the reef or save the jobs, half this island is going to hate you. Welcome to governing." }
+    ],
+    getChoices: function() {
+      return [
+        {
+          title: "Phase Out the Plant Over 3 Years",
+          desc: "Announce a managed transition: plant operations wind down as eco-tourism and sustainable fishing infrastructure scales up. Worker retraining fund of $2M.",
+          impacts: [
+            { label: "Reef +10", type: "positive" },
+            { label: "Employment −8%", type: "negative" },
+            { label: "Treasury −$2M", type: "negative" }
+          ],
+          effect: (s) => { s.reef += 10; s.employment -= 8; s.treasury -= 1.2; s.approval += 7; s.pollution -= 15; },
+          outcome: {
+            title: "The Managed Retreat",
+            text: "OceanCorp threatens litigation, then quietly accepts when the UN Rapporteur's report generates international attention. The 3-year timeline gives workers space to retrain. Some fishers return to expanded marine cooperatives. It's not painless. Tomas Rai, now a shift supervisor, signs up for a dive instructor certification 'just in case.'",
+            concept: "<strong>Political Science Concept: Just Transition</strong> The concept of 'just transition' originated in labor movements: workers in harmful industries should not bear the cost of environmental protection. The International Labour Organization frames this as a policy design challenge: can you achieve environmental goals while providing decent work and social protection? Your retraining fund attempts this, but $2M for 800 workers is $2,500 per person. Is that just?"
+          }
+        },
+        {
+          title: "Immediate Shutdown",
+          desc: "The science is unambiguous. Shut the plant now. Full stop. Deal with the economic fallout after.",
+          impacts: [
+            { label: "Reef +20", type: "positive" },
+            { label: "Employment −25%", type: "negative" },
+            { label: "Approval −20", type: "negative" }
+          ],
+          effect: (s) => { s.reef += 20; s.employment -= 25; s.treasury -= 0.5; s.approval -= 20; s.factoryBuilt = false; s.pollution -= 30; },
+          outcome: {
+            title: "The Hammer Falls",
+            text: "Protests. Lawsuits. Families losing income overnight. It's brutal. But within three months, water quality metrics improve dramatically. Coral scientists call it 'the fastest reef recovery we've documented.' International conservation funding floods in. The human cost is real and immediate. The ecological benefit is real and slow. You may not survive the next election.",
+            concept: "<strong>Political Science Concept: Emergency Powers and Democratic Legitimacy</strong> Carl Schmitt argued that sovereignty reveals itself in the exception — who decides when normal rules are suspended? Your shutdown bypasses normal consultative processes. It may be scientifically correct. But if democratic leaders can override democratic processes when they believe the science demands it, where is the limiting principle? This tension between expert knowledge and democratic mandate has no clean resolution."
+          }
+        },
+        {
+          title: "Seek International Partnership",
+          desc: "Pitch the reef as a global heritage site. Request international funding to compensate OceanCorp for closure and fund worker transition.",
+          impacts: [
+            { label: "Reef +5 (slow)", type: "positive" },
+            { label: "Treasury +$1M (if approved)", type: "positive" },
+            { label: "Timeline: uncertain", type: "neutral" }
+          ],
+          effect: (s) => { s.reef += 5; s.treasury += 0.5; s.approval += 3; s.pollution -= 5; },
+          outcome: {
+            title: "The Multilateral Gambit",
+            text: "The UN Fast-Track Heritage Application takes 8-14 months. A Nordic climate fund offers bridge financing of $1M. It helps, but the reef can't wait for committee timelines. Dr. Lal: 'International institutions were designed for problems that move at the speed of diplomacy. Coral bleaching moves at the speed of chemistry.'",
+            concept: "<strong>Political Science Concept: Scale Mismatch in Governance</strong> Environmental problems often exist at scales that don't match existing governance structures. The reef is local. Climate change is global. The corporation is multinational. The governance tools are national. Elinor Ostrom (Nobel 2009) showed that commons can be successfully managed, but only when the governance scale matches the resource scale. Your reef falls between all available jurisdictions."
+          }
+        }
+      ];
+    }
+  },
+  {
+    title: "Legacy",
+    scenario: `Your term ends in 6 months. The decisions you've made have reshaped Nusa Karang. <em>What final act do you take to lock in your vision?</em> Whatever you choose will be difficult for your successor to reverse. This is your chance to shape the island's trajectory beyond your time in office.`,
+    voices: [
+      { name: "Your Advisor", type: "politician", quote: "Constitutional amendments are hard to undo. Contracts are hard to break. Infrastructure changes the landscape. Choose something permanent." },
+      { name: "Dr. Anya Lal", type: "scientist", quote: "Whatever you build in law, make sure the reef has legal standing. Not just protections — standing. The ability to be represented in court." },
+      { name: "Maria Chen", type: "fisher", quote: "My grandmother fished this reef. I want my granddaughter to fish it too. Make it so." },
+      { name: "Tomas Rai", type: "worker", quote: "I want my kids to have options. Not just the reef. Not just the factory. Options." }
+    ],
+    getChoices: function() {
+      return [
+        {
+          title: "Constitutional Reef Protection",
+          desc: "Amend the constitution to grant the reef legal personhood and rights to ecological integrity, enforceable in court.",
+          impacts: [
+            { label: "Reef Protected", type: "positive" },
+            { label: "Investment caution", type: "negative" },
+            { label: "Legacy: permanent", type: "positive" }
+          ],
+          effect: (s) => { s.reef += 10; s.approval += 10; s.employment -= 3; },
+          outcome: {
+            title: "Rights of Nature",
+            text: "Nusa Karang becomes the smallest jurisdiction in the world to grant legal personhood to a natural system. Ecuador did it in 2008. New Zealand did it for the Whanganui River in 2017. Your reef can now be represented in court by any citizen. Future governors cannot simply override it. Dr. Lal cries at the signing ceremony.",
+            concept: "<strong>Political Science Concept: Rights of Nature and Legal Personhood</strong> Granting legal personhood to natural entities transforms environmental protection from policy preference (reversible by the next government) to constitutional right (requiring supermajority to overturn). Christopher Stone's 'Should Trees Have Standing?' (1972) argued that natural objects need legal rights because their human defenders are always outspent by their destroyers. Your amendment attempts to structurally rebalance this asymmetry."
+          }
+        },
+        {
+          title: "Sovereign Wealth Fund",
+          desc: "Create a permanent fund from reef-related revenues (tourism taxes, fishing licenses, carbon credits) that invests in both ecological maintenance and job diversification.",
+          impacts: [
+            { label: "Treasury structured", type: "positive" },
+            { label: "Employment +5%", type: "positive" },
+            { label: "Reef +5", type: "positive" }
+          ],
+          effect: (s) => { s.reef += 5; s.employment += 5; s.treasury += 0.5; s.approval += 8; },
+          outcome: {
+            title: "The Permanent Fund",
+            text: "Modeled on Norway's petroleum fund and Alaska's Permanent Fund, you create a financial structure that ties the island's long-term wealth to the reef's health. When the reef thrives, tourism revenue feeds the fund. When the fund grows, it invests in education and job diversification. The incentive structure aligns economics with ecology for the first time.",
+            concept: "<strong>Political Science Concept: Institutional Design for Sustainability</strong> Elinor Ostrom identified that successful commons management requires institutions that align individual incentives with collective outcomes. Your fund does this by making reef health directly profitable for the treasury. It converts a public good (the reef) into a productive asset with clear economic returns, solving the free-rider problem by making everyone a stakeholder in preservation."
+          }
+        },
+        {
+          title: "Education Mandate",
+          desc: "Establish a mandatory Marine Ecology and Environmental Governance curriculum in all island schools, funded in perpetuity by a small tourism levy.",
+          impacts: [
+            { label: "Long-term change", type: "positive" },
+            { label: "Reef: indirect benefit", type: "positive" },
+            { label: "Costs low", type: "positive" }
+          ],
+          effect: (s) => { s.approval += 5; s.reef += 3; s.treasury -= 0.2; },
+          outcome: {
+            title: "The Longest Game",
+            text: "The curriculum won't save the reef this year or next. But in 15 years, every adult on this island will understand coral biology, commons governance, and the political economy of natural resources. They'll be harder to mislead. They'll ask better questions. They'll vote differently. The opposition calls it 'indoctrination.' You call it 'political science education.'",
+            concept: "<strong>Political Science Concept: Civic Capacity and Informed Self-Governance</strong> John Dewey argued that democracy requires educated citizens capable of understanding the consequences of collective choices. Environmental governance fails not because people are selfish but because the systems are complex and the information is asymmetric. Your curriculum attacks the root cause of poor environmental governance: the gap between the complexity of the problem and the public's capacity to engage with it."
+          }
+        }
+      ];
+    }
+  }
+];
+
+// RENDER FUNCTIONS
+function updateStats() {
+  state.reef = Math.max(0, Math.min(100, state.reef));
+  state.employment = Math.max(0, Math.min(100, state.employment));
+  state.approval = Math.max(0, Math.min(100, state.approval));
+  state.treasury = Math.max(0, state.treasury);
+
+  document.getElementById('reefVal').textContent = Math.round(state.reef) + '%';
+  document.getElementById('reefBar').style.width = state.reef + '%';
+  document.getElementById('reefBar').style.background = state.reef > 60 ? 'var(--coral-warm)' : state.reef > 30 ? 'var(--warning-amber)' : 'var(--danger-red)';
+
+  document.getElementById('empVal').textContent = Math.round(state.employment) + '%';
+  document.getElementById('empBar').style.width = state.employment + '%';
+
+  document.getElementById('appVal').textContent = Math.round(state.approval) + '%';
+  document.getElementById('appBar').style.width = state.approval + '%';
+  document.getElementById('appBar').style.background = state.approval > 50 ? 'var(--money-green)' : 'var(--danger-red)';
+
+  document.getElementById('treasVal').textContent = '$' + state.treasury.toFixed(1) + 'M';
+  document.getElementById('treasBar').style.width = Math.min(100, (state.treasury / 5) * 100) + '%';
+
+  renderReefVisual();
+}
+
+function renderReefVisual() {
+  const container = document.getElementById('reefVisual');
+  container.innerHTML = '';
+  
+  const reefLayer = document.createElement('div');
+  reefLayer.className = 'reef-layer';
+  
+  const coralCount = 20;
+  const colors = ['#ff6b6b', '#ee5a9a', '#ff8c42', '#f7b731', '#48bb78', '#a78bfa'];
+  const bleachedColors = ['#d4d4d4', '#e5e5e5', '#c4c4c4', '#b8b8b8'];
+  
+  for (let i = 0; i < coralCount; i++) {
+    const coral = document.createElement('div');
+    coral.className = 'coral-piece';
+    const height = 15 + Math.random() * 40;
+    const width = 8 + Math.random() * 20;
+    const bleachChance = (100 - state.reef) / 100;
+    const isBleached = Math.random() < bleachChance;
+    const isDead = state.reef < 30 && Math.random() < 0.5;
+    
+    coral.style.height = (isDead ? height * 0.3 : height) + 'px';
+    coral.style.width = width + 'px';
+    coral.style.background = isDead ? '#555' : isBleached ? bleachedColors[Math.floor(Math.random() * bleachedColors.length)] : colors[Math.floor(Math.random() * colors.length)];
+    coral.style.opacity = isDead ? 0.4 : isBleached ? 0.6 : 0.9;
+    reefLayer.appendChild(coral);
+  }
+  
+  container.appendChild(reefLayer);
+  
+  // Fish
+  const fishCount = Math.floor(state.reef / 15);
+  const fishEmojis = ['🐠', '🐟', '🐡', '🦈'];
+  for (let i = 0; i < fishCount; i++) {
+    const fish = document.createElement('div');
+    fish.className = 'fish';
+    fish.textContent = fishEmojis[Math.floor(Math.random() * fishEmojis.length)];
+    fish.style.top = (15 + Math.random() * 50) + '%';
+    fish.style.left = (10 + Math.random() * 80) + '%';
+    fish.style.animationDelay = (Math.random() * 3) + 's';
+    container.appendChild(fish);
+  }
+  
+  // Factory smoke
+  if (state.factoryBuilt) {
+    const smoke = document.createElement('div');
+    smoke.className = 'factory-smoke';
+    smoke.textContent = '🏭';
+    smoke.style.opacity = Math.min(1, state.pollution / 30);
+    container.appendChild(smoke);
+  }
+}
+
+function renderRound() {
+  const round = rounds[state.round];
+  document.getElementById('roundLabel').textContent = `Round ${state.round + 1} of 5`;
+  document.getElementById('roundTitle').textContent = round.title;
+  document.getElementById('scenarioText').innerHTML = round.scenario;
+  
+  // Voices
+  const voicesContainer = document.getElementById('stakeholderVoices');
+  voicesContainer.innerHTML = '';
+  round.voices.forEach(v => {
+    voicesContainer.innerHTML += `
+      <div class="voice-card ${v.type}">
+        <div class="voice-name">${v.name}</div>
+        <div class="voice-quote">"${v.quote}"</div>
+      </div>
+    `;
+  });
+  
+  // Choices
+  const choices = round.choices || round.getChoices();
+  const choicesContainer = document.getElementById('choicesContainer');
+  choicesContainer.innerHTML = '';
+  choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `
+      <div class="choice-title">${c.title}</div>
+      <div class="choice-desc">${c.desc}</div>
+      <div class="choice-impact">
+        ${c.impacts.map(imp => `<span class="impact-tag ${imp.type}">${imp.label}</span>`).join('')}
+      </div>
+    `;
+    btn.onclick = () => makeChoice(i);
+    choicesContainer.appendChild(btn);
+  });
+  
+  // Hide outcome
+  document.getElementById('outcomeCard').classList.remove('active');
+  document.getElementById('nextBtn').classList.remove('active');
+}
+
+function makeChoice(index) {
+  const round = rounds[state.round];
+  const choices = round.choices || round.getChoices();
+  const choice = choices[index];
+  
+  // Apply effects
+  choice.effect(state);
+  state.choices.push({ round: state.round, choice: choice.title });
+  
+  updateStats();
+  
+  // Disable choice buttons
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.4';
+  });
+  document.querySelectorAll('.choice-btn')[index].style.opacity = '1';
+  document.querySelectorAll('.choice-btn')[index].style.borderColor = 'var(--coral-warm)';
+  
+  // Show outcome
+  const outcome = choice.outcome;
+  document.getElementById('outcomeTitle').textContent = typeof outcome.title === 'function' ? outcome.title(state) : outcome.title;
+  document.getElementById('outcomeText').textContent = typeof outcome.text === 'function' ? outcome.text(state) : outcome.text;
+  document.getElementById('poliSciNote').innerHTML = outcome.concept;
+  document.getElementById('outcomeCard').classList.add('active');
+  document.getElementById('nextBtn').classList.add('active');
+  
+  document.getElementById('outcomeCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function nextRound() {
+  state.round++;
+  // Natural reef degradation per round
+  if (state.factoryBuilt) state.reef -= 5;
+  state.reef -= 2; // Climate baseline
+  state.treasury += 0.3; // Base tax revenue
+  
+  if (state.round >= 5) {
+    showFinale();
+  } else {
+    renderRound();
+    updateStats();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function showFinale() {
+  document.getElementById('gamePanel').classList.remove('active');
+  const finale = document.getElementById('finalePanel');
+  finale.classList.add('active');
+  
+  let title, status;
+  if (state.reef >= 70) {
+    title = "The Reef Endures";
+    status = "Nusa Karang's reef survived your tenure. It's not pristine, but it's alive. The ecosystem that sustained your island's identity and livelihood will continue to do so. Future generations will inherit a living reef and the governance structures you built to protect it.";
+  } else if (state.reef >= 40) {
+    title = "A Fragile Balance";
+    status = "The reef is damaged but recoverable. Your decisions prevented collapse but didn't prevent significant degradation. The next governor inherits a system under stress — whether it recovers or declines depends on the institutional frameworks you left behind.";
+  } else {
+    title = "The Reef Falls Silent";
+    status = "The reef has crossed the tipping point. Recovery within human timescales is now impossible. Nusa Karang's identity, its fishing culture, its tourism economy, its biodiversity — all of it built on a living system that no longer lives. The factories may still run. The reef will not.";
+  }
+  
+  document.getElementById('finaleTitle').textContent = title;
+  document.getElementById('finaleStatus').textContent = status;
+  
+  document.getElementById('finalStats').innerHTML = `
+    <div class="final-stat">
+      <div class="fs-label">Final Reef Health</div>
+      <div class="fs-value" style="color: ${state.reef > 60 ? 'var(--coral-warm)' : state.reef > 30 ? 'var(--warning-amber)' : 'var(--danger-red)'}">${Math.round(state.reef)}%</div>
+    </div>
+    <div class="final-stat">
+      <div class="fs-label">Final Employment</div>
+      <div class="fs-value" style="color: var(--warning-amber)">${Math.round(state.employment)}%</div>
+    </div>
+    <div class="final-stat">
+      <div class="fs-label">Final Approval</div>
+      <div class="fs-value" style="color: ${state.approval > 50 ? 'var(--money-green)' : 'var(--danger-red)'}">${Math.round(state.approval)}%</div>
+    </div>
+    <div class="final-stat">
+      <div class="fs-label">Treasury</div>
+      <div class="fs-value" style="color: var(--sand)">$${state.treasury.toFixed(1)}M</div>
+    </div>
+  `;
+  
+  document.getElementById('lessonBox').innerHTML = `
+    <h3>What This Game Teaches</h3>
+    <p>Every decision you made involved <span class="concept">tradeoffs that cannot be optimized away</span>. There was no choice that made everyone better off. This is the fundamental insight of public goods theory: when a resource is shared, individual rationality and collective rationality diverge.</p>
+    <p>The concepts you encountered — <span class="concept">Tragedy of the Commons</span>, <span class="concept">Collective Action Problems</span>, <span class="concept">Regulatory Capture</span>, <span class="concept">Time Horizon Mismatches</span>, <span class="concept">Just Transition</span>, <span class="concept">Rights of Nature</span> — are not abstract theories. They are the actual frameworks that real policymakers use when facing exactly these dilemmas.</p>
+    <p>The most important thing this game cannot simulate: <span class="concept">the people are real</span>. Maria Chen's family has fished that reef for generations. Tomas Rai's paycheck feeds real children. Dr. Lal's science describes real chemistry. No game, and no AI, can hold the full weight of those realities. But understanding the structures that shape their choices is the beginning of governing well.</p>
+    <h3 style="margin-top: 20px;">Your Decisions</h3>
+    <p>${state.choices.map((c, i) => `<strong>Round ${i+1}:</strong> ${c.choice}`).join('<br>')}</p>
+    <p style="margin-top: 16px; color: var(--coral-warm);">Would different choices have produced a better outcome? Play again and find out.</p>
+  `;
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startGame() {
+  document.getElementById('titleScreen').style.display = 'none';
+  document.getElementById('gamePanel').classList.add('active');
+  renderRound();
+  updateStats();
+}
+</script>
+</body>
+</html>
