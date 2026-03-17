@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IR Tech Governance Simulation — [Your Scenario]</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c1117;
+    --surface: #151c25;
+    --surface-hover: #1a232e;
+    --border: #222d3a;
+    --text: #c8cfd8;
+    --text-dim: #6b7a8d;
+    --text-bright: #e8ecf0;
+    --accent-us: #4a90d9;
+    --accent-us-bg: rgba(74,144,217,0.1);
+    --accent-cn: #d94a4a;
+    --accent-cn-bg: rgba(217,74,74,0.1);
+    --accent-eu: #5ab88f;
+    --accent-eu-bg: rgba(90,184,143,0.1);
+    --gold: #d4a843;
+    --gold-bg: rgba(212,168,67,0.1);
+    --warning: #d97a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 50px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 40px;
+    right: 40px;
+    height: 1px;
+    background: linear-gradient(to right, var(--accent-us), var(--accent-cn), var(--accent-eu));
+    opacity: 0.4;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .header-label {
+    font-size: 0.7em;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4em;
+    font-weight: 800;
+    color: var(--text-bright);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .header .subtitle {
+    color: var(--text-dim);
+    font-size: 1em;
+    max-width: 650px;
+    line-height: 1.7;
+  }
+  .header .student-info {
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: var(--text-dim);
+  }
+  .header .student-info span { color: var(--gold); }
+
+  /* INSTRUCTION */
+  .instruction {
+    max-width: 1100px;
+    margin: 30px auto 0;
+    padding: 0 40px;
+  }
+  .instruction-box {
+    background: var(--gold-bg);
+    border: 1px solid rgba(212,168,67,0.2);
+    border-radius: 8px;
+    padding: 18px 22px;
+    font-size: 0.88em;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .instruction-box strong { color: var(--gold); }
+
+  /* MAIN LAYOUT */
+  .game-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+  }
+
+  /* SIDEBAR - STATE DASHBOARD */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .state-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .state-card.active { border-color: var(--gold); }
+  .state-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .state-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .us .state-dot { background: var(--accent-us); }
+  .cn .state-dot { background: var(--accent-cn); }
+  .eu .state-dot { background: var(--accent-eu); }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85em;
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--text-dim); }
+  .stat-value { font-weight: 600; color: var(--text-bright); }
+  .stat-bar {
+    width: 60px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-left: 8px;
+  }
+  .stat-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s;
+  }
+  .us .stat-fill { background: var(--accent-us); }
+  .cn .stat-fill { background: var(--accent-cn); }
+  .eu .stat-fill { background: var(--accent-eu); }
+
+  .round-indicator {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    text-align: center;
+  }
+  .round-label {
+    font-size: 0.7em;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .round-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2em;
+    font-weight: 800;
+    color: var(--gold);
+  }
+  .round-total {
+    font-size: 0.85em;
+    color: var(--text-dim);
+  }
+
+  /* MAIN PANEL */
+  .main-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .scenario-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+  }
+  .scenario-label {
+    font-size: 0.7em;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .scenario-box h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4em;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+  }
+  .scenario-box p {
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 0.95em;
+  }
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .choice-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-family: 'Source Sans 3', sans-serif;
+    color: var(--text);
+  }
+  .choice-btn:hover {
+    background: var(--surface-hover);
+    border-color: var(--gold);
+    transform: translateX(4px);
+  }
+  .choice-btn h4 {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+  .choice-btn p {
+    font-size: 0.85em;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .choice-btn .consequence {
+    margin-top: 8px;
+    font-size: 0.8em;
+    color: var(--warning);
+    font-weight: 500;
+    display: none;
+  }
+
+  /* OUTCOME */
+  .outcome-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    display: none;
+  }
+  .outcome-box.visible { display: block; }
+  .outcome-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2em;
+    color: var(--text-bright);
+    margin-bottom: 12px;
+  }
+  .outcome-box p {
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 0.93em;
+    margin-bottom: 12px;
+  }
+  .stat-change {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin: 3px 4px 3px 0;
+  }
+  .stat-change.positive { background: rgba(90,184,143,0.15); color: var(--accent-eu); }
+  .stat-change.negative { background: rgba(217,74,74,0.15); color: var(--accent-cn); }
+  .stat-change.neutral { background: rgba(212,168,67,0.15); color: var(--gold); }
+
+  .next-btn {
+    margin-top: 16px;
+    padding: 12px 28px;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .next-btn:hover { opacity: 0.85; }
+
+  /* DESIGN DOC */
+  .design-doc {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+  }
+  .design-doc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4em;
+    color: var(--text-bright);
+    margin-bottom: 20px;
+  }
+  .design-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .design-section h3 {
+    font-size: 0.95em;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .design-section p {
+    color: var(--text-dim);
+    font-size: 0.9em;
+    line-height: 1.8;
+  }
+
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 30px 40px;
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 768px) {
+    .game-container { grid-template-columns: 1fr; }
+    .header { padding: 30px 20px; }
+    .header h1 { font-size: 1.7em; }
+    .game-container, .design-doc, .instruction { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-label">Interactive Simulation</div>
+    <h1>The Semiconductor Chokepoint</h1>
+    <p class="subtitle">
+      A three-actor simulation of strategic competition over advanced chip manufacturing. You play as the United States. China and the EU respond based on modeled incentive structures.
+    </p>
+    <div class="student-info">
+      <span>Student Name</span> · Science &amp; Technology in IR · Fall 2026 · Nazarbayev University
+    </div>
+  </div>
+</div>
+
+<div class="instruction">
+  <div class="instruction-box">
+    <strong>Template instructions:</strong> This is a starter simulation with one playable round. Your assignment is to expand it to 4-5 rounds with branching consequences. Modify the states, stats, scenarios, choices, and outcomes to model your chosen tech governance dilemma. The design document at the bottom is where you explain <em>why</em> you modeled incentives the way you did. Claude builds the code; you design the logic.
+  </div>
+</div>
+
+<div class="game-container">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="round-indicator">
+      <div class="round-label">Round</div>
+      <div class="round-number" id="roundNum">1</div>
+      <div class="round-total">of 5</div>
+    </div>
+
+    <div class="state-card us active">
+      <div class="state-name"><span class="state-dot"></span> United States</div>
+      <div class="stat-row">
+        <span class="stat-label">Tech Dominance</span>
+        <span class="stat-value" id="us-tech">85</span>
+        <div class="stat-bar"><div class="stat-fill" id="us-tech-bar" style="width:85%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Alliance Trust</span>
+        <span class="stat-value" id="us-alliance">70</span>
+        <div class="stat-bar"><div class="stat-fill" id="us-alliance-bar" style="width:70%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Economic Cost</span>
+        <span class="stat-value" id="us-cost">20</span>
+        <div class="stat-bar"><div class="stat-fill" id="us-cost-bar" style="width:20%"></div></div>
+      </div>
+    </div>
+
+    <div class="state-card cn">
+      <div class="state-name"><span class="state-dot"></span> China</div>
+      <div class="stat-row">
+        <span class="stat-label">Tech Dominance</span>
+        <span class="stat-value" id="cn-tech">55</span>
+        <div class="stat-bar"><div class="stat-fill" id="cn-tech-bar" style="width:55%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Self-Sufficiency</span>
+        <span class="stat-value" id="cn-self">30</span>
+        <div class="stat-bar"><div class="stat-fill" id="cn-self-bar" style="width:30%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Economic Cost</span>
+        <span class="stat-value" id="cn-cost">15</span>
+        <div class="stat-bar"><div class="stat-fill" id="cn-cost-bar" style="width:15%"></div></div>
+      </div>
+    </div>
+
+    <div class="state-card eu">
+      <div class="state-name"><span class="state-dot"></span> European Union</div>
+      <div class="stat-row">
+        <span class="stat-label">Tech Dominance</span>
+        <span class="stat-value" id="eu-tech">40</span>
+        <div class="stat-bar"><div class="stat-fill" id="eu-tech-bar" style="width:40%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Strategic Autonomy</span>
+        <span class="stat-value" id="eu-auto">50</span>
+        <div class="stat-bar"><div class="stat-fill" id="eu-auto-bar" style="width:50%"></div></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Economic Cost</span>
+        <span class="stat-value" id="eu-cost">10</span>
+        <div class="stat-bar"><div class="stat-fill" id="eu-cost-bar" style="width:10%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-panel">
+    <div class="scenario-box">
+      <div class="scenario-label">Scenario</div>
+      <h2>ASML and the Lithography Question</h2>
+      <p>
+        ASML, the Dutch manufacturer of extreme ultraviolet lithography machines, is the sole global supplier of the equipment needed to produce advanced chips below 7nm. China has placed orders worth $4.2 billion. The Netherlands has imposed partial export restrictions under US pressure, but China is lobbying The Hague directly and offering trade concessions across European markets. ASML's CEO has publicly warned that restrictions will cost European jobs and push China toward developing indigenous alternatives faster. You must decide the US position.
+      </p>
+    </div>
+
+    <div class="choices" id="choices">
+      <button class="choice-btn" onclick="makeChoice(1)">
+        <h4>A: Full Blockade</h4>
+        <p>Pressure the Netherlands to ban all ASML exports to China, including DUV machines. Invoke security agreements and threaten secondary sanctions on European firms that circumvent.</p>
+        <div class="consequence">Consequence preview hidden — design this in your expanded version</div>
+      </button>
+      <button class="choice-btn" onclick="makeChoice(2)">
+        <h4>B: Calibrated Restriction</h4>
+        <p>Maintain current EUV ban but allow DUV exports to continue. Offer ASML compensation through expanded US defense contracts and joint R&D investment.</p>
+        <div class="consequence">Consequence preview hidden</div>
+      </button>
+      <button class="choice-btn" onclick="makeChoice(3)">
+        <h4>C: Multilateral Framework</h4>
+        <p>Propose a new Wassenaar-style multilateral export control regime specifically for lithography and advanced semiconductor equipment. Takes longer but builds durable coalition.</p>
+        <div class="consequence">Consequence preview hidden</div>
+      </button>
+    </div>
+
+    <div class="outcome-box" id="outcome">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</div>
+
+<div class="design-doc">
+  <h2>Design Document</h2>
+  <div class="design-section">
+    <h3>Theoretical Framework</h3>
+    <p>[STUDENT: What IR theory informs your simulation design? Realism, liberal institutionalism, constructivism? Why did you choose these actors and these metrics? What does your model assume about state behavior and why?]</p>
+  </div>
+  <div class="design-section">
+    <h3>Incentive Structures</h3>
+    <p>[STUDENT: Explain the payoff logic. Why does Choice A produce these specific stat changes? What real-world evidence supports your modeling of Chinese/EU responses? Cite specific policy documents, statements, or academic sources.]</p>
+  </div>
+  <div class="design-section">
+    <h3>Limitations &amp; Simplifications</h3>
+    <p>[STUDENT: What does your model leave out? What actors, variables, or dynamics are missing? Why did you simplify where you did? How would adding complexity change the outcomes?]</p>
+  </div>
+  <div class="design-section">
+    <h3>What the Simulation Reveals</h3>
+    <p>[STUDENT: After playing through all paths, what does your simulation demonstrate about tech governance in IR? What is the structural dilemma that no single choice resolves?]</p>
+  </div>
+</div>
+
+<div class="footer">
+  Built with Claude as cognitive partner · AI in Social Inquiry Minor · Nazarbayev University
+</div>
+
+<script>
+  const outcomes = {
+    1: {
+      title: "Full Blockade: Immediate Fallout",
+      text: "The Netherlands complies under pressure, but the EU Commission issues a formal statement criticizing 'extraterritorial overreach.' ASML announces a hiring freeze. China accelerates its National Integrated Circuit Investment Fund by $47 billion, specifically targeting lithography R&D. South Korea and Japan begin quietly questioning whether their own chip industries could face similar US demands.",
+      changes: [
+        { label: "US Tech Dominance +5", cls: "positive" },
+        { label: "US Alliance Trust -15", cls: "negative" },
+        { label: "US Economic Cost +10", cls: "negative" },
+        { label: "China Self-Sufficiency +10", cls: "neutral" },
+        { label: "EU Strategic Autonomy +5", cls: "neutral" },
+      ],
+      stats: {
+        "us-tech": 90, "us-alliance": 55, "us-cost": 30,
+        "cn-tech": 50, "cn-self": 40, "cn-cost": 25,
+        "eu-tech": 38, "eu-auto": 55, "eu-cost": 20
+      }
+    },
+    2: {
+      title: "Calibrated Restriction: The Middle Path",
+      text: "ASML continues DUV shipments while EUV remains blocked. China gains access to mature-node manufacturing capacity but remains cut off from leading-edge production. The compensation deal strengthens US-Dutch defense ties. However, China uses DUV machines more creatively than expected, achieving breakthroughs in chiplet architecture that partially offset the EUV gap.",
+      changes: [
+        { label: "US Tech Dominance +2", cls: "positive" },
+        { label: "US Alliance Trust +5", cls: "positive" },
+        { label: "US Economic Cost +5", cls: "neutral" },
+        { label: "China Tech +5", cls: "neutral" },
+        { label: "EU Economic Cost -5", cls: "positive" },
+      ],
+      stats: {
+        "us-tech": 87, "us-alliance": 75, "us-cost": 25,
+        "cn-tech": 60, "cn-self": 35, "cn-cost": 20,
+        "eu-tech": 42, "eu-auto": 48, "eu-cost": 5
+      }
+    },
+    3: {
+      title: "Multilateral Framework: The Long Game",
+      text: "Negotiations begin but move slowly. Japan and South Korea join. The EU insists on carve-outs for civilian semiconductor applications. China launches a diplomatic counter-offensive, offering bilateral trade deals to peel off coalition members. After six months, a framework emerges but with significant loopholes. Meanwhile, China has used the negotiation window to stockpile equipment.",
+      changes: [
+        { label: "US Alliance Trust +10", cls: "positive" },
+        { label: "US Tech Dominance -3", cls: "negative" },
+        { label: "China Self-Sufficiency +5", cls: "neutral" },
+        { label: "EU Strategic Autonomy +10", cls: "positive" },
+        { label: "All Economic Costs +5", cls: "negative" },
+      ],
+      stats: {
+        "us-tech": 82, "us-alliance": 80, "us-cost": 25,
+        "cn-tech": 58, "cn-self": 35, "cn-cost": 20,
+        "eu-tech": 43, "eu-auto": 60, "eu-cost": 15
+      }
+    }
+  };
+
+  function makeChoice(choice) {
+    const o = outcomes[choice];
+    const outcomeBox = document.getElementById('outcome');
+    
+    let changesHTML = o.changes.map(c => 
+      `<span class="stat-change ${c.cls}">${c.label}</span>`
+    ).join('');
+
+    outcomeBox.innerHTML = `
+      <div class="scenario-label">Outcome</div>
+      <h3>${o.title}</h3>
+      <p>${o.text}</p>
+      <div>${changesHTML}</div>
+      <p style="margin-top:16px; color: var(--text-dim); font-size:0.88em;">
+        [STUDENT: In your expanded version, this leads to Round 2 with new scenarios shaped by this choice. Build the branching logic so different paths produce different geopolitical configurations by Round 5.]
+      </p>
+      <button class="next-btn" onclick="resetRound()">Reset Round (expand for full game)</button>
+    `;
+    outcomeBox.classList.add('visible');
+    document.getElementById('choices').style.display = 'none';
+
+    // Update stats
+    for (const [id, val] of Object.entries(o.stats)) {
+      const el = document.getElementById(id);
+      const bar = document.getElementById(id + '-bar');
+      if (el) el.textContent = val;
+      if (bar) bar.style.width = val + '%';
+    }
+  }
+
+  function resetRound() {
+    document.getElementById('outcome').classList.remove('visible');
+    document.getElementById('choices').style.display = 'flex';
+    // Reset stats
+    const defaults = {
+      "us-tech": 85, "us-alliance": 70, "us-cost": 20,
+      "cn-tech": 55, "cn-self": 30, "cn-cost": 15,
+      "eu-tech": 40, "eu-auto": 50, "eu-cost": 10
+    };
+    for (const [id, val] of Object.entries(defaults)) {
+      const el = document.getElementById(id);
+      const bar = document.getElementById(id + '-bar');
+      if (el) el.textContent = val;
+      if (bar) bar.style.width = val + '%';
+    }
+  }
+</script>
+
+</body>
+</html>
