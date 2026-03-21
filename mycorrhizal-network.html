@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wood Wide Web</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0804; overflow: hidden; font-family: 'Helvetica Neue', sans-serif; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  
+  .signal-display { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10;
+    padding: 10px 28px; border-radius: 20px; background: rgba(10,8,4,0.7); border: 1px solid rgba(180,140,60,0.15);
+    backdrop-filter: blur(10px); text-align: center; transition: all 0.8s; }
+  .signal-display h3 { font-size: 0.85em; font-weight: 300; color: rgba(220,180,100,0.8); letter-spacing: 0.15em; text-transform: uppercase; }
+  .signal-display p { font-size: 0.7em; color: rgba(180,140,80,0.5); margin-top: 3px; }
+  
+  .legend { position: fixed; top: 20px; right: 20px; z-index: 10; }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .legend-text { font-size: 0.7em; color: rgba(180,160,120,0.5); letter-spacing: 0.05em; }
+  
+  .info { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 10; text-align: center; }
+  .info p { font-size: 0.75em; color: rgba(150,130,90,0.4); letter-spacing: 0.1em; }
+  
+  .depth-label { position: fixed; left: 12px; top: 50%; transform: translateY(-50%) rotate(-90deg); z-index: 5;
+    font-size: 0.65em; color: rgba(120,100,60,0.2); letter-spacing: 0.3em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+
+<div class="signal-display" id="signal-display">
+  <h3 id="sig-name">Mycorrhizal Network</h3>
+  <p id="sig-desc">Click a tree to send signals underground</p>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background: #f0c040;"></div><span class="legend-text">Carbon / sugars</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background: #40d0f0;"></div><span class="legend-text">Phosphorus</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background: #60ee70;"></div><span class="legend-text">Nitrogen</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background: #ff5050;"></div><span class="legend-text">Defense signal (alarm)</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background: #c090ff;"></div><span class="legend-text">Water</span></div>
+</div>
+
+<div class="depth-label">Soil depth</div>
+
+<div class="info"><p>Click any tree. Watch the network respond.</p></div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  soilLine = H * 0.38;
+  initTrees();
+}
+
+let time = 0;
+let soilLine;
+let trees = [];
+let hyphae = [];
+let signals = [];
+let particles = [];
+let soilParticles = [];
+
+const signalTypes = [
+  { name: 'Carbon Transfer', desc: 'Mother tree feeding seedling through fungal highway', color: '#f0c040', colorA: 'rgba(240,192,64,', speed: 0.8, size: 4 },
+  { name: 'Phosphorus Exchange', desc: 'Fungus trades phosphorus for plant sugars', color: '#40d0f0', colorA: 'rgba(64,208,240,', speed: 0.6, size: 3 },
+  { name: 'Nitrogen Sharing', desc: 'Dying tree dumps nitrogen to neighbors', color: '#60ee70', colorA: 'rgba(96,238,112,', speed: 0.7, size: 3.5 },
+  { name: 'Defense Alarm', desc: 'Insect attack detected. Warning neighbors via jasmonic acid.', color: '#ff5050', colorA: 'rgba(255,80,80,', speed: 1.5, size: 5 },
+  { name: 'Water Redistribution', desc: 'Deep-rooted tree sharing water with drought-stressed neighbor', color: '#c090ff', colorA: 'rgba(192,144,255,', speed: 0.5, size: 3 },
+];
+
+function initTrees() {
+  trees = [];
+  let numTrees = Math.max(5, Math.min(9, Math.floor(W / 140)));
+  
+  for (let i = 0; i < numTrees; i++) {
+    let x = W * 0.08 + (W * 0.84) * (i / (numTrees - 1)) + (Math.random() - 0.5) * 40;
+    let isMother = (i === Math.floor(numTrees / 2));
+    let isSeedling = (i === 0 || i === numTrees - 1) && Math.random() < 0.5;
+    
+    let size = isMother ? 1.4 : isSeedling ? 0.5 : 0.7 + Math.random() * 0.5;
+    
+    trees.push({
+      x: x,
+      topY: soilLine,
+      size: size,
+      health: 0.7 + Math.random() * 0.3,
+      rootDepth: soilLine + 60 + size * 120 + Math.random() * 60,
+      rootSpread: 60 + size * 80,
+      species: Math.random() < 0.3 ? 'birch' : Math.random() < 0.5 ? 'fir' : 'oak',
+      isMother: isMother,
+      isSeedling: isSeedling,
+      glow: 0,
+      swayPhase: Math.random() * Math.PI * 2,
+      label: isMother ? 'Mother Tree' : isSeedling ? 'Seedling' : ''
+    });
+  }
+  
+  generateHyphae();
+}
+
+function generateHyphae() {
+  hyphae = [];
+  
+  // Connect trees with fungal hyphae through soil
+  for (let i = 0; i < trees.length; i++) {
+    for (let j = i + 1; j < trees.length; j++) {
+      let dist = Math.abs(trees[i].x - trees[j].x);
+      if (dist > W * 0.45) continue;
+      
+      let numStrands = dist < 200 ? 4 : dist < 350 ? 3 : 2;
+      // More connections to/from mother tree
+      if (trees[i].isMother || trees[j].isMother) numStrands += 2;
+      
+      for (let s = 0; s < numStrands; s++) {
+        let points = [];
+        let segments = 8 + Math.floor(Math.random() * 6);
+        
+        let startX = trees[i].x + (Math.random() - 0.5) * trees[i].rootSpread;
+        let startY = trees[i].rootDepth + (Math.random() - 0.5) * 30;
+        let endX = trees[j].x + (Math.random() - 0.5) * trees[j].rootSpread;
+        let endY = trees[j].rootDepth + (Math.random() - 0.5) * 30;
+        
+        for (let k = 0; k <= segments; k++) {
+          let t = k / segments;
+          let x = startX + (endX - startX) * t + (Math.random() - 0.5) * 50;
+          let baseY = startY + (endY - startY) * t;
+          let dip = Math.sin(t * Math.PI) * (30 + Math.random() * 60);
+          let y = baseY + dip;
+          points.push({ x, y });
+        }
+        
+        hyphae.push({
+          from: i, to: j,
+          points: points,
+          thickness: 0.5 + Math.random() * 1,
+          alpha: 0.08 + Math.random() * 0.12,
+          pulsePhase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+    
+    // Root hyphae going down from each tree
+    for (let r = 0; r < 5; r++) {
+      let points = [];
+      let angle = (r / 5) * Math.PI - Math.PI / 2 + (Math.random() - 0.5) * 0.5;
+      let length = 40 + Math.random() * 80;
+      let startX = trees[i].x + (Math.random() - 0.5) * 20;
+      let startY = soilLine + 20;
+      
+      for (let k = 0; k <= 6; k++) {
+        let t = k / 6;
+        points.push({
+          x: startX + Math.cos(angle) * length * t + (Math.random() - 0.5) * 15,
+          y: startY + t * (trees[i].rootDepth - soilLine) + (Math.random() - 0.5) * 10
+        });
+      }
+      
+      hyphae.push({
+        from: i, to: i,
+        points: points,
+        thickness: 0.8 + Math.random() * 0.8,
+        alpha: 0.1 + Math.random() * 0.1,
+        pulsePhase: Math.random() * Math.PI * 2,
+        isRoot: true
+      });
+    }
+  }
+}
+
+// Soil organisms
+for (let i = 0; i < 100; i++) {
+  soilParticles.push({
+    x: Math.random() * 2000,
+    y: 0,
+    size: Math.random() * 1.2 + 0.3,
+    alpha: Math.random() * 0.08 + 0.01,
+    drift: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.1 + 0.02
+  });
+}
+
+function sendSignal(treeIndex, typeIndex) {
+  let tree = trees[treeIndex];
+  let type = signalTypes[typeIndex];
+  tree.glow = 1;
+  
+  document.getElementById('sig-name').textContent = type.name;
+  document.getElementById('sig-desc').textContent = type.desc;
+  
+  // Find all hyphae connected to this tree and send signals along them
+  hyphae.forEach((h, hi) => {
+    if (h.isRoot) return;
+    if (h.from !== treeIndex && h.to !== treeIndex) return;
+    
+    let reverse = h.to === treeIndex;
+    let delay = Math.random() * 40;
+    
+    signals.push({
+      hyphaeIndex: hi,
+      progress: reverse ? 1 : 0,
+      direction: reverse ? -1 : 1,
+      type: type,
+      alpha: 1,
+      fromTree: treeIndex,
+      toTree: reverse ? h.from : h.to,
+      delay: delay,
+      active: false,
+      trail: []
+    });
+  });
+}
+
+function drawSky() {
+  // Night sky gradient
+  let grad = ctx.createLinearGradient(0, 0, 0, soilLine);
+  grad.addColorStop(0, '#0a0d14');
+  grad.addColorStop(0.5, '#0e1018');
+  grad.addColorStop(1, '#12140e');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, soilLine + 5);
+  
+  // Stars
+  for (let i = 0; i < 40; i++) {
+    let sx = ((i * 137.5) % W);
+    let sy = ((i * 97.3) % (soilLine * 0.7));
+    let twinkle = Math.sin(time * 2 + i * 3) * 0.3 + 0.7;
+    ctx.beginPath();
+    ctx.arc(sx, sy, 0.8, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(200, 210, 230, ${0.3 * twinkle})`;
+    ctx.fill();
+  }
+  
+  // Moon
+  ctx.beginPath();
+  ctx.arc(W * 0.15, soilLine * 0.2, 20, 0, Math.PI * 2);
+  let moonGrad = ctx.createRadialGradient(W * 0.15, soilLine * 0.2, 0, W * 0.15, soilLine * 0.2, 60);
+  moonGrad.addColorStop(0, 'rgba(220, 210, 180, 0.3)');
+  moonGrad.addColorStop(0.3, 'rgba(220, 210, 180, 0.05)');
+  moonGrad.addColorStop(1, 'transparent');
+  ctx.fillStyle = moonGrad;
+  ctx.fillRect(W * 0.15 - 60, soilLine * 0.2 - 60, 120, 120);
+  ctx.beginPath();
+  ctx.arc(W * 0.15, soilLine * 0.2, 15, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(230, 220, 190, 0.6)';
+  ctx.fill();
+}
+
+function drawSoil() {
+  // Soil layers
+  let grad = ctx.createLinearGradient(0, soilLine, 0, H);
+  grad.addColorStop(0, '#1a1508');
+  grad.addColorStop(0.05, '#1e180a');
+  grad.addColorStop(0.15, '#15120a');
+  grad.addColorStop(0.4, '#100e08');
+  grad.addColorStop(1, '#0a0804');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, soilLine, W, H - soilLine);
+  
+  // Soil surface texture
+  ctx.beginPath();
+  ctx.moveTo(0, soilLine);
+  for (let x = 0; x < W; x += 3) {
+    let y = soilLine + Math.sin(x * 0.02 + time * 0.1) * 2 + Math.sin(x * 0.05) * 1.5;
+    ctx.lineTo(x, y);
+  }
+  ctx.lineTo(W, soilLine + 10);
+  ctx.lineTo(0, soilLine + 10);
+  ctx.closePath();
+  ctx.fillStyle = '#1d1a0c';
+  ctx.fill();
+  
+  // Leaf litter on surface
+  for (let i = 0; i < 30; i++) {
+    let lx = (i * 73.7) % W;
+    let ly = soilLine - 2 + Math.sin(lx * 0.03) * 2;
+    ctx.beginPath();
+    ctx.ellipse(lx, ly, 4 + (i % 3) * 2, 1.5, (i * 0.7), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${80 + i % 40}, ${50 + i % 30}, ${20}, 0.3)`;
+    ctx.fill();
+  }
+  
+  // Soil organisms
+  soilParticles.forEach(p => {
+    p.y = soilLine + 40 + ((p.x * 7.3 + p.drift * 100) % (H - soilLine - 60));
+    p.x += Math.sin(time * 0.3 + p.drift) * p.speed;
+    if (p.x > W + 20) p.x = -20;
+    
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(160, 140, 80, ${p.alpha})`;
+    ctx.fill();
+  });
+}
+
+function drawTree(tree, index) {
+  let x = tree.x;
+  let y = tree.topY;
+  let s = tree.size;
+  let sway = Math.sin(time * 0.5 + tree.swayPhase) * 3 * s;
+  
+  // Glow when signaling
+  if (tree.glow > 0) {
+    let glowGrad = ctx.createRadialGradient(x, y - 30 * s, 0, x, y - 30 * s, 80 * s);
+    glowGrad.addColorStop(0, `rgba(240, 200, 80, ${tree.glow * 0.15})`);
+    glowGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = glowGrad;
+    ctx.fillRect(x - 100 * s, y - 130 * s, 200 * s, 200 * s);
+    tree.glow *= 0.98;
+  }
+  
+  // Underground root glow
+  if (tree.glow > 0.1) {
+    let rootGlow = ctx.createRadialGradient(x, tree.rootDepth, 0, x, tree.rootDepth, tree.rootSpread);
+    rootGlow.addColorStop(0, `rgba(200, 160, 60, ${tree.glow * 0.08})`);
+    rootGlow.addColorStop(1, 'transparent');
+    ctx.fillStyle = rootGlow;
+    ctx.fillRect(x - tree.rootSpread, tree.rootDepth - 60, tree.rootSpread * 2, 120);
+  }
+  
+  // Trunk
+  ctx.beginPath();
+  let trunkW = 6 * s;
+  ctx.moveTo(x - trunkW, y);
+  ctx.quadraticCurveTo(x - trunkW * 0.8 + sway * 0.3, y - 40 * s, x - trunkW * 0.4 + sway, y - 80 * s);
+  ctx.lineTo(x + trunkW * 0.4 + sway, y - 80 * s);
+  ctx.quadraticCurveTo(x + trunkW * 0.8 + sway * 0.3, y - 40 * s, x + trunkW, y);
+  ctx.closePath();
+  ctx.fillStyle = tree.species === 'birch' ? '#3a3830' : '#2a2018';
+  ctx.fill();
+  
+  // Canopy
+  if (tree.species === 'fir') {
+    // Conifer shape
+    for (let layer = 0; layer < 3; layer++) {
+      ctx.beginPath();
+      let layerY = y - 80 * s - layer * 25 * s + sway * (1 + layer * 0.3);
+      let layerW = (35 - layer * 8) * s;
+      ctx.moveTo(x + sway * (1 + layer * 0.2), layerY - 30 * s);
+      ctx.lineTo(x - layerW + sway, layerY);
+      ctx.lineTo(x + layerW + sway, layerY);
+      ctx.closePath();
+      let green = 30 + layer * 10 + Math.sin(time + index) * 5;
+      ctx.fillStyle = `rgb(${15 + layer * 5}, ${green}, ${10 + layer * 3})`;
+      ctx.fill();
+    }
+  } else {
+    // Deciduous canopy
+    for (let c = 0; c < 5; c++) {
+      let cx2 = x + (Math.cos(c * 1.3 + index) * 20 * s) + sway;
+      let cy2 = y - (90 + c * 10) * s + Math.sin(c * 2) * 10 * s;
+      let cr = (18 + c * 3) * s;
+      
+      ctx.beginPath();
+      ctx.arc(cx2, cy2, cr, 0, Math.PI * 2);
+      let green = 35 + c * 8 + Math.sin(time * 0.5 + c + index) * 8;
+      ctx.fillStyle = `rgba(${15 + c * 3}, ${green}, ${10 + c * 2}, 0.8)`;
+      ctx.fill();
+    }
+  }
+  
+  // Visible roots at surface
+  for (let r = 0; r < 4; r++) {
+    ctx.beginPath();
+    let rootAngle = (r / 4) * Math.PI - Math.PI / 2 + 0.3 * (index % 2 ? 1 : -1);
+    let rootLen = 25 + r * 10 * s;
+    ctx.moveTo(x + (r - 1.5) * 4 * s, y + 2);
+    ctx.quadraticCurveTo(
+      x + Math.cos(rootAngle) * rootLen * 0.5, y + 8 + r * 2,
+      x + Math.cos(rootAngle) * rootLen, y + 5 + Math.sin(rootAngle + 1) * 5
+    );
+    ctx.strokeStyle = `rgba(60, 45, 25, ${0.4 + r * 0.1})`;
+    ctx.lineWidth = 2.5 * s - r * 0.3;
+    ctx.stroke();
+  }
+  
+  // Label
+  if (tree.label) {
+    ctx.font = '10px Helvetica Neue';
+    ctx.fillStyle = 'rgba(200, 180, 120, 0.3)';
+    ctx.textAlign = 'center';
+    ctx.fillText(tree.label, x, y - (tree.species === 'fir' ? 140 : 120) * s);
+    ctx.textAlign = 'left';
+  }
+}
+
+function drawHyphae() {
+  hyphae.forEach((h, hi) => {
+    let pulse = Math.sin(time * 0.8 + h.pulsePhase) * 0.3 + 0.7;
+    
+    ctx.beginPath();
+    let pts = h.points;
+    if (pts.length < 2) return;
+    
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length - 1; i++) {
+      let xc = (pts[i].x + pts[i + 1].x) / 2;
+      let yc = (pts[i].y + pts[i + 1].y) / 2;
+      ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
+    }
+    ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+    
+    let baseAlpha = h.alpha * pulse;
+    ctx.strokeStyle = `rgba(180, 160, 100, ${baseAlpha})`;
+    ctx.lineWidth = h.thickness;
+    ctx.stroke();
+    
+    // Fungal nodes along hyphae
+    if (!h.isRoot && Math.random() < 0.01) {
+      // Skip, just draw occasionally
+    }
+    for (let i = 0; i < pts.length; i += 3) {
+      if (i >= pts.length) break;
+      let nodePulse = Math.sin(time + i + hi * 0.5) * 0.3 + 0.7;
+      ctx.beginPath();
+      ctx.arc(pts[i].x, pts[i].y, 1.5 * h.thickness * nodePulse, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200, 180, 100, ${baseAlpha * 0.8})`;
+      ctx.fill();
+    }
+  });
+}
+
+function drawSignals() {
+  for (let i = signals.length - 1; i >= 0; i--) {
+    let sig = signals[i];
+    
+    if (sig.delay > 0) { sig.delay--; continue; }
+    sig.active = true;
+    
+    let h = hyphae[sig.hyphaeIndex];
+    if (!h) { signals.splice(i, 1); continue; }
+    
+    sig.progress += sig.direction * sig.type.speed * 0.008;
+    
+    // Get position along hyphae
+    let pts = h.points;
+    let totalLen = 0;
+    let segLens = [];
+    for (let j = 1; j < pts.length; j++) {
+      let len = Math.hypot(pts[j].x - pts[j-1].x, pts[j].y - pts[j-1].y);
+      segLens.push(len);
+      totalLen += len;
+    }
+    
+    let targetDist = sig.progress * totalLen;
+    let accumulated = 0;
+    let px = pts[0].x, py = pts[0].y;
+    
+    for (let j = 0; j < segLens.length; j++) {
+      if (accumulated + segLens[j] >= targetDist) {
+        let t = (targetDist - accumulated) / segLens[j];
+        px = pts[j].x + (pts[j+1].x - pts[j].x) * t;
+        py = pts[j].y + (pts[j+1].y - pts[j].y) * t;
+        break;
+      }
+      accumulated += segLens[j];
+    }
+    
+    // Add to trail
+    sig.trail.push({ x: px, y: py, alpha: 1 });
+    if (sig.trail.length > 25) sig.trail.shift();
+    
+    // Draw trail
+    sig.trail.forEach((tp, ti) => {
+      tp.alpha *= 0.92;
+      ctx.beginPath();
+      ctx.arc(tp.x, tp.y, sig.type.size * (ti / sig.trail.length) * 0.8, 0, Math.PI * 2);
+      ctx.fillStyle = `${sig.type.colorA}${tp.alpha * 0.4})`;
+      ctx.fill();
+    });
+    
+    // Main signal particle
+    ctx.beginPath();
+    ctx.arc(px, py, sig.type.size, 0, Math.PI * 2);
+    ctx.fillStyle = sig.type.color;
+    ctx.fill();
+    
+    // Glow
+    let sigGlow = ctx.createRadialGradient(px, py, 0, px, py, sig.type.size * 5);
+    sigGlow.addColorStop(0, `${sig.type.colorA}0.2)`);
+    sigGlow.addColorStop(1, 'transparent');
+    ctx.fillStyle = sigGlow;
+    ctx.fillRect(px - sig.type.size * 5, py - sig.type.size * 5, sig.type.size * 10, sig.type.size * 10);
+    
+    // Check if arrived
+    if (sig.progress >= 1 || sig.progress <= 0) {
+      // Light up receiving tree
+      trees[sig.toTree].glow = 0.8;
+      
+      // Chance of forwarding signal to next tree
+      if (Math.random() < 0.35) {
+        setTimeout(() => {
+          let nextHyphae = hyphae.filter((nh, ni) => 
+            !nh.isRoot && ni !== sig.hyphaeIndex && 
+            (nh.from === sig.toTree || nh.to === sig.toTree)
+          );
+          if (nextHyphae.length > 0) {
+            let nh = nextHyphae[Math.floor(Math.random() * nextHyphae.length)];
+            let nhIndex = hyphae.indexOf(nh);
+            let reverse = nh.to === sig.toTree;
+            signals.push({
+              hyphaeIndex: nhIndex,
+              progress: reverse ? 1 : 0,
+              direction: reverse ? -1 : 1,
+              type: sig.type,
+              alpha: 1,
+              fromTree: sig.toTree,
+              toTree: reverse ? nh.from : nh.to,
+              delay: 10 + Math.random() * 20,
+              active: false,
+              trail: []
+            });
+          }
+        }, 200);
+      }
+      
+      signals.splice(i, 1);
+    }
+  }
+}
+
+// Click handler
+canvas.addEventListener('click', (e) => {
+  let minDist = Infinity, nearest = 0;
+  trees.forEach((t, i) => {
+    let d = Math.hypot(e.clientX - t.x, e.clientY - (t.topY - 40 * t.size));
+    if (d < minDist) { minDist = d; nearest = i; }
+  });
+  
+  let typeIdx = Math.floor(Math.random() * signalTypes.length);
+  // Defense signals more likely from clicked tree
+  if (Math.random() < 0.3) typeIdx = 3;
+  
+  sendSignal(nearest, typeIdx);
+});
+
+// Auto signals
+let nextAuto = 120;
+
+function autoSignal() {
+  if (time * 60 > nextAuto) {
+    // Mother tree sends carbon to seedling
+    let motherIdx = trees.findIndex(t => t.isMother);
+    let seedlingIdx = trees.findIndex(t => t.isSeedling);
+    
+    if (motherIdx >= 0 && Math.random() < 0.4) {
+      sendSignal(motherIdx, 0); // carbon
+    } else {
+      let from = Math.floor(Math.random() * trees.length);
+      let type = Math.floor(Math.random() * signalTypes.length);
+      sendSignal(from, type);
+    }
+    
+    nextAuto = time * 60 + 200 + Math.random() * 300;
+  }
+}
+
+function animate() {
+  time += 0.016;
+  
+  ctx.clearRect(0, 0, W, H);
+  
+  drawSky();
+  drawSoil();
+  
+  // Draw underground first
+  drawHyphae();
+  drawSignals();
+  
+  // Draw trees on top
+  trees.forEach((t, i) => drawTree(t, i));
+  
+  // Soil line grass tufts
+  for (let i = 0; i < 40; i++) {
+    let gx = (i * 53.7 + 20) % W;
+    let gy = soilLine - 1;
+    for (let blade = 0; blade < 3; blade++) {
+      let bladeAngle = -Math.PI / 2 + (blade - 1) * 0.3 + Math.sin(time * 0.8 + i + blade) * 0.1;
+      let bladeLen = 5 + blade * 3;
+      ctx.beginPath();
+      ctx.moveTo(gx, gy);
+      ctx.lineTo(gx + Math.cos(bladeAngle) * bladeLen, gy + Math.sin(bladeAngle) * bladeLen);
+      ctx.strokeStyle = `rgba(40, 55, 20, 0.4)`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+  
+  autoSignal();
+  
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', resize);
+resize();
+animate();
+</script>
+</body>
+</html>
