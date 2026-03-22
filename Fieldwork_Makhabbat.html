@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fieldwork: The Game - PLS511 Final Exam</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --card-hover: #f0f0f8;
+    --purple: #7c3aed;
+    --pink: #db2777;
+    --cyan: #0891b2;
+    --orange: #ea580c;
+    --green: #16a34a;
+    --red: #e11d48;
+    --yellow: #ca8a04;
+    --text: #1a1a2e;
+    --text-dim: #6b7280;
+    --text-bright: #111827;
+    --border: #e2e8f0;
+    --gradient-1: linear-gradient(135deg, #7c3aed, #db2777);
+    --gradient-2: linear-gradient(135deg, #0891b2, #7c3aed);
+    --gradient-3: linear-gradient(135deg, #ea580c, #db2777);
+    --gradient-4: linear-gradient(135deg, #16a34a, #0891b2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 20% 50%, rgba(124, 58, 237, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(219, 39, 119, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(8, 145, 178, 0.02) 0%, transparent 50%);
+    animation: bgShift 20s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+  @keyframes bgShift {
+    0%, 100% { transform: translate(0, 0); }
+    33% { transform: translate(-2%, 1%); }
+    66% { transform: translate(1%, -2%); }
+  }
+
+  /* Floating particles */
+  .particles {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.15; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Top bar */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 14px; }
+  .topbar-logo {
+    font-size: 20px;
+    font-weight: 900;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+  .student-badge {
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple);
+  }
+
+  .timer-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .timer {
+    font-family: 'Inter', monospace;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--green);
+    letter-spacing: 2px;
+  }
+  .timer.warning { color: var(--yellow); }
+  .timer.danger { color: var(--red); animation: pulse 1s infinite; }
+  .timer-icon { font-size: 20px; }
+
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  /* Progress bar */
+  .progress-bar-bg {
+    position: fixed;
+    top: 60px; left: 0; right: 0;
+    height: 4px;
+    background: var(--border);
+    z-index: 99;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--gradient-1);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 0 2px 2px 0;
+    box-shadow: 0 0 12px rgba(124, 58, 237, 0.3);
+  }
+
+  /* Main container */
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 84px 24px 120px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Screen system */
+  .screen { display: none; }
+  .screen.active { display: block; animation: screenIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes screenIn { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  /* ====== INTRO SCREEN ====== */
+  .intro-hero {
+    text-align: center;
+    padding: 50px 0 30px;
+  }
+  .intro-emoji { font-size: 64px; margin-bottom: 16px; display: block; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .intro-hero h1 {
+    font-size: 48px;
+    font-weight: 900;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .intro-hero .subtitle {
+    font-size: 17px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .intro-hero .tagline {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--pink);
+    opacity: 0.8;
+  }
+
+  /* Cards */
+  .game-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .game-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gradient-1);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .game-card:hover::before { opacity: 1; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .card-icon { font-size: 22px; }
+  .card-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    color: var(--purple);
+  }
+  .game-card p, .game-card li {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+  .game-card ul { padding-left: 20px; }
+  .game-card li { margin-bottom: 6px; }
+
+  /* Round headers */
+  .round-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .round-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 24px;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .round-badge.r1 { background: var(--gradient-1); }
+  .round-badge.r2 { background: var(--gradient-3); }
+  .round-badge.r3 { background: var(--gradient-2); }
+  .round-badge.r4 { background: var(--gradient-4); }
+
+  .round-info h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-bright);
+    letter-spacing: -0.5px;
+  }
+  .round-info .round-subtitle {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  /* Scenario */
+  .scenario {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(219, 39, 119, 0.02));
+    border: 1px solid rgba(124, 58, 237, 0.15);
+    border-left: 4px solid var(--purple);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    line-height: 1.85;
+  }
+
+  /* Crisis scenario */
+  .crisis-scenario {
+    background: linear-gradient(135deg, rgba(225, 29, 72, 0.06), rgba(234, 88, 12, 0.03));
+    border: 2px solid rgba(225, 29, 72, 0.25);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    animation: crisisIn 1s ease;
+    position: relative;
+  }
+  .crisis-scenario::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 13px;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.5;
+  }
+  @keyframes crisisIn {
+    0% { transform: scale(1.02); box-shadow: 0 0 40px rgba(225, 29, 72, 0.25); }
+    100% { transform: scale(1); box-shadow: none; }
+  }
+  .crisis-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(225, 29, 72, 0.12);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--red);
+    margin-bottom: 12px;
+  }
+  .crisis-scenario p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    line-height: 1.85;
+  }
+
+  /* Concept tags */
+  .concept-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
+  .concept-tag {
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .tag-purple { background: rgba(124, 58, 237, 0.1); color: var(--purple); border: 1px solid rgba(124, 58, 237, 0.2); }
+  .tag-pink { background: rgba(219, 39, 119, 0.08); color: var(--pink); border: 1px solid rgba(219, 39, 119, 0.2); }
+  .tag-cyan { background: rgba(8, 145, 178, 0.08); color: var(--cyan); border: 1px solid rgba(8, 145, 178, 0.2); }
+  .tag-orange { background: rgba(234, 88, 12, 0.08); color: var(--orange); border: 1px solid rgba(234, 88, 12, 0.2); }
+  .tag-green { background: rgba(22, 163, 74, 0.08); color: var(--green); border: 1px solid rgba(22, 163, 74, 0.2); }
+
+  /* Choice cards */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .choice-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .choice-card:hover {
+    background: var(--card-hover);
+    border-color: rgba(124, 58, 237, 0.3);
+    transform: translateX(4px);
+  }
+  .choice-card.selected {
+    border-color: var(--purple);
+    background: rgba(124, 58, 237, 0.08);
+    transform: translateX(6px);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.1);
+  }
+  .choice-letter {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+    transition: all 0.25s;
+  }
+  .choice-card.selected .choice-letter {
+    background: var(--gradient-1);
+    border-color: transparent;
+    color: white;
+  }
+  .choice-text { font-size: 15px; line-height: 1.65; padding-top: 6px; }
+
+  /* Justification */
+  .justify-section { margin: 20px 0 24px; }
+  .justify-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    color: var(--cyan);
+    margin-bottom: 6px;
+  }
+  .justify-hint {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  textarea {
+    width: 100%;
+    min-height: 150px;
+    background: #ffffff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.75;
+    resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  textarea:focus {
+    outline: none;
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
+  .word-count {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: right;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .word-count.good { color: var(--green); }
+
+  /* Consequence reveal */
+  .consequence {
+    background: linear-gradient(135deg, rgba(22, 163, 74, 0.06), rgba(8, 145, 178, 0.03));
+    border: 1px solid rgba(22, 163, 74, 0.15);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    display: none;
+  }
+  .consequence.visible { display: block; animation: consequenceIn 0.5s ease; }
+  @keyframes consequenceIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .consequence-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+  .consequence p { font-size: 14px; line-height: 1.75; }
+
+  /* Review panel (Round 3) */
+  .reviewer-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .reviewer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+  }
+  .reviewer-card.methodologist::before { background: var(--gradient-1); }
+  .reviewer-card.ethicist::before { background: var(--gradient-3); }
+  .reviewer-card.participant::before { background: var(--gradient-4); }
+
+  .reviewer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .reviewer-badge.methodologist { background: rgba(124, 58, 237, 0.1); color: var(--purple); }
+  .reviewer-badge.ethicist { background: rgba(234, 88, 12, 0.08); color: var(--orange); }
+  .reviewer-badge.participant { background: rgba(22, 163, 74, 0.08); color: var(--green); }
+
+  .reviewer-card p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 15px;
+    line-height: 1.8;
+    font-style: italic;
+    color: var(--text);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary {
+    background: var(--gradient-1);
+    color: white;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.25);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(124, 58, 237, 0.3); }
+  .btn-primary:disabled { opacity: 0.15; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-start {
+    background: var(--gradient-1);
+    color: white;
+    font-size: 18px;
+    padding: 16px 48px;
+    border-radius: 14px;
+    box-shadow: 0 4px 25px rgba(124, 58, 237, 0.3);
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 4px 25px rgba(124, 58, 237, 0.25); }
+    50% { box-shadow: 0 4px 40px rgba(124, 58, 237, 0.3); }
+  }
+  .btn-start:hover { transform: translateY(-3px) scale(1.02); }
+
+  .btn-export {
+    background: var(--gradient-4);
+    color: #ffffff;
+    font-weight: 800;
+    box-shadow: 0 4px 15px rgba(22, 163, 74, 0.2);
+  }
+  .btn-export:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(22, 163, 74, 0.3); }
+
+  .btn-row { display: flex; justify-content: center; gap: 12px; margin-top: 32px; }
+
+  /* Achievement toast */
+  .achievement {
+    position: fixed;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 200;
+    transition: bottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+  }
+  .achievement.show { bottom: 30px; }
+  .achievement-icon { font-size: 28px; }
+  .achievement-text { font-size: 14px; font-weight: 600; }
+  .achievement-sub { font-size: 12px; color: var(--text-dim); }
+
+  /* Summary screen */
+  .summary-grid { display: grid; gap: 16px; margin: 24px 0; }
+  .summary-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .summary-item h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .summary-item.r1 h4 { color: var(--purple); }
+  .summary-item.r2 h4 { color: var(--orange); }
+  .summary-item.r3 h4 { color: var(--cyan); }
+  .summary-item.r4 h4 { color: var(--green); }
+  .choice-made { font-weight: 700; color: var(--green); margin-bottom: 8px; font-size: 14px; }
+  .justification { font-size: 14px; color: var(--text-dim); line-height: 1.65; white-space: pre-wrap; }
+
+  .final-message {
+    text-align: center;
+    padding: 30px 0;
+  }
+  .final-emoji { font-size: 56px; margin-bottom: 12px; }
+  .final-message h2 {
+    font-size: 28px;
+    font-weight: 800;
+    background: var(--gradient-4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .final-message p { color: var(--text-dim); margin-top: 8px; }
+
+  .concepts-checklist {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin: 24px 0;
+  }
+  .concepts-checklist h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--purple);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  /* Research brief on intro */
+  .research-field {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .field-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    color: var(--pink);
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+  .field-value { font-size: 15px; line-height: 1.6; }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .container { padding: 76px 16px 100px; }
+    .intro-hero h1 { font-size: 32px; }
+    .round-info h2 { font-size: 22px; }
+    .choice-card { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Achievement toast -->
+<div class="achievement" id="achievement">
+  <div class="achievement-icon" id="achieveIcon"></div>
+  <div>
+    <div class="achievement-text" id="achieveText"></div>
+    <div class="achievement-sub" id="achieveSub"></div>
+  </div>
+</div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo">FIELDWORK</span>
+    <span class="student-badge" id="studentName">Makhabbat</span>
+  </div>
+  <div class="timer-box">
+    <span class="timer-icon">&#9201;</span>
+    <div class="timer" id="timer">40:00</div>
+  </div>
+</div>
+<div class="progress-bar-bg"><div class="progress-bar" id="progressBar" style="width: 0%"></div></div>
+
+<div class="container">
+
+  <!-- ==================== INTRO ==================== -->
+  <div class="screen active" id="screen-intro">
+    <div class="intro-hero">
+      <span class="intro-emoji">&#127758;</span>
+      <h1>Fieldwork: The Game</h1>
+      <p class="subtitle">PLS511 Qualitative Methods -- Final Exam</p>
+      <p class="tagline">"The field is not a place. It is a set of relationships."</p>
+    </div>
+
+    <div class="game-card">
+      <div class="card-header">
+        <span class="card-icon">&#128203;</span>
+        <span class="card-title">Your Research Briefing</span>
+      </div>
+      <div class="research-field"><span class="field-label">Topic</span><span class="field-value" id="briefTopic">Motivations behind having large families in Kazakhstan and the gap between pronatalist expectations and actual conditions for mothers and children</span></div>
+      <div class="research-field"><span class="field-label">Question</span><span class="field-value" id="briefRQ">Why do Kazakh families continue to have many children when conditions for mothers and children remain inadequate, and how do pronatalist policies interact with lived reproductive decisions across regions?</span></div>
+      <div class="research-field"><span class="field-label">Method</span><span class="field-value" id="briefMethod">Mixed methods: regional statistics and mapping, pronatalist policy analysis, semi-structured interviews with women from large families (rural and urban), with efforts to include fathers</span></div>
+      <div class="research-field"><span class="field-label">Field Site</span><span class="field-value" id="briefSite">Villages and cities across southern Kazakhstan</span></div>
+      <div class="research-field"><span class="field-label">Participants</span><span class="field-value" id="briefParticipants">Mothers of large families (primary), fathers (if willing), potentially policymakers</span></div>
+    </div>
+
+    <div class="game-card">
+      <div class="card-header">
+        <span class="card-icon">&#127918;</span>
+        <span class="card-title">How This Works</span>
+      </div>
+      <ul>
+        <li><strong>3 rounds, 40 minutes.</strong> Each round presents a fieldwork scenario based on your thesis.</li>
+        <li><strong>Choose your approach</strong> from 4 options, then <strong>justify your choice</strong> using course concepts and readings.</li>
+        <li><strong>No right answers.</strong> What matters is the quality of your methodological reasoning.</li>
+        <li><strong>Auto-saves</strong> in your browser. At the end, download your answers.</li>
+        <li><strong>Cite readings</strong> by author name. No page numbers needed.</li>
+      </ul>
+    </div>
+
+    <div class="game-card">
+      <div class="card-header">
+        <span class="card-icon">&#128736;</span>
+        <span class="card-title">Concepts In Play</span>
+      </div>
+      <div class="concept-tags">
+        <span class="concept-tag tag-purple">Positionality</span>
+        <span class="concept-tag tag-pink">Reflexivity</span>
+        <span class="concept-tag tag-cyan">Relational Interviewing</span>
+        <span class="concept-tag tag-orange">Meta-Data &amp; Silences</span>
+        <span class="concept-tag tag-green">Ethics Beyond IRB</span>
+        <span class="concept-tag tag-purple">Thick Description</span>
+        <span class="concept-tag tag-pink">Ongoing Consent</span>
+        <span class="concept-tag tag-cyan">CBR Principles</span>
+        <span class="concept-tag tag-orange">Photovoice</span>
+        <span class="concept-tag tag-green">Emotional Responses in Interviews</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-start" onclick="startGame()">Begin Fieldwork &#10132;</button>
+    </div>
+  </div>
+
+  <!-- ==================== ROUND 1 ==================== -->
+  <div class="screen" id="screen-round1">
+    <div class="round-header">
+      <div class="round-badge r1">1</div>
+      <div class="round-info">
+        <h2>You Arrive</h2>
+        <div class="round-subtitle">First contact with your field site -- ~13 minutes</div>
+      </div>
+    </div>
+
+    <div class="scenario" id="r1scenario">You step out of a shared taxi onto a dusty road in a village outside Shymkent. The house is low-roofed and sun-bleached, its courtyard cluttered with plastic toys, a rusted swing set, and laundry drying on a wire strung between two apricot trees. A dog barks once and goes quiet. Inside, you can hear children -- many of them -- and a television playing a Turkish soap opera at full volume. Your host, Aisulu-apa, a mother of nine, opens the gate. She is 38 but looks older: tired eyes, flour on her hands, a toddler balanced on one hip. She smiles warmly and ushers you in, already setting out bread, kurt, and tea. She calls you "qyzym" -- my daughter -- before you have introduced yourself.<br><br>But you are not alone. Sitting at the head of the dastarkhan is Serik-ata, the village aksakal who arranged your visit through a local NGO contact. He introduced you to Aisulu-apa and three other mothers in the village. He is sipping tea slowly, watching. He has already told Aisulu-apa that you are "a student from the university writing about our families." When you explained your research earlier, he nodded approvingly and said, "Good, you will show them that our women are strong. They don't complain." He clearly expects to stay for the interview. Aisulu-apa glances at him before answering even your small-talk questions. The other mothers you are scheduled to meet this week were all introduced through him.<br><br>You need to begin. But Serik-ata's presence will shape every word Aisulu-apa says. And his framing -- "our women don't complain" -- has already told her what kind of answers are acceptable.</div>
+
+    <div class="concept-tags">
+      <span class="concept-tag tag-purple">Positionality</span>
+      <span class="concept-tag tag-cyan">Access &amp; Gatekeeping</span>
+      <span class="concept-tag tag-green">Thick Description</span>
+      <span class="concept-tag tag-orange">Relational Interviewing</span>
+    </div>
+
+    <div class="choices" id="r1choices">
+      <div class="choice-card" onclick="selectChoice('r1','A',this)"><div class="choice-letter">A</div><div class="choice-text" id="r1choiceA">Thank Serik-ata warmly for the introduction and ask if he would be willing to sit separately so Aisulu-apa can speak freely "as women do" -- framing his departure as a matter of gender propriety rather than a research demand. Begin the interview only after he leaves.</div></div>
+      <div class="choice-card" onclick="selectChoice('r1','B',this)"><div class="choice-letter">B</div><div class="choice-text" id="r1choiceB">Let Serik-ata stay. Do not conduct the formal interview today. Instead, treat this visit as relationship-building: drink tea, help Aisulu-apa in the kitchen, play with the children, observe. Note everything -- the house, the dynamics, what is said and unsaid in his presence. Return alone another day for the actual interview.</div></div>
+      <div class="choice-card" onclick="selectChoice('r1','C',this)"><div class="choice-letter">C</div><div class="choice-text" id="r1choiceC">Proceed with the interview while Serik-ata is present. Ask general, non-sensitive questions first. Treat his presence as data -- observe how Aisulu-apa's answers shift when she looks at him, what topics she avoids, where she hesitates. Record the meta-data. Plan a follow-up visit alone later to ask more sensitive questions.</div></div>
+      <div class="choice-card" onclick="selectChoice('r1','D',this)"><div class="choice-letter">D</div><div class="choice-text" id="r1choiceD">Interview Serik-ata first. Ask him about village life, family traditions, how many children families tend to have and why. This respects his authority, gives him a role in the research, and may create space for him to leave afterward feeling he has contributed. Then ask to speak with Aisulu-apa privately.</div></div>
+    </div>
+
+    <div class="justify-section">
+      <div class="justify-label">&#9998; Justify Your Choice</div>
+      <div class="justify-hint">Why this approach? How does your positionality as a 23-year-old childless woman shape this encounter? What do Schwartz-Shea &amp; Yanow, Fujii, or Geertz/Wedeen say about moments like this? (150-250 words)</div>
+      <textarea id="r1justify" oninput="updateWordCount('r1justify','r1wc'); autoSave();" placeholder="Your justification..."></textarea>
+      <div class="word-count" id="r1wc">0 words</div>
+    </div>
+
+    <div class="consequence" id="r1consequence">
+      <div class="consequence-label">&#127793; What happens next</div>
+      <p id="r1consequenceText">Whatever you chose, one thing is clear: Aisulu-apa noticed. She watched how you handled the aksakal -- whether you deferred to him, challenged him, or found a way around him. She is already deciding whether you are someone she can be honest with or someone who will write what the village wants outsiders to hear. When you return for your next visit, she opens the gate and stands there a moment before letting you in. "You came back," she says, as if she had not expected it. Two of the other mothers Serik-ata introduced you to have agreed to talk, but a third -- a woman with six children whose husband works in Russia -- sent word that she "has nothing to say." You do not yet know whether that is her decision or his.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="r1next" disabled onclick="nextRound(2)">Round 2 &#10132;</button>
+    </div>
+  </div>
+
+  <!-- ==================== ROUND 2 ==================== -->
+  <div class="screen" id="screen-round2">
+    <div class="round-header">
+      <div class="round-badge r2">2</div>
+      <div class="round-info">
+        <h2>Everything Unravels</h2>
+        <div class="round-subtitle">An ethical crisis meets an analytical surprise -- ~13 minutes</div>
+      </div>
+    </div>
+
+    <div class="crisis-scenario">
+      <div class="crisis-label">&#9888; Complication</div>
+      <p id="r2scenario">It is your fourth interview. You are alone with Gulmira, a mother of seven, in her kitchen. Her youngest is asleep in a cradle she rocks with her foot while she talks. She has been calm, even cheerful, describing how she manages the household on her husband's irregular construction wages. Then you ask about the decision to have a seventh child.<br><br>Her face changes. She stops rocking the cradle. She tells you that after her fifth child she hemorrhaged and nearly died. The doctor told her another pregnancy could kill her. She told her husband. He told his mother. Her mother-in-law said, "A woman who refuses children is not a real wife." Her husband said nothing -- which, Gulmira says, was worse than if he had shouted. She got pregnant twice more. She starts crying -- not loudly, but steadily, her hands flat on the table. Then she looks up at you and says: "You are from the university. You know people. Can you talk to someone? Can you report this? I don't know who to go to. I can't tell anyone here."<br><br>At the same time, something is shifting in your head. You came into this research with a framework -- you expected to find that large families resulted from a mix of tradition, economic calculation, and pronatalist policy incentives. But Gulmira's story, and the stories before hers, are showing you something you did not expect: coercion. Not from the state but from within families. Pressure from mothers-in-law. Husbands' silence as a weapon. Women who describe having children not as a choice but as something that happened to them. Your theoretical framework about rational demographic decision-making does not account for this. Your interview questions -- designed around "motivations" and "family planning decisions" -- have been assuming agency that some of these women do not have.<br><br>You are sitting across from a crying woman who has asked you for help, and you are realizing that the very language of your research has been obscuring what is actually happening.</p>
+    </div>
+
+    <div class="concept-tags">
+      <span class="concept-tag tag-orange">Research Ethics</span>
+      <span class="concept-tag tag-pink">Ongoing Consent</span>
+      <span class="concept-tag tag-cyan">Relational Interviewing</span>
+      <span class="concept-tag tag-green">Reflexivity</span>
+      <span class="concept-tag tag-purple">Meta-Data &amp; Silences</span>
+      <span class="concept-tag tag-orange">Emotional Responses</span>
+    </div>
+
+    <div class="choices" id="r2choices">
+      <div class="choice-card" onclick="selectChoice('r2','A',this)"><div class="choice-letter">A</div><div class="choice-text" id="r2choiceA">Stop the interview immediately. Sit with Gulmira. Do not record. Tell her honestly that you cannot intervene in her family situation -- you are a researcher, not an advocate -- but that you can help her find a local crisis line or women's support organization. After the visit, pause all fieldwork for several days. Use that time to rewrite your interview protocol: drop the language of "motivations" and "decisions" and restructure questions around lived experience and constraint. Write a reflexivity memo about how your assumptions shaped your questions.</div></div>
+      <div class="choice-card" onclick="selectChoice('r2','B',this)"><div class="choice-letter">B</div><div class="choice-text" id="r2choiceB">Pause the recorder and tell Gulmira you hear her. Acknowledge her pain without promising action you cannot deliver. Ask her if she wants to continue, stop, or have this part of the conversation excluded from your data. If she chooses to continue, shift the conversation away from the interview script entirely -- let her lead. Afterward, consult with your supervisor about whether this research has moved into territory that requires a revised ethics protocol. Begin revising your framework to center reproductive coercion rather than demographic choice, but do not discard your original framework entirely -- let the tension between them become part of the analysis.</div></div>
+      <div class="choice-card" onclick="selectChoice('r2','C',this)"><div class="choice-letter">C</div><div class="choice-text" id="r2choiceC">Acknowledge Gulmira's distress, offer to stop, but if she wants to keep talking, gently continue. Her emotional response is itself data -- a rupture in the narrative of cheerful resilience. Your job is not to fix her life but to document it faithfully. After the interview, write up everything: her words, her tears, the moment the cradle stopped rocking. Revise your theoretical framework to incorporate reproductive coercion alongside your original variables. Contact a local women's NGO and leave their number with Gulmira, but do not personally intervene. Keep your remaining interviews on schedule.</div></div>
+      <div class="choice-card" onclick="selectChoice('r2','D',this)"><div class="choice-letter">D</div><div class="choice-text" id="r2choiceD">Tell Gulmira that you will help. Promise to raise her situation with someone who can do something -- a local deputy, an NGO, a journalist. Her trust matters more than research boundaries. Then redesign your entire project: abandon the demographic framework and reframe the thesis around reproductive coercion and bodily autonomy in Kazakh families. Rewrite all interview questions from scratch. This is the real story and you should follow it.</div></div>
+    </div>
+
+    <div class="justify-section">
+      <div class="justify-label">&#9998; Justify Your Choice</div>
+      <div class="justify-hint">Three things are happening at once: an emotional crisis, a request for help, and a theoretical collapse. How do you handle each? What does Fujii say about the interview as a social encounter? What does reflexivity (Schwartz-Shea &amp; Yanow) demand when your own assumptions are exposed? What are the ethics of witnessing distress without intervening? (200-300 words)</div>
+      <textarea id="r2justify" oninput="updateWordCount('r2justify','r2wc'); autoSave();" placeholder="Your justification..."></textarea>
+      <div class="word-count" id="r2wc">0 words</div>
+    </div>
+
+    <div class="consequence" id="r2consequence">
+      <div class="consequence-label">&#127793; What happens next</div>
+      <p id="r2consequenceText">You leave Gulmira's house and walk down the road toward the shared taxi stop. The sun is low and hot. A group of children run past you chasing a deflated soccer ball. You sit on a concrete bench and try to write field notes but your hands are unsteady. You realize you are not the same researcher who arrived here a week ago. The clean lines of your proposal -- "motivations," "demographic trends," "pronatalist policy analysis" -- feel like a language from another world. What you have heard in these kitchens is not about policy. It is about bodies, silence, and the weight of what cannot be said to a husband at the dinner table. The question now is whether you can hold both: the structural analysis your thesis requires and the intimate, painful reality these women have trusted you with. One of the fathers you wanted to interview -- Gulmira's neighbor's husband -- has heard you are "asking women about their private business." He is not happy. Your access to male participants in this village may have just closed.</p>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="r2next" disabled onclick="showRound3()">Final Round &#10132;</button>
+    </div>
+  </div>
+
+  <!-- ==================== ROUND 3 ==================== -->
+  <div class="screen" id="screen-round3">
+    <div class="round-header">
+      <div class="round-badge r3">3</div>
+      <div class="round-info">
+        <h2>Defend Your Decisions</h2>
+        <div class="round-subtitle">A review panel challenges your fieldwork -- ~14 minutes</div>
+      </div>
+    </div>
+
+    <p style="color: var(--text-dim); margin-bottom: 24px; font-size: 15px;">Three reviewers have read your fieldwork report. They have questions. Respond to each.</p>
+
+    <div class="reviewer-card methodologist">
+      <div class="reviewer-badge methodologist">&#128300; The Methodologist</div>
+      <p id="r4challenge1">"Your original design proposed mixed methods -- regional statistics, policy analysis, and interviews differentiated by rural and urban settings. But your interview sample is almost entirely rural women accessed through a single gatekeeper, you failed to recruit fathers, and midway through fieldwork you abandoned your theoretical framework and rewrote your interview protocol. You also say you want to compare rural and urban experiences, but your urban interviews never materialized. So what exactly is your sampling logic now? How do you justify drawing analytical conclusions from a convenience sample filtered through a village elder's social network? And if your original framework collapsed, what replaced it -- or did you simply follow the data wherever it went, which is not a method but an absence of one?"</p>
+    </div>
+    <div class="justify-section">
+      <div class="justify-hint">Address the sampling, the framework revision, and the mixed-methods design. How do qualitative researchers handle it when the field reshapes the research? Draw on course readings. (150-250 words)</div>
+      <textarea id="r4respond1" oninput="updateWordCount('r4respond1','r4wc1'); autoSave();" placeholder="Your response to the methodologist..."></textarea>
+      <div class="word-count" id="r4wc1">0 words</div>
+    </div>
+
+    <div class="reviewer-card ethicist">
+      <div class="reviewer-badge ethicist">&#9878; The Ethicist</div>
+      <p id="r4challenge2">"A participant broke down during an interview and directly asked you for help. Let's set aside what you chose to do and focus on what comes after. You now hold information about domestic reproductive coercion within a specific family in a small village. If you publish this research -- even with pseudonyms -- people in that village will know who Gulmira is. Her husband will know. Her mother-in-law will know. Anonymization does not work in communities of 200 people. Beyond that: you entered these women's homes as a 23-year-old university student, someone who will leave this village and return to a comfortable life in the city. These women stay. What is your obligation to them after the research ends? And what happens if Gulmira's husband discovers what she told you -- not from your publication, but because someone in the village saw you leaving her house in tears? Your presence itself may have created risk for her. How do you account for that?"</p>
+    </div>
+    <div class="justify-section">
+      <div class="justify-hint">This is about ethics beyond IRB: ongoing consent, anonymization limits in small communities, researcher responsibility after leaving the field. What do the course readings say about protecting participants when standard safeguards are insufficient? (150-250 words)</div>
+      <textarea id="r4respond2" oninput="updateWordCount('r4respond2','r4wc2'); autoSave();" placeholder="Your response to the ethicist..."></textarea>
+      <div class="word-count" id="r4wc2">0 words</div>
+    </div>
+
+    <div class="reviewer-card participant">
+      <div class="reviewer-badge participant">&#128100; The Participant</div>
+      <p id="r4challenge3">"My name is Nazgul. I have six children. I live in a village in Turkestan region. I agreed to talk to you because the aksakal asked me to, and because you seemed like a nice girl. You sat in my kitchen and drank my tea and asked me why I have so many children. I want to ask you something back.<br><br>You are 23. You don't have children. You live in the city. You go to university. When you asked me about my 'motivations' for having a large family, I could see you were trying not to judge me, but I could also see that you already had your answer. You think I didn't choose this. Maybe you're right. Maybe you're wrong. But here is what bothers me: you came to my home, I fed you, I told you things I have never told anyone -- not my sister, not my mother -- and then you wrote it all down and left. You will put it in a paper. Maybe you will get a good grade. Maybe someone important will read it. But nothing will change for me.<br><br>So my question is: what was this for? Was it for my benefit, or for yours? And if it was for yours, what gave you the right to sit at my table and ask me to open a door I have spent years keeping shut?<br><br>I am not angry. I just want to know if you have thought about this. Because I have been thinking about it since you left."</p>
+    </div>
+    <div class="justify-section">
+      <div class="justify-hint">This is the hardest question in qualitative research. Nazgul is asking about power, extraction, and reciprocity. Draw on CBR principles (whose knowledge counts?), Fujii's relational interviewing, positionality (Schwartz-Shea &amp; Yanow), and photovoice (Wang). What do you owe her? What can research actually do? Be honest. (200-300 words, 8 points)</div>
+      <textarea id="r4respond3" oninput="updateWordCount('r4respond3','r4wc3'); autoSave();" placeholder="Your response to the participant..."></textarea>
+      <div class="word-count" id="r4wc3">0 words</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="showSummary()">Finish &amp; Review &#10132;</button>
+    </div>
+  </div>
+
+  <!-- ==================== SUMMARY ==================== -->
+  <div class="screen" id="screen-summary">
+    <div class="final-message">
+      <div class="final-emoji">&#127942;</div>
+      <h2>Fieldwork Complete</h2>
+      <p>Review your decisions below, then download your answers.</p>
+    </div>
+
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <div class="concepts-checklist">
+      <h4>Course Concepts You Should Have Engaged With</h4>
+      <div class="concept-tags" style="margin-top: 8px;">
+        <span class="concept-tag tag-purple">Positionality (Schwartz-Shea &amp; Yanow)</span>
+        <span class="concept-tag tag-pink">Thick Description (Geertz/Wedeen)</span>
+        <span class="concept-tag tag-cyan">Relational Interviewing (Fujii)</span>
+        <span class="concept-tag tag-orange">Meta-Data &amp; Silences (Fujii)</span>
+        <span class="concept-tag tag-green">Ongoing Consent</span>
+        <span class="concept-tag tag-purple">Reflexivity</span>
+        <span class="concept-tag tag-pink">Ethics Beyond IRB</span>
+        <span class="concept-tag tag-cyan">Emotional Responses in Interviews</span>
+        <span class="concept-tag tag-orange">CBR Principles</span>
+        <span class="concept-tag tag-green">Photovoice (Wang)</span>
+        <span class="concept-tag tag-purple">Reluctant Interviewees (Scott et al.)</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-export" onclick="exportAnswers()">&#128190; Download Answers</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============ PARTICLES ============
+(function() {
+  const container = document.getElementById('particles');
+  const colors = ['#7c3aed','#db2777','#0891b2','#ea580c','#16a34a','#ca8a04'];
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDuration = (15 + Math.random() * 25) + 's';
+    p.style.animationDelay = (Math.random() * 20) + 's';
+    p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+    container.appendChild(p);
+  }
+})();
+
+// ============ STATE ============
+const state = { student: 'Makhabbat', choices: {}, startTime: null, totalSeconds: 40 * 60 };
+
+// ============ TIMER ============
+let timerInterval;
+function startTimer() {
+  state.startTime = Date.now();
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+    const remaining = Math.max(0, state.totalSeconds - elapsed);
+    const min = Math.floor(remaining / 60);
+    const sec = remaining % 60;
+    const el = document.getElementById('timer');
+    el.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+    if (remaining <= 300) el.className = 'timer danger';
+    else if (remaining <= 600) el.className = 'timer warning';
+    if (remaining === 0) clearInterval(timerInterval);
+  }, 1000);
+}
+
+// ============ NAVIGATION ============
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const p = { intro:0, round1:25, round2:50, round3:75, summary:100 };
+  document.getElementById('progressBar').style.width = (p[id]||0) + '%';
+}
+
+function startGame() { startTimer(); showScreen('round1'); showAchievement('&#128205;','Fieldwork Begins','Round 1 of 3'); }
+function nextRound(n) {
+  showScreen('round' + n);
+  const msgs = { 2:['&#9888;','Everything Unravels','Crisis meets analysis...'] };
+  if (msgs[n]) showAchievement(msgs[n][0], msgs[n][1], msgs[n][2]);
+}
+function showRound3() {
+  showScreen('round3');
+  showAchievement('&#128101;','Review Panel','Defend your decisions');
+}
+
+// ============ ACHIEVEMENTS ============
+function showAchievement(icon, text, sub) {
+  const el = document.getElementById('achievement');
+  document.getElementById('achieveIcon').innerHTML = icon;
+  document.getElementById('achieveText').textContent = text;
+  document.getElementById('achieveSub').textContent = sub;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ============ CHOICES ============
+function selectChoice(round, letter, el) {
+  el.parentElement.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.choices[round] = letter;
+  const c = document.getElementById(round + 'consequence');
+  if (c) c.classList.add('visible');
+  checkNext(round);
+  autoSave();
+}
+
+function checkNext(round) {
+  const ta = document.getElementById(round + 'justify');
+  const btn = document.getElementById(round + 'next');
+  if (!btn) return;
+  const hasChoice = !!state.choices[round];
+  const words = ta ? ta.value.trim().split(/\s+/).filter(w=>w).length : 0;
+  btn.disabled = !(hasChoice && words >= 20);
+}
+
+// ============ WORD COUNT ============
+function updateWordCount(taId, wcId) {
+  const text = document.getElementById(taId).value.trim();
+  const words = text ? text.split(/\s+/).filter(w=>w).length : 0;
+  const el = document.getElementById(wcId);
+  el.textContent = words + ' words';
+  el.className = words >= 150 ? 'word-count good' : 'word-count';
+  if (taId.includes('justify')) checkNext(taId.replace('justify',''));
+}
+
+// ============ AUTO-SAVE ============
+function autoSave() {
+  const d = { student:state.student, choices:state.choices };
+  ['r1justify','r2justify','r4respond1','r4respond2','r4respond3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) d[id] = el.value;
+  });
+  localStorage.setItem('fieldwork_' + state.student, JSON.stringify(d));
+}
+function loadSave() {
+  const s = localStorage.getItem('fieldwork_' + state.student);
+  if (!s) return;
+  const d = JSON.parse(s);
+  ['r1justify','r2justify','r4respond1','r4respond2','r4respond3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && d[id]) el.value = d[id];
+  });
+  state.choices = d.choices || {};
+}
+
+// ============ SUMMARY ============
+function showSummary() {
+  autoSave();
+  showScreen('summary');
+  showAchievement('&#127942;','Fieldwork Complete!','Don\'t forget to download');
+  const rounds = [{n:1,t:'You Arrive',c:'r1'},{n:2,t:'Everything Unravels',c:'r2'}];
+  let html = '';
+  for (const r of rounds) {
+    html += `<div class="summary-item r${r.n}"><h4>Round ${r.n}: ${r.t}</h4>
+      <div class="choice-made">Choice: ${state.choices[r.c]||'None'}</div>
+      <div class="justification">${document.getElementById(r.c+'justify')?.value||''}</div></div>`;
+  }
+  html += `<div class="summary-item r4"><h4>Round 3: Defend Your Decisions</h4>
+    <div style="margin-bottom:12px"><strong style="color:var(--purple)">Methodologist:</strong><br><span class="justification">${document.getElementById('r4respond1')?.value||''}</span></div>
+    <div style="margin-bottom:12px"><strong style="color:var(--orange)">Ethicist:</strong><br><span class="justification">${document.getElementById('r4respond2')?.value||''}</span></div>
+    <div><strong style="color:var(--green)">Participant:</strong><br><span class="justification">${document.getElementById('r4respond3')?.value||''}</span></div></div>`;
+  document.getElementById('summaryGrid').innerHTML = html;
+}
+
+// ============ EXPORT ============
+function exportAnswers() {
+  let o = `FIELDWORK: THE GAME -- PLS511 FINAL EXAM\nStudent: ${state.student}\nDate: ${new Date().toLocaleString()}\n${'='.repeat(60)}\n\n`;
+  [{n:1,t:'YOU ARRIVE'},{n:2,t:'EVERYTHING UNRAVELS'}].forEach(r => {
+    o += `ROUND ${r.n}: ${r.t}\nChoice: ${state.choices['r'+r.n]||'None'}\nJustification:\n${document.getElementById('r'+r.n+'justify')?.value||'(empty)'}\n\n`;
+  });
+  o += `ROUND 3: DEFEND YOUR DECISIONS\nMethodologist:\n${document.getElementById('r4respond1')?.value||'(empty)'}\n\nEthicist:\n${document.getElementById('r4respond2')?.value||'(empty)'}\n\nParticipant:\n${document.getElementById('r4respond3')?.value||'(empty)'}\n`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([o], {type:'text/plain'}));
+  a.download = `PLS511_Exam_${state.student.replace(/\s+/g,'_')}.txt`;
+  a.click();
+}
+
+window.onload = loadSave;
+</script>
+</body>
+</html>
