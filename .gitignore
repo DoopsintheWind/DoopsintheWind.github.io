@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Editor swap/cache
+*.swp
+*~
+.idea/
+.vscode/
+
+# Env files
+.env
+.env.local
+
+# Build output (Jekyll, etc.)
+_site/
+
+# Node
+node_modules/
+
+# Logs
+*.log
