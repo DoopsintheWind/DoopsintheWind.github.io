@@ -305,11 +305,68 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   margin: 12px 0 0; font-style: italic; color: var(--ink-soft);
 }
 
+/* ── Curation / books ── */
+.preface {
+  padding: 36px 40px 8px;
+  max-width: 760px;
+  font-size: 17px; line-height: 1.65;
+  color: var(--ink-soft);
+}
+.preface p { margin: 0 0 16px; }
+.preface p:last-child { margin-bottom: 0; }
+
+.books {
+  padding: 16px 40px 56px;
+  display: grid; gap: 56px;
+}
+.book {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 36px;
+  align-items: start;
+}
+.book .cover-wrap { width: 180px; }
+.book .cover {
+  background: var(--paper-deep);
+  border: 1px solid var(--paper-edge);
+  padding: 8px;
+  box-shadow: 0 8px 24px -10px rgba(26,22,18,0.35);
+}
+.book .cover img {
+  width: 100%; display: block;
+  aspect-ratio: 2/3; object-fit: cover;
+  background: var(--ink);
+}
+.book .cover-caption {
+  font-family: var(--mono); font-size: 9.5px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  margin-top: 8px;
+  text-align: center;
+}
+.book h3 {
+  font-family: var(--serif-display); font-weight: 400;
+  font-size: 26px; line-height: 1.2;
+  margin: 0 0 4px; letter-spacing: -0.015em;
+}
+.book .author {
+  font-family: var(--mono); font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--ink-mute);
+  margin: 0 0 16px;
+}
+.book .book-body p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15.5px; line-height: 1.65;
+  max-width: 62ch;
+}
+
 /* ── Responsive ── */
 @media (max-width: 880px) {
   .topbar { padding: 16px 20px; flex-wrap: wrap; gap: 14px; }
   .topbar nav { gap: 14px; flex-wrap: wrap; }
-  .hero, .body-2col, .body-1col, .research-grid, .courses, .ai-grid, .contact-grid {
+  .hero, .body-2col, .body-1col, .research-grid, .courses, .ai-grid, .contact-grid, .preface, .books {
     padding-left: 20px; padding-right: 20px;
   }
   .hero { grid-template-columns: 1fr; gap: 32px; }
@@ -319,4 +376,6 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   .course { grid-template-columns: 36px 70px 1fr; }
   .course .term { grid-column: 1 / -1; text-align: left; }
   h1.display { font-size: clamp(48px, 12vw, 72px) !important; }
+  .book { grid-template-columns: 1fr; gap: 20px; }
+  .book .cover-wrap { width: 160px; }
 }
