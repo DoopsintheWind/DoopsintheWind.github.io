@@ -234,6 +234,13 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   color: var(--terracotta); vertical-align: super;
   margin-left: 8px; letter-spacing: 0.1em;
 }
+.courses.compact { padding: 24px 40px 40px; }
+.courses.compact .course {
+  grid-template-columns: 44px 80px 1fr 130px;
+  gap: 20px; padding: 16px 0;
+}
+.courses.compact .course .num { font-size: 26px; }
+.courses.compact .course h3 { font-size: 19px; }
 
 /* ── AI page ── */
 .ai-grid {
