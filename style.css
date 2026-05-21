@@ -153,6 +153,10 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   grid-template-columns: 1fr 1.1fr 1fr;
   gap: 36px;
 }
+.body-3col > div > p:not(.section-head) {
+  font-size: 18px;
+  line-height: 1.65;
+}
 .body-1col { padding: 0 40px 56px; }
 
 /* ── Currents list ── */
@@ -168,7 +172,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   text-transform: uppercase; letter-spacing: 0.1em;
   color: var(--ink-mute);
 }
-.currents .v { font-size: 14.5px; }
+.currents .v { font-size: 16.5px; line-height: 1.5; }
 
 /* ── Research grid ── */
 .research-grid {
@@ -258,9 +262,9 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .ai-fronts h3 {
   font-family: var(--serif-display); font-weight: 400;
-  font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em;
+  font-size: 26px; margin: 0 0 6px; letter-spacing: -0.01em;
 }
-.ai-fronts p { margin: 0; color: var(--ink-soft); font-size: 14.5px; }
+.ai-fronts p { margin: 0; color: var(--ink-soft); font-size: 17px; line-height: 1.55; }
 .annotation {
   background: var(--paper-deep); color: var(--ink);
   padding: 24px;
@@ -366,7 +370,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .book .book-body p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 15.5px; line-height: 1.65;
+  font-size: 17.5px; line-height: 1.65;
   max-width: 62ch;
 }
 
