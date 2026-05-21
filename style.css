@@ -369,11 +369,53 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   max-width: 62ch;
 }
 
+/* ── Post card (Substack) ── */
+.post-card-wrap { padding: 0 40px 56px; }
+.post-card {
+  display: block;
+  background: var(--paper-deep);
+  border: 1px solid var(--paper-edge);
+  padding: 26px 30px;
+  text-decoration: none;
+  color: inherit;
+  max-width: 720px;
+  transition: transform .25s, box-shadow .25s;
+}
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px -14px rgba(26,22,18,0.35);
+}
+.post-card-meta {
+  font-family: var(--mono); font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--ink-mute);
+  margin-bottom: 10px;
+}
+.post-card-title {
+  font-family: var(--serif-display); font-weight: 400;
+  font-size: 30px; line-height: 1.15;
+  margin: 0 0 6px; letter-spacing: -0.015em;
+}
+.post-card-sub {
+  font-family: var(--serif-body); font-style: italic;
+  font-size: 17px; line-height: 1.4;
+  color: var(--ink-soft);
+  margin: 0 0 18px;
+  max-width: 52ch;
+}
+.post-card-link {
+  font-family: var(--mono); font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--terracotta);
+}
+.currents .v a { color: var(--terracotta); text-decoration: none; }
+.currents .v a:hover { text-decoration: underline; }
+
 /* ── Responsive ── */
 @media (max-width: 880px) {
   .topbar { padding: 16px 20px; flex-wrap: wrap; gap: 14px; }
   .topbar nav { gap: 14px; flex-wrap: wrap; }
-  .hero, .body-2col, .body-1col, .research-grid, .courses, .ai-grid, .contact-grid, .preface, .books {
+  .hero, .body-2col, .body-1col, .research-grid, .courses, .ai-grid, .contact-grid, .preface, .books, .post-card-wrap {
     padding-left: 20px; padding-right: 20px;
   }
   .hero { grid-template-columns: 1fr; gap: 32px; }
