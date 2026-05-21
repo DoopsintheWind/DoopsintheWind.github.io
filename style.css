@@ -270,14 +270,15 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .ai-fronts p { margin: 0; color: var(--ink-soft); font-size: 14.5px; }
 .annotation {
-  background: var(--ink); color: var(--paper);
+  background: var(--paper-deep); color: var(--ink);
   padding: 24px;
   transform: rotate(0.6deg);
+  border: 1px solid var(--paper-edge);
 }
 .annotation .meta {
   font-family: var(--mono); font-size: 10.5px;
   text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--clay);
+  color: var(--ink-mute);
 }
 .annotation p {
   font-family: var(--serif-display); font-size: 24px;
@@ -286,7 +287,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .annotation .attr {
   font-family: var(--mono); font-size: 9px;
   text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--clay); margin-top: 18px;
+  color: var(--ink-mute); margin-top: 18px;
 }
 .reading { margin-top: 28px; }
 .reading ul { margin: 0; padding: 0; list-style: none; font-size: 14px; line-height: 1.7; }
