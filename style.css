@@ -4,12 +4,12 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --paper: #F2E9DA;
-  --paper-deep: #E8DCC5;
-  --paper-edge: #D9CAAE;
+  --paper: #DFCCA8;
+  --paper-deep: #CDB890;
+  --paper-edge: #B89E78;
   --ink: #1A1612;
   --ink-soft: #4A3F35;
-  --ink-mute: #7A6B5C;
+  --ink-mute: #6B5C4D;
   --terracotta: #B0492C;
   --terracotta-deep: #8A3620;
   --clay: #C99A7A;
