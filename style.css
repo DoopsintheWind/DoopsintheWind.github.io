@@ -41,15 +41,7 @@ a { color: inherit; }
 
 /* ── Layout shell ── */
 .shell { max-width: 1080px; margin: 0 auto; position: relative; }
-.grain {
-  position: fixed; inset: 0; pointer-events: none; z-index: 1;
-  opacity: 0.5; mix-blend-mode: screen;
-  background-image:
-    radial-gradient(rgba(242,228,204,0.07) 1px, transparent 1px),
-    radial-gradient(rgba(242,228,204,0.05) 1px, transparent 1px);
-  background-size: 3px 3px, 7px 7px;
-  background-position: 0 0, 1px 2px;
-}
+.grain { display: none; }
 .shell > * { position: relative; z-index: 2; }
 
 /* ── Topbar ── */
