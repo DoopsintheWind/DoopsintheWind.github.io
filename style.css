@@ -153,6 +153,12 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   grid-template-columns: 1fr 1fr;
   gap: 32px;
 }
+.body-3col {
+  padding: 0 40px 56px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 1fr;
+  gap: 36px;
+}
 .body-1col { padding: 0 40px 56px; }
 
 /* ── Currents list ── */
@@ -370,15 +376,13 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 
 /* ── Post card (Substack) ── */
-.post-card-wrap { padding: 0 40px 56px; }
 .post-card {
   display: block;
   background: var(--paper-deep);
   border: 1px solid var(--paper-edge);
-  padding: 26px 30px;
+  padding: 22px 24px;
   text-decoration: none;
   color: inherit;
-  max-width: 720px;
   transition: transform .25s, box-shadow .25s;
 }
 .post-card:hover {
@@ -393,15 +397,14 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .post-card-title {
   font-family: var(--serif-display); font-weight: 400;
-  font-size: 30px; line-height: 1.15;
-  margin: 0 0 6px; letter-spacing: -0.015em;
+  font-size: 24px; line-height: 1.15;
+  margin: 0 0 8px; letter-spacing: -0.015em;
 }
 .post-card-sub {
   font-family: var(--serif-body); font-style: italic;
-  font-size: 17px; line-height: 1.4;
+  font-size: 15.5px; line-height: 1.4;
   color: var(--ink-soft);
-  margin: 0 0 18px;
-  max-width: 52ch;
+  margin: 0 0 16px;
 }
 .post-card-link {
   font-family: var(--mono); font-size: 10.5px;
@@ -415,12 +418,12 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 @media (max-width: 880px) {
   .topbar { padding: 16px 20px; flex-wrap: wrap; gap: 14px; }
   .topbar nav { gap: 14px; flex-wrap: wrap; }
-  .hero, .body-2col, .body-1col, .research-grid, .courses, .ai-grid, .contact-grid, .preface, .books, .post-card-wrap {
+  .hero, .body-2col, .body-3col, .body-1col, .research-grid, .courses, .ai-grid, .contact-grid, .preface, .books {
     padding-left: 20px; padding-right: 20px;
   }
   .hero { grid-template-columns: 1fr; gap: 32px; }
   .hero .plate-wrap { max-width: 280px; }
-  .body-2col, .research-grid, .ai-grid, .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  .body-2col, .body-3col, .research-grid, .ai-grid, .contact-grid { grid-template-columns: 1fr; gap: 32px; }
   .research-item { grid-template-columns: 120px 1fr; }
   .course { grid-template-columns: 36px 70px 1fr; }
   .course .term { grid-column: 1 / -1; text-align: left; }
