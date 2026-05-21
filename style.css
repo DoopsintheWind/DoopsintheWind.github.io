@@ -4,18 +4,20 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --paper: #B59179;
-  --paper-deep: #9E7B63;
-  --paper-edge: #85664E;
-  --ink: #1A1612;
-  --ink-soft: #3D332A;
-  --ink-mute: #4F4135;
-  --terracotta: #B0492C;
-  --terracotta-deep: #8A3620;
-  --clay: #C99A7A;
-  --wine: #5C2018;
-  --moss: #4A5A3C;
-  --sky: #6E7F8F;
+  --paper: #6F4436;
+  --paper-deep: #835648;
+  --paper-edge: #9A6E5E;
+  --ink: #F2E4CC;
+  --ink-soft: #DDC9AA;
+  --ink-mute: #B89A7C;
+  --terracotta: #E08560;
+  --terracotta-deep: #C26B45;
+  --clay: #D9B894;
+  --wine: #C9583C;
+  --moss: #8FA078;
+  --sky: #98AAB8;
+  --line: rgba(242,228,204,0.18);
+  --line-soft: rgba(242,228,204,0.12);
 
   --serif-display: "DM Serif Display", "Cormorant Garamond", Georgia, serif;
   --serif-body: "Newsreader", "Source Serif 4", Georgia, serif;
@@ -41,10 +43,10 @@ a { color: inherit; }
 .shell { max-width: 1080px; margin: 0 auto; position: relative; }
 .grain {
   position: fixed; inset: 0; pointer-events: none; z-index: 1;
-  opacity: 0.45; mix-blend-mode: multiply;
+  opacity: 0.5; mix-blend-mode: screen;
   background-image:
-    radial-gradient(rgba(74,63,53,0.06) 1px, transparent 1px),
-    radial-gradient(rgba(74,63,53,0.04) 1px, transparent 1px);
+    radial-gradient(rgba(242,228,204,0.07) 1px, transparent 1px),
+    radial-gradient(rgba(242,228,204,0.05) 1px, transparent 1px);
   background-size: 3px 3px, 7px 7px;
   background-position: 0 0, 1px 2px;
 }
@@ -54,7 +56,7 @@ a { color: inherit; }
 .topbar {
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px 40px;
-  border-bottom: 1px solid rgba(26,22,18,0.18);
+  border-bottom: 1px solid var(--line);
   font-family: var(--mono);
   font-size: 10.5px;
   text-transform: uppercase;
@@ -166,7 +168,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .currents li {
   display: grid; grid-template-columns: 92px 1fr;
   padding: 10px 0;
-  border-top: 1px dotted rgba(26,22,18,0.25);
+  border-top: 1px dotted var(--line-soft);
   align-items: baseline;
 }
 .currents .k {
@@ -214,7 +216,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .course {
   display: grid; grid-template-columns: 60px 90px 1fr 140px;
   gap: 24px; padding: 24px 0;
-  border-top: 1px solid rgba(26,22,18,0.18);
+  border-top: 1px solid var(--line);
   align-items: baseline;
   transition: background .2s;
   text-decoration: none; color: inherit;
@@ -256,7 +258,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .ai-fronts > div {
   display: grid; grid-template-columns: 52px 1fr; gap: 18px;
   padding: 18px 0;
-  border-top: 1px dotted rgba(26,22,18,0.25);
+  border-top: 1px dotted var(--line-soft);
 }
 .ai-fronts .roman {
   font-family: var(--serif-display); font-size: 32px;
@@ -295,7 +297,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
 }
 .contact-list { list-style: none; padding: 0; margin: 0; }
-.contact-list li { padding: 14px 0; border-top: 1px solid rgba(26,22,18,0.18); }
+.contact-list li { padding: 14px 0; border-top: 1px solid var(--line); }
 .contact-list .k {
   font-family: var(--mono); font-size: 10px;
   text-transform: uppercase; letter-spacing: 0.1em;
