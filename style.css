@@ -4,9 +4,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --paper: #DFCCA8;
-  --paper-deep: #CDB890;
-  --paper-edge: #B89E78;
+  --paper: #CFB68A;
+  --paper-deep: #BCA174;
+  --paper-edge: #A78A5E;
   --ink: #1A1612;
   --ink-soft: #4A3F35;
   --ink-mute: #6B5C4D;
