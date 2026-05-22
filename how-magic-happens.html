@@ -762,7 +762,7 @@ window.MagicScenes = (function(){
         state.pitch += dy * 0.006;
         state.pitch = Math.max(-1.2, Math.min(1.2, state.pitch));
       });
-      var stop = function(){ if (!state.dragging) return; state.dragging = false; canvas.style.cursor = 'grab'; };
+      var stop = function(){ if (!state.dragging) return; state.dragging = false; canvas.style.cursor = 'grab'; state.autoRotate = true; };
       canvas.addEventListener('pointerup', stop);
       canvas.addEventListener('pointercancel', stop);
       canvas.addEventListener('pointerleave', stop);
@@ -1060,9 +1060,9 @@ window.MagicScenes = (function(){
 
   function smallLabel(text, pos, color){
     color = color || '#f3eedd';
-    var lab = H.textSprite(text, { color: color, font: 'italic 56px "Newsreader", serif', scale: 1 });
-    lab.position.set(pos.x, pos.y - 0.45, pos.z);
-    lab.scale.set(2.0, 0.5, 1);
+    var lab = H.textSprite(text, { color: color, font: 'italic 76px "Newsreader", serif', scale: 1 });
+    lab.position.set(pos.x, pos.y - 0.5, pos.z);
+    lab.scale.set(2.6, 0.62, 1);
     root.add(lab);
   }
   smallLabel('man', pts.man);
@@ -1094,8 +1094,8 @@ window.MagicScenes = (function(){
 
   var mid = new THREE.Vector3().addVectors(pts.man, pts.king).multiplyScalar(0.5);
   var royalTag = H.monoSprite('+ royal', { color: '#E08560' });
-  royalTag.position.set(mid.x - 0.4, mid.y + 0.25, mid.z);
-  royalTag.scale.set(1.6, 0.32, 1);
+  royalTag.position.set(mid.x - 0.4, mid.y + 0.3, mid.z);
+  royalTag.scale.set(2.3, 0.42, 1);
   royalTag.material.opacity = 0.95;
   root.add(royalTag);
 
