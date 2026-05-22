@@ -57,8 +57,8 @@ a { color: inherit; }
 }
 .topbar .brand b { color: var(--ink); font-weight: 600; }
 .topbar .brand .sep { margin: 0 10px; opacity: 0.4; }
-.topbar nav { display: flex; gap: 22px; }
-.topbar nav a { text-decoration: none; color: var(--ink-soft); transition: color .15s; }
+.topbar nav { display: flex; gap: 22px; flex-wrap: wrap; row-gap: 8px; justify-content: flex-end; }
+.topbar nav a { text-decoration: none; color: var(--ink-soft); transition: color .15s; white-space: nowrap; }
 .topbar nav a:hover { color: var(--ink); }
 .topbar nav a.active {
   color: var(--terracotta);
