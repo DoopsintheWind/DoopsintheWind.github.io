@@ -454,13 +454,60 @@
   /* RESPONSIVE */
   @media (max-width: 880px) {
     .magic-hero { grid-template-columns: 1fr; padding: 40px 20px 12px; }
+    .magic-hero h1.display { font-size: clamp(40px, 11vw, 64px); }
     .magic-hero .plate-meta { text-align: left; }
     .magic-running, .band, .magic-footer { margin-left: 20px; margin-right: 20px; }
-    .stage { grid-template-columns: 1fr; }
+    .magic-running {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 18px 20px;
+    }
+    .magic-running .label { display: flex; align-items: center; gap: 10px; }
+    .magic-running .label .arrow { display: inline-block; margin-top: 0; font-size: 22px; }
+    .magic-running .q { font-size: clamp(28px, 8vw, 42px); }
+    .magic-running .q .said { display: block; margin-left: 0; margin-top: 6px; }
+    .band-head { padding: 16px 18px 14px; }
+    .band-body { padding: 22px 18px 26px; }
+    .stage { grid-template-columns: 1fr; gap: 18px; }
     .stage .annot { padding-left: 0; border-left: 0; border-top: 1px dashed var(--line); padding-top: 18px; }
-    .loop-card { grid-template-columns: 1fr; gap: 18px; }
+    .box .box-name {
+      position: static;
+      display: block;
+      padding: 40px 18px 4px;
+      text-align: right;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .box.mini .box-name, .box.short .box-name { padding-top: 32px; }
+    .box.mini { height: auto; min-height: 110px; padding: 14px 18px; }
+    .box.short { height: auto; min-height: 140px; padding-bottom: 14px; }
+    .box .center { font-size: 20px; padding: 8px 4px; }
+    .toks { padding: 8px 12px 14px; }
+    .output-line { font-size: 20px; padding: 14px 8px; height: auto; }
+    .loop-card { grid-template-columns: 1fr; gap: 18px; padding: 22px 20px; }
+    .loop-arrow { font-size: 48px; }
     .loop-tag { writing-mode: horizontal-tb; transform: none; }
-    .box.tall { height: 460px; }
+    .box.tall { height: 420px; }
+    .box.med { height: 380px; }
+    .pullquote { padding: 0 8px; }
+    .magic-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
+  }
+
+  @media (max-width: 480px) {
+    .magic-hero { padding: 28px 16px 8px; }
+    .magic-hero h1.display { font-size: clamp(34px, 10.5vw, 48px); }
+    .magic-running, .band, .magic-footer { margin-left: 14px; margin-right: 14px; }
+    .magic-running { padding: 16px 16px; }
+    .band-head { padding: 14px 14px 12px; gap: 6px; }
+    .band-body { padding: 18px 14px 22px; }
+    .band-head .desc { font-size: 15px; }
+    .magic-running .q { font-size: clamp(26px, 9vw, 36px); }
+    .box.tall { height: 360px; }
+    .box.med { height: 340px; }
+    .box .center { font-size: 18px; }
+    .output-line { font-size: 17px; }
+    .output-line .word { font-size: 14px; padding: 6px 10px; }
+    .tok-chip { font-size: 14px; padding: 10px 14px; }
   }
 </style>
 </head>

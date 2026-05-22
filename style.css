@@ -26,6 +26,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+html, body { overflow-x: hidden; }
 body {
   margin: 0;
   background: var(--paper);
@@ -426,7 +427,14 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   .research-item { grid-template-columns: 120px 1fr; }
   .course { grid-template-columns: 36px 70px 1fr; }
   .course .term { grid-column: 1 / -1; text-align: left; }
-  h1.display { font-size: clamp(48px, 12vw, 72px) !important; }
+  h1.display { font-size: clamp(40px, 11vw, 64px) !important; }
   .book { grid-template-columns: 1fr; gap: 20px; }
   .book .cover-wrap { width: 160px; }
+}
+
+@media (max-width: 480px) {
+  .topbar { padding: 12px 16px; gap: 10px; }
+  .topbar .brand { font-size: 9.5px; letter-spacing: 0.18em; }
+  .topbar nav { gap: 8px 14px; row-gap: 6px; font-size: 9.5px; letter-spacing: 0.14em; justify-content: flex-start; }
+  h1.display { font-size: clamp(34px, 10.5vw, 48px) !important; }
 }
