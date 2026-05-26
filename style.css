@@ -4,9 +4,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --paper: #6F4436;
-  --paper-deep: #835648;
-  --paper-edge: #9A6E5E;
+  --paper: #855645;
+  --paper-deep: #97685A;
+  --paper-edge: #AE8170;
   --ink: #F2E4CC;
   --ink-soft: #DDC9AA;
   --ink-mute: #B89A7C;
@@ -32,7 +32,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--serif-body);
-  font-size: 16px;
+  font-size: 17.5px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -51,7 +51,7 @@ a { color: inherit; }
   padding: 20px 40px;
   border-bottom: 1px solid var(--line);
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 11.5px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--ink-soft);
@@ -87,7 +87,7 @@ h1.display {
 .lede {
   font-family: var(--serif-body);
   font-style: italic; font-weight: 300;
-  font-size: 22px; line-height: 1.4;
+  font-size: 24px; line-height: 1.4;
   color: var(--ink-soft);
   max-width: 36ch;
   margin: 20px 0 0;
@@ -155,7 +155,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   gap: 36px;
 }
 .body-3col > div > p:not(.section-head) {
-  font-size: 18px;
+  font-size: 19.5px;
   line-height: 1.65;
 }
 .body-1col { padding: 0 40px 56px; }
@@ -173,7 +173,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   text-transform: uppercase; letter-spacing: 0.1em;
   color: var(--ink-mute);
 }
-.currents .v { font-size: 16.5px; line-height: 1.5; }
+.currents .v { font-size: 18.5px; line-height: 1.5; }
 
 /* ── Research grid ── */
 .research-grid {
@@ -188,7 +188,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .research-item:hover { transform: translateY(-3px); }
 .research-item h3 {
   font-family: var(--serif-display); font-weight: 400;
-  font-size: 26px; line-height: 1.15;
+  font-size: 29px; line-height: 1.15;
   margin: 0 0 10px; letter-spacing: -0.015em;
 }
 .research-item .meta {
@@ -197,7 +197,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   color: var(--ink-mute);
   margin-bottom: 6px;
 }
-.research-item p { margin: 0; color: var(--ink-soft); font-size: 14.5px; line-height: 1.55; }
+.research-item p { margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.55; }
 .research-item .read {
   margin-top: 12px;
   font-family: var(--mono); font-size: 10px;
@@ -221,18 +221,18 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .course:first-child { border-top: 0; }
 .course:hover { background: rgba(176,73,44,0.04); }
 .course .num {
-  font-family: var(--serif-display); font-size: 36px; color: var(--ink-mute); line-height: 1;
+  font-family: var(--serif-display); font-size: 40px; color: var(--ink-mute); line-height: 1;
 }
 .course.accent .num { color: var(--terracotta); }
 .course .code, .course .term {
-  font-family: var(--mono); font-size: 10.5px;
+  font-family: var(--mono); font-size: 11.5px;
   text-transform: uppercase; letter-spacing: 0.1em;
   color: var(--ink-mute);
 }
 .course .term { text-align: right; line-height: 1.5; }
 .course h3 {
   font-family: var(--serif-display); font-weight: 400;
-  font-size: 26px; margin: 0; letter-spacing: -0.01em;
+  font-size: 30px; margin: 0; letter-spacing: -0.01em;
 }
 .course .new {
   font-family: var(--mono); font-size: 10px;
@@ -263,9 +263,9 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .ai-fronts h3 {
   font-family: var(--serif-display); font-weight: 400;
-  font-size: 26px; margin: 0 0 6px; letter-spacing: -0.01em;
+  font-size: 29px; margin: 0 0 6px; letter-spacing: -0.01em;
 }
-.ai-fronts p { margin: 0; color: var(--ink-soft); font-size: 17px; line-height: 1.55; }
+.ai-fronts p { margin: 0; color: var(--ink-soft); font-size: 18.5px; line-height: 1.55; }
 .annotation {
   background: var(--paper-deep); color: var(--ink);
   padding: 24px;
@@ -278,7 +278,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   color: var(--ink-mute);
 }
 .annotation p {
-  font-family: var(--serif-display); font-size: 24px;
+  font-family: var(--serif-display); font-size: 27px;
   line-height: 1.25; margin: 12px 0 0; letter-spacing: -0.01em;
 }
 .annotation .attr {
@@ -287,7 +287,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   color: var(--ink-mute); margin-top: 18px;
 }
 .reading { margin-top: 28px; }
-.reading ul { margin: 0; padding: 0; list-style: none; font-size: 14px; line-height: 1.7; }
+.reading ul { margin: 0; padding: 0; list-style: none; font-size: 15.5px; line-height: 1.7; }
 
 /* ── Contact ── */
 .contact-grid {
@@ -302,7 +302,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   color: var(--ink-mute);
 }
 .contact-list .v {
-  font-family: var(--serif-display); font-size: 24px;
+  font-family: var(--serif-display); font-size: 28px;
   margin-top: 4px; display: block;
 }
 .contact-list a { text-decoration: none; }
@@ -314,7 +314,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   transform: rotate(-0.5deg);
 }
 .postcard p {
-  font-family: var(--serif-body); font-size: 16px; line-height: 1.6;
+  font-family: var(--serif-body); font-size: 17.5px; line-height: 1.6;
   margin: 12px 0 0; font-style: italic; color: var(--ink-soft);
 }
 
@@ -322,7 +322,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .preface {
   padding: 36px 40px 8px;
   max-width: 760px;
-  font-size: 17px; line-height: 1.65;
+  font-size: 18.5px; line-height: 1.65;
   color: var(--ink-soft);
 }
 .preface p { margin: 0 0 16px; }
@@ -359,7 +359,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .book h3 {
   font-family: var(--serif-display); font-weight: 400;
-  font-size: 26px; line-height: 1.2;
+  font-size: 29px; line-height: 1.2;
   margin: 0 0 4px; letter-spacing: -0.015em;
 }
 .book .author {
@@ -371,7 +371,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .book .book-body p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 17.5px; line-height: 1.65;
+  font-size: 19px; line-height: 1.65;
   max-width: 62ch;
 }
 
@@ -397,12 +397,12 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .post-card-title {
   font-family: var(--serif-display); font-weight: 400;
-  font-size: 24px; line-height: 1.15;
+  font-size: 27px; line-height: 1.15;
   margin: 0 0 8px; letter-spacing: -0.015em;
 }
 .post-card-sub {
   font-family: var(--serif-body); font-style: italic;
-  font-size: 15.5px; line-height: 1.4;
+  font-size: 17px; line-height: 1.4;
   color: var(--ink-soft);
   margin: 0 0 16px;
 }
