@@ -41,7 +41,7 @@ a { color: inherit; }
 ::selection { background: var(--terracotta); color: var(--paper); }
 
 /* ── Layout shell ── */
-.shell { max-width: 1080px; margin: 0 auto; position: relative; }
+.shell { max-width: 1200px; margin: 0 auto; position: relative; }
 .grain { display: none; }
 .shell > * { position: relative; z-index: 2; }
 
@@ -56,9 +56,10 @@ a { color: inherit; }
   letter-spacing: 0.12em;
   color: var(--ink-soft);
 }
+.topbar .brand { white-space: nowrap; }
 .topbar .brand b { color: var(--ink); font-weight: 600; }
 .topbar .brand .sep { margin: 0 10px; opacity: 0.4; }
-.topbar nav { display: flex; gap: 22px; flex-wrap: wrap; row-gap: 8px; justify-content: flex-end; }
+.topbar nav { display: flex; gap: 18px; flex-wrap: nowrap; row-gap: 8px; justify-content: flex-end; }
 .topbar nav a { text-decoration: none; color: var(--ink-soft); transition: color .15s; white-space: nowrap; }
 .topbar nav a:hover { color: var(--ink); }
 .topbar nav a.active {
