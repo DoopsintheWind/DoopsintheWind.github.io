@@ -294,7 +294,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 /* ── Contact ── */
 .contact-grid {
   padding: 40px 40px;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+  display: grid; grid-template-columns: minmax(0, 560px); gap: 40px;
 }
 .contact-list { list-style: none; padding: 0; margin: 0; }
 .contact-list li { padding: 14px 0; border-top: 1px solid var(--line); }
@@ -309,16 +309,6 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .contact-list a { text-decoration: none; }
 .contact-list a:hover { color: var(--terracotta); }
-.postcard {
-  background: var(--paper-deep);
-  padding: 28px;
-  border: 1px solid var(--paper-edge);
-  transform: rotate(-0.5deg);
-}
-.postcard p {
-  font-family: var(--serif-body); font-size: 17.5px; line-height: 1.6;
-  margin: 12px 0 0; font-style: italic; color: var(--ink-soft);
-}
 
 /* ── Curation / books ── */
 .preface {
