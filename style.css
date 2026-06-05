@@ -157,7 +157,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   gap: 36px;
 }
 .body-3col > div > p:not(.section-head) {
-  font-size: 19.5px;
+  font-size: 19px;
   line-height: 1.65;
 }
 .body-1col { padding: 0 40px 56px; }
@@ -234,7 +234,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .course .term { text-align: right; line-height: 1.5; }
 .course h3 {
   font-family: var(--serif-display); font-weight: 400;
-  font-size: 30px; margin: 0; letter-spacing: -0.01em;
+  font-size: 29px; margin: 0; letter-spacing: -0.01em;
 }
 .course .new {
   font-family: var(--mono); font-size: 10px;
@@ -247,7 +247,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   gap: 20px; padding: 16px 0;
 }
 .courses.compact .course .num { font-size: 26px; }
-.courses.compact .course h3 { font-size: 19px; }
+.courses.compact .course h3 { font-size: 29px; }
 
 /* ── AI page ── */
 .ai-grid {
@@ -267,7 +267,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   font-family: var(--serif-display); font-weight: 400;
   font-size: 29px; margin: 0 0 6px; letter-spacing: -0.01em;
 }
-.ai-fronts p { margin: 0; color: var(--ink-soft); font-size: 18.5px; line-height: 1.55; }
+.ai-fronts p { margin: 0; color: var(--ink-soft); font-size: 19px; line-height: 1.65; }
 .annotation {
   background: var(--paper-deep); color: var(--ink);
   padding: 24px;
@@ -314,7 +314,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 .preface {
   padding: 36px 40px 8px;
   max-width: 760px;
-  font-size: 18.5px; line-height: 1.65;
+  font-size: 19px; line-height: 1.65;
   color: var(--ink-soft);
 }
 .preface p { margin: 0 0 16px; }
