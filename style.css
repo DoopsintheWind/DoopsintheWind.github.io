@@ -4,21 +4,21 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  /* Dusty terracotta — warm golden-brown ground, espresso ink, brick + sea-glass */
-  --paper: #CDA488;
-  --paper-deep: #C49A7E;
-  --paper-edge: #B0866A;
-  --ink: #3A2A20;
-  --ink-soft: #5A4636;
-  --ink-mute: #6B5742;
-  --terracotta: #9C3F28;
-  --terracotta-deep: #832F1C;
-  --clay: #D9B894;
-  --wine: #8A3620;
-  --moss: #3D6470;
-  --sky: #4F7280;
-  --line: rgba(58,42,32,0.22);
-  --line-soft: rgba(58,42,32,0.14);
+  /* Deep Harbour — dark teal-navy ground, sea-foam ink, coral + sea-glass */
+  --paper: #2B4D52;
+  --paper-deep: #335A60;
+  --paper-edge: #46696E;
+  --ink: #EDE3CF;
+  --ink-soft: #CBD8D2;
+  --ink-mute: #8AA39D;
+  --terracotta: #E0855F;
+  --terracotta-deep: #C96A45;
+  --clay: #8FB8B0;
+  --wine: #D9714E;
+  --moss: #8FB8B0;
+  --sky: #6FA0A6;
+  --line: rgba(237,227,207,0.18);
+  --line-soft: rgba(237,227,207,0.11);
 
   --serif-display: "DM Serif Display", "Cormorant Garamond", Georgia, serif;
   --serif-body: "Newsreader", "Source Serif 4", Georgia, serif;
@@ -112,12 +112,12 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   background: var(--paper-deep);
   border: 1px solid var(--paper-edge);
   padding: 12px;
-  box-shadow: 0 8px 28px -12px rgba(40,28,20,0.18);
+  box-shadow: 0 8px 28px -12px rgba(8,22,25,0.45);
 }
 .plate.tilt-l { transform: rotate(-1.2deg); }
 .plate.tilt-r { transform: rotate(0.8deg); }
 .plate-inner { aspect-ratio: 4/5; overflow: hidden; background: var(--ink); }
-.plate-inner img { width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(.18) saturate(.92) contrast(.96); }
+.plate-inner img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.95) contrast(.97); }
 .plate-inner.gradient {
   display: flex; align-items: center; justify-content: center;
   font-family: var(--serif-display);
@@ -221,7 +221,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   text-decoration: none; color: inherit;
 }
 .course:first-child { border-top: 0; }
-.course:hover { background: rgba(176,73,44,0.04); }
+.course:hover { background: rgba(224,133,95,0.06); }
 .course .num {
   font-family: var(--serif-display); font-size: 40px; color: var(--ink-mute); line-height: 1;
 }
@@ -335,7 +335,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   background: var(--paper-deep);
   border: 1px solid var(--paper-edge);
   padding: 8px;
-  box-shadow: 0 8px 24px -10px rgba(40,28,20,0.18);
+  box-shadow: 0 8px 24px -10px rgba(8,22,25,0.45);
 }
 .book .cover img {
   width: 100%; display: block;
@@ -379,7 +379,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .post-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px -14px rgba(40,28,20,0.18);
+  box-shadow: 0 10px 28px -14px rgba(8,22,25,0.45);
 }
 .post-card + .post-card { margin-top: 14px; }
 .post-card-meta {
