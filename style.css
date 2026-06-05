@@ -4,20 +4,21 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --paper: #855645;
-  --paper-deep: #97685A;
-  --paper-edge: #AE8170;
-  --ink: #F2E4CC;
-  --ink-soft: #DDC9AA;
-  --ink-mute: #B89A7C;
-  --terracotta: #E08560;
-  --terracotta-deep: #C26B45;
-  --clay: #D9B894;
-  --wine: #C9583C;
-  --moss: #8FA078;
-  --sky: #98AAB8;
-  --line: rgba(242,228,204,0.18);
-  --line-soft: rgba(242,228,204,0.12);
+  /* Coastal limestone — light summer ground, slate-teal ink, terracotta + sea-glass */
+  --paper: #F4EFE6;
+  --paper-deep: #ECE5D8;
+  --paper-edge: #DCD1BF;
+  --ink: #2C3A3D;
+  --ink-soft: #51635F;
+  --ink-mute: #6E7A77;
+  --terracotta: #CB6A4A;
+  --terracotta-deep: #B0563A;
+  --clay: #CDA98A;
+  --wine: #B0492C;
+  --moss: #4F7280;
+  --sky: #5E8290;
+  --line: rgba(44,58,61,0.16);
+  --line-soft: rgba(44,58,61,0.10);
 
   --serif-display: "DM Serif Display", "Cormorant Garamond", Georgia, serif;
   --serif-body: "Newsreader", "Source Serif 4", Georgia, serif;
@@ -111,7 +112,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   background: var(--paper-deep);
   border: 1px solid var(--paper-edge);
   padding: 12px;
-  box-shadow: 0 8px 28px -12px rgba(26,22,18,0.35);
+  box-shadow: 0 8px 28px -12px rgba(60,74,77,0.16);
 }
 .plate.tilt-l { transform: rotate(-1.2deg); }
 .plate.tilt-r { transform: rotate(0.8deg); }
@@ -344,7 +345,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   background: var(--paper-deep);
   border: 1px solid var(--paper-edge);
   padding: 8px;
-  box-shadow: 0 8px 24px -10px rgba(26,22,18,0.35);
+  box-shadow: 0 8px 24px -10px rgba(60,74,77,0.16);
 }
 .book .cover img {
   width: 100%; display: block;
@@ -388,7 +389,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .post-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px -14px rgba(26,22,18,0.35);
+  box-shadow: 0 10px 28px -14px rgba(60,74,77,0.16);
 }
 .post-card + .post-card { margin-top: 14px; }
 .post-card-meta {
