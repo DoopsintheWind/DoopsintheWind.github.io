@@ -4,21 +4,21 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  /* Deep Harbour — dark teal-navy ground, sea-foam ink, coral + sea-glass */
-  --paper: #2B4D52;
-  --paper-deep: #335A60;
-  --paper-edge: #46696E;
-  --ink: #EDE3CF;
-  --ink-soft: #CBD8D2;
-  --ink-mute: #8AA39D;
-  --terracotta: #E0855F;
-  --terracotta-deep: #C96A45;
-  --clay: #8FB8B0;
-  --wine: #D9714E;
-  --moss: #8FB8B0;
-  --sky: #6FA0A6;
-  --line: rgba(237,227,207,0.18);
-  --line-soft: rgba(237,227,207,0.11);
+  /* Salt Coast — pale sand ground, deep ocean ink, tidal teal + sea-glass */
+  --paper: #F2EEE3;
+  --paper-deep: #E9E3D3;
+  --paper-edge: #D6CEBA;
+  --ink: #16384A;
+  --ink-soft: #3E5D6B;
+  --ink-mute: #6F857C;
+  --terracotta: #0E6F79;
+  --terracotta-deep: #0B5860;
+  --clay: #5E8F84;
+  --wine: #24647A;
+  --moss: #5E8F84;
+  --sky: #6FA3B8;
+  --line: rgba(22,56,74,0.20);
+  --line-soft: rgba(22,56,74,0.11);
 
   --serif-display: "DM Serif Display", "Cormorant Garamond", Georgia, serif;
   --serif-body: "Newsreader", "Source Serif 4", Georgia, serif;
@@ -112,7 +112,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   background: var(--paper-deep);
   border: 1px solid var(--paper-edge);
   padding: 12px;
-  box-shadow: 0 8px 28px -12px rgba(8,22,25,0.45);
+  box-shadow: 0 8px 28px -12px rgba(22,56,74,0.22);
 }
 .plate.tilt-l { transform: rotate(-1.2deg); }
 .plate.tilt-r { transform: rotate(0.8deg); }
@@ -205,10 +205,10 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   font-family: var(--mono); font-size: 10px;
   color: var(--terracotta); letter-spacing: 0.08em;
 }
-.tone-1 { background: linear-gradient(135deg, #B0492C, #5C2018); }
-.tone-2 { background: linear-gradient(135deg, #C99A7A, #8A3620); }
-.tone-3 { background: linear-gradient(135deg, #4A5A3C, #1A1612); }
-.tone-4 { background: linear-gradient(135deg, #6E7F8F, #2A2520); }
+.tone-1 { background: linear-gradient(135deg, #1C7682, #0E3A4A); }
+.tone-2 { background: linear-gradient(135deg, #7FAEBF, #2E5A6E); }
+.tone-3 { background: linear-gradient(135deg, #5E8F84, #1F3B34); }
+.tone-4 { background: linear-gradient(135deg, #D8CDAF, #8A7B57); }
 
 /* ── Teaching list ── */
 .courses { padding: 40px 40px 56px; }
@@ -221,7 +221,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   text-decoration: none; color: inherit;
 }
 .course:first-child { border-top: 0; }
-.course:hover { background: rgba(224,133,95,0.06); }
+.course:hover { background: rgba(14,111,121,0.07); }
 .course .num {
   font-family: var(--serif-display); font-size: 40px; color: var(--ink-mute); line-height: 1;
 }
@@ -335,7 +335,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
   background: var(--paper-deep);
   border: 1px solid var(--paper-edge);
   padding: 8px;
-  box-shadow: 0 8px 24px -10px rgba(8,22,25,0.45);
+  box-shadow: 0 8px 24px -10px rgba(22,56,74,0.22);
 }
 .book .cover img {
   width: 100%; display: block;
@@ -379,7 +379,7 @@ hr.hairline { border: 0; height: 1px; background: var(--ink); opacity: 0.18; mar
 }
 .post-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px -14px rgba(8,22,25,0.45);
+  box-shadow: 0 10px 28px -14px rgba(22,56,74,0.22);
 }
 .post-card + .post-card { margin-top: 14px; }
 .post-card-meta {
