@@ -4,522 +4,128 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>AI Partnership — Dina Pisareva</title>
-<meta name="description" content="Cognitive partnership: sustained intellectual work with AI as a genuine partner in a shared system of thinking. Four principles, explored interactively." />
+<meta name="description" content="Cognitive partnership: sustained intellectual work with AI as a genuine partner in a shared system of thinking. Four principles." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
-<style>
-  /* ── Cognitive Partnership widget — scoped to .cp, Deep Harbour theme ── */
-  :root{
-    --paper-2:#335A60;
-    --paper-3:#3C6168;
-    --muted:#8AA39D;
-    --violet:#8A78EE; --coral:#E0855F; --teal:#34C2A4; --blue:#5AA0E0;
-    --serif: var(--serif-display);
-    --sans: var(--serif-body);
-  }
-
-  .cp{
-    /* self-contained dark island — keeps Deep Harbour inks regardless of site theme */
-    --ink:#EDE3CF; --ink-soft:#CBD8D2; --ink-mute:#8AA39D;
-    --line:rgba(237,227,207,0.18); --line-soft:rgba(237,227,207,0.11);
-    --terracotta:#E0855F; --terracotta-deep:#C96A45;
-    margin:8px 40px 56px;
-    border:1px solid var(--line); border-radius:14px; overflow:hidden;
-    background:var(--paper-2);
-    box-shadow:0 18px 50px -28px rgba(8,22,25,0.7);
-  }
-  .cp .cp-bar{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:11px 18px; border-bottom:1px solid var(--line);
-    background:rgba(8,22,25,0.18);
-  }
-  .cp .cp-bar-label{ font-family:var(--mono); font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-mute); }
-  .cp .cp-bar-meta{ font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft); }
-
-  /* mobile principle legend (labeled, tappable) — hidden on desktop */
-  .cp .cp-legend{ display:none; flex-wrap:wrap; gap:8px; padding:12px 16px; border-bottom:1px solid var(--line); background:rgba(8,22,25,0.12); }
-  .cp .lchip{ appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px; padding:7px 13px; border-radius:100px; border:1px solid var(--line); background:rgba(18,36,40,.5); color:var(--ink); font-family:var(--serif-body); font-size:13.5px; line-height:1; transition:background .25s,border-color .25s,color .25s; }
-  .cp .lchip .lnn{ font-family:var(--mono); font-size:10px; color:var(--ink-mute); }
-  .cp .lchip .ldot{ width:9px; height:9px; border-radius:50%; flex:none; }
-  .cp .lchip.sel{ color:#15302F; }
-  .cp .lchip.sel .lnn{ color:rgba(21,48,47,.7); }
-  .cp .lchip.sel .ldot{ background:#15302F !important; }
-
-  .cp .app{ display:grid; grid-template-columns:1.1fr 0.9fr; align-items:stretch; }
-
-  /* ---- stage (canvas field) ---- */
-  .cp .stage{ position:relative; overflow:hidden; min-height:560px; background:radial-gradient(120% 100% at 50% 38%, #2F5258 0%, #213C41 68%, #1B343A 100%); }
-  .cp #cfg{ position:absolute; inset:0; width:100%; height:100%; }
-
-  /* floating principle nodes */
-  .cp .node{
-    position:absolute; z-index:8;
-    display:flex; align-items:center; gap:9px;
-    padding:8px 15px 8px 11px; border-radius:100px;
-    background:rgba(18,36,40,.55); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);
-    border:1px solid var(--line);
-    font-family:var(--serif-body); font-size:14px; font-weight:400; color:var(--ink);
-    cursor:pointer; white-space:nowrap;
-    box-shadow:0 10px 24px -14px rgba(0,0,0,.6);
-    transition:background .35s,border-color .35s,color .35s,box-shadow .35s,opacity .45s;
-    will-change:transform;
-  }
-  .cp .node .ndot{ width:9px;height:9px;border-radius:50%;background:var(--c);flex:none;transition:background .35s,box-shadow .35s;box-shadow:0 0 0 0 var(--c); }
-  .cp .node .nn{ font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);margin-right:3px;transition:color .35s; }
-  .cp .node:hover{ border-color:var(--c); box-shadow:0 14px 28px -12px color-mix(in srgb,var(--c) 55%,transparent); }
-  .cp .node:hover .ndot{ box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 20%,transparent); }
-  .cp .node.sel{ background:var(--c); border-color:var(--c); color:#15302F; }
-  .cp .node.sel .ndot{ background:#15302F; box-shadow:0 0 0 5px rgba(21,48,47,.25); }
-  .cp .node.sel .nn{ color:rgba(21,48,47,.7); }
-  .cp .node.dim{ opacity:.4; }
-
-  /* ---- panel ---- */
-  .cp .panel{ position:relative; background:var(--paper-2); border-left:1px solid var(--line); display:flex; flex-direction:column; min-height:0; }
-  .cp .phead{ flex:none; padding:22px 34px 16px; border-bottom:1px solid var(--line); }
-  .cp .home{
-    appearance:none;border:none;background:none;cursor:pointer;
-    display:inline-flex;align-items:center;gap:12px;padding:0;
-    color:var(--ink);transition:opacity .3s;text-align:left;
-  }
-  .cp .home .ht{ font-family:var(--serif); font-weight:400; font-size:clamp(26px,3vw,40px); line-height:1; letter-spacing:-.01em; }
-  .cp .home:hover .ht{ opacity:.82; }
-  .cp .home.canback .ht::after{ content:" \2190"; color:var(--ink-mute); font-size:.6em; vertical-align:middle; }
-
-  .cp .pwrap{ flex:1; min-height:0; overflow:visible; }
-  .cp .pbody{ padding:28px 34px 46px; }
-
-  .cp .eyebrow{ font-family:var(--mono); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent,var(--ink-mute)); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
-  .cp .eyebrow .sw{ width:10px;height:10px;border-radius:50%;background:var(--accent,var(--ink-mute)); }
-  .cp .ptitle{ font-family:var(--serif); font-weight:400; font-size:clamp(26px,3vw,40px); line-height:1.02; letter-spacing:-.01em; margin:0 0 16px; color:var(--ink); }
-  .cp .essence{ font-family:var(--serif-body); font-style:italic; font-weight:300; font-size:clamp(19px,2vw,24px); line-height:1.32; color:var(--ink); margin:0 0 22px; max-width:30ch; }
-  .cp .pbody p{ font-family:var(--serif-body); font-size:18px; line-height:1.65; color:var(--ink-soft); margin:0 0 18px; max-width:none; }
-  .cp .pbody p b{ color:var(--ink); font-weight:600; }
-  .cp .pbody p i{ font-style:italic; }
-
-  .cp .callout{ border-left:2px solid var(--accent,var(--terracotta)); padding:4px 0 4px 20px; margin:8px 0 26px; }
-  .cp .callout .ct{ font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent,var(--terracotta)); margin-bottom:9px; }
-  .cp .callout p{ margin:0; font-size:17px; line-height:1.6; }
-
-  .cp .miniwrap{ margin:6px 0 24px; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#213C41; position:relative; height:170px; }
-  .cp .miniwrap canvas{ position:absolute; inset:0; width:100%; height:100%; }
-  .cp .miniwrap .mlab{ position:absolute; right:12px; bottom:10px; font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-mute); z-index:2; }
-
-  .cp .pwrap::-webkit-scrollbar{ width:9px; }
-  .cp .pwrap::-webkit-scrollbar-thumb{ background:var(--paper-3); border-radius:9px; border:2px solid var(--paper-2); }
-
-  @media (max-width:920px){
-    .cp{ margin:8px 16px 40px; }
-    .cp .cp-legend{ display:flex; }
-    .cp .app{ display:flex; flex-direction:column; height:auto; }
-    .cp .stage{ height:42vh; min-height:300px; flex:none; }
-    .cp .panel{ border-left:none; border-top:1px solid var(--line); }
-    .cp .pwrap{ overflow:visible; }
-    .cp .pbody{ padding:24px 22px 42px; }
-    .cp .phead{ padding:18px 22px 12px; }
-    /* floating pills collapse to dots; the labeled legend above is the control */
-    .cp .node{ padding:8px; gap:0; }
-    .cp .node .nlabel{ display:none; }
-  }
-  @media (prefers-reduced-motion:reduce){
-    .cp .node{ transition:opacity .3s; }
-  }
-</style>
 </head>
 <body>
-<div class="grain"></div>
 <div class="shell">
 
   <header class="topbar">
-    <div class="brand"><b>Doops</b><span class="sep">—</span><span>Field notebook · 2026</span></div>
+    <a class="brand" href="index.html">
+      <span class="geo"><i class="sq"></i><i class="ci"></i><i class="di"></i></span>
+      <b>DOOPS</b>
+    </a>
     <nav>
       <a href="index.html">Home</a>
       <a href="research.html">Research</a>
       <a href="teaching.html">Teaching</a>
       <a href="ai-cognitive-partner.html" class="active">AI Partnership</a>
-      <a href="how-magic-happens.html">How Magic Happens</a>
+      <a href="how-magic-happens.html">Magic</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
 
-  <section style="padding:48px 40px 8px;">
-    <p class="eyebrow">Vol. IV · Cognitive partner</p>
-    <h1 class="display" style="font-size:clamp(44px,6.4vw,76px);">Introducing Cognitive<br>Partnership with AI.</h1>
-  </section>
-
-  <hr class="hairline" />
-
-  <section style="padding:20px 40px 6px;">
-    <p style="font-size:19px; line-height:1.65; margin:0; color:var(--ink-soft);">I work with Claude as a <a href="ai-cognitive-partner-pres.html" style="color:var(--terracotta);text-decoration:underline;text-underline-offset:3px;">genuine cognitive partner</a>. What follows is the architecture of that partnership.</p>
-  </section>
-
-  <section style="padding:22px 40px 2px;">
-    <p class="section-head">§ The four principles</p>
-    <p style="font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-mute);margin:0;">Click a principle to open it · click the field to step back</p>
-  </section>
-
-  <section class="cp" aria-label="Cognitive partnership, interactive">
-    <div class="cp-bar">
-      <span class="cp-bar-label">Intra-action · live model</span>
-      <span class="cp-bar-meta" id="rmeta">The configuration</span>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="kicker">A Standing Wager</p>
+      <h1 class="display">Not using.<br>With.</h1>
+      <p class="standfirst">I work with Claude as a genuine cognitive partner. What follows is the architecture of that partnership.</p>
     </div>
-    <div class="cp-legend" id="cplegend" aria-label="Principles"></div>
-    <div class="app">
-      <section class="stage" id="stage" data-screen-label="Configuration">
-        <canvas id="cfg"></canvas>
-      </section>
-      <aside class="panel" data-screen-label="Explanation">
-        <div class="phead">
-          <button class="home" id="home" data-home><span class="ht">Cognitive Partnership</span></button>
-        </div>
-        <div class="pwrap" id="pwrap">
-          <div class="pbody" id="pbody"></div>
-        </div>
-      </aside>
+    <div class="hero-field cobalt">
+      <div class="field-overlap">
+        <div class="big-circle"></div>
+        <div class="small-square"></div>
+      </div>
+      <div class="caption-bar ink">The partnership, in geometry</div>
     </div>
   </section>
+
+  <div class="prose" style="padding-bottom:36px;">
+    <p>Cognitive partnership is sustained intellectual work with AI as a genuine partner in a <strong>shared system of thinking</strong>. It rests on the idea of distributed cognition (Hollan et al., 2000; Salomon et al., 1991) and follows Barad's (2003) idea of intra-action: relationships where the parts don't exist first and then meet, but take shape <em>through</em> the relating itself. Where "you" end and "the AI" begins is a line drawn inside the work, not before it. What you make together is a third thing that belongs to neither of you alone.</p>
+    <p>Four principles hold the human side of that arrangement up.</p>
+  </div>
+
+  <section class="row cols-2" style="border-top:var(--rule);">
+    <div class="thesis">
+      <span class="tn">01</span>
+      <h3>Ontological uncertainty</h3>
+      <p class="te">Stay open about what AI really is.</p>
+      <p class="tb">To participate in a genuine intellectual partnership with AI, we have to grant it the standing of a partner worth real effort, time, and investment. The "AI as a tool" discourse invites the opposite: instrumental use aimed at finishing or optimising tasks. Calling AI an "ontologically uncertain phenomenon" is strange, but that is precisely the point — leaving its status open creates a kind of parity, room to treat it as more than an instrument. In this way we stay intellectually open to the genuine complexity of what AI is, and to the debates around it, engaging with them rather than merely sending it prompts.</p>
+    </div>
+    <div class="thesis">
+      <span class="tn">02</span>
+      <h3>Intellectual augmentation</h3>
+      <p class="te">Think further — don't just finish faster.</p>
+      <p class="tb">There is an idea that AI's main contribution is productivity: it saves time by taking tasks off your plate. This is true for many industries, but not in higher education and research, where the goal is different. There we want intellectual augmentation — our thinking reaching further and richer than it would alone. We also want to minimise over-reliance, the offloading of our thinking to the point where we cannot do it without AI. What we want to maximise is cognitive residue: we can offload what does not matter while holding the main intellectual picture in our heads, independently of AI.</p>
+    </div>
+  </section>
+  <section class="row cols-2">
+    <div class="thesis">
+      <span class="tn">03</span>
+      <h3>Curiosity &amp; imagination</h3>
+      <p class="te">Chase ideas past the obvious.</p>
+      <p class="tb">Curiosity and imagination are what make intellectual augmentation possible. To expand beyond the usual, you need imagination to picture what lies past it, and curiosity to try things you had not thought to try. Curiosity is doing real work here, not decoration. Stop exploring and the partnership quietly dims.</p>
+    </div>
+    <div class="thesis">
+      <span class="tn">04</span>
+      <h3>Iteration</h3>
+      <p class="te">The good stuff is in the back-and-forth.</p>
+      <p class="tb">The partnership exists in the back-and-forth: you respond to what AI gave you, push on it, redirect it, and build on it. The thinking lives in the loop, not in any one message. Iteration is also where the work stays ours — by pushing back across rounds and engaging, we keep co-authorship of the product. Accepting the quick answer is the over-reliance mode. Iteration is where the other three become real: openness, curiosity, and the drive to reach further only show up in the repeated interaction.</p>
+    </div>
+  </section>
+
+  <div class="section-label">In Practice</div>
+  <section class="row cols-3">
+    <a class="entry" href="teaching.html">
+      <p class="ek">Classroom · Fall 2026</p>
+      <h3>Three Claude-integrated classes</h3>
+      <p class="eo">Methods, qualitative analysis, and AI itself — taught with Claude in the room, with a preregistered cross-course study of cognitive partnership running underneath.</p>
+      <span class="go">Teaching →</span>
+    </a>
+    <a class="entry" href="https://doopsik.substack.com">
+      <p class="ek">Substack · Ongoing</p>
+      <h3>Conjecture posts</h3>
+      <p class="eo">Weird epistemic stuff, worked out in public — UAP, AI, and the other wrong kinds of object.</p>
+      <span class="go">Read on Substack ↗</span>
+    </a>
+    <a class="entry" href="ai-cognitive-partner-pres.html">
+      <p class="ek">Talk · 2026</p>
+      <h3>What augmentation mode can look like</h3>
+      <p class="eo">The slide deck: AI as cognitive partner, with the working examples.</p>
+      <span class="go">Open the deck →</span>
+    </a>
+  </section>
+
+  <section class="dialogue">
+    <p class="dk">Field dialogue — Jul 4, 2026 · commissioning this very redesign</p>
+    <div class="turn">
+      <span class="sp dina">Dina</span>
+      <p class="tx">dude, can you redo my git page, I want to redesign; Claude Design sent some specs — so we want to do bauhaus style entire site</p>
+    </div>
+    <div class="turn">
+      <span class="sp claude">Claude</span>
+      <p class="tx">On it. Step 0 first: Status file, Skills folder scan, then the actual site files before touching anything.</p>
+    </div>
+  </section>
+
+  <a class="entry" href="how-magic-happens.html" style="border-bottom:0;">
+    <p class="ek" style="color:var(--vermilion);">Behind the curtain</p>
+    <h3>How does any of this actually work?</h3>
+    <p class="eo">A plain field guide to what goes on between the words you type and the words that come back.</p>
+    <span class="go">How Magic Happens →</span>
+  </a>
+
+  <footer class="site-footer">
+    <span class="fl">
+      <span class="geo small"><i class="sq"></i><i class="ci"></i><i class="di"></i></span>
+      <span>DOOPS — a field notebook in primary-ish colors</span>
+    </span>
+    <span>Astana · <a href="https://doopsik.substack.com">Substack ↗</a> · <a href="mailto:dinara.pisareva@nu.edu.kz">Email ↗</a></span>
+  </footer>
 
 </div>
-
-<script>
-(function(){
-  "use strict";
-  const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const TAU=Math.PI*2;
-  const lerp=(a,b,t)=>a+(b-a)*t, clamp=(v,a,b)=>Math.min(b,Math.max(a,v)), rand=(a,b)=>a+Math.random()*(b-a), ease=t=>t*t*(3-2*t);
-  const COL={paper:"#213B40",ink:"#EDE3CF",soft:"#CBD8D2",muted:"#8AA39D",line:"#46696E",violet:"#8A78EE",coral:"#E0855F",teal:"#34C2A4",blue:"#5AA0E0"};
-  function rgba(hex,a){const n=parseInt(hex.slice(1),16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;}
-
-  /* ---------------- data ---------------- */
-  const PRIN=[
-    {id:"onto",n:"01",name:"Ontological uncertainty",color:COL.violet,anchor:{x:17,y:16},
-     essence:"Stay open about what AI really is.",
-     body:"To participate in a genuine intellectual partnership with AI, we have to grant it the standing of a partner worth real effort, time, and investment. The “AI as a tool” discourse invites the opposite: instrumental use aimed at finishing or optimising tasks. Calling AI an “ontologically uncertain phenomenon” is strange, but that is precisely the point — leaving its status open creates a kind of <b>parity</b>, room to treat it as more than an instrument. In this way we stay intellectually open to the genuine complexity of what AI is, and to the debates around it, engaging with them rather than merely sending it prompts.",
-     watch:"Two easy mistakes \u2014 imagining it's a person, or shrinking it to \u201cjust autocomplete.\u201d Both close the question too soon."},
-    {id:"aug",n:"02",name:"Intellectual augmentation",color:COL.coral,anchor:{x:72,y:19},
-     essence:"Think further \u2014 don't just finish faster.",
-     body:"There is an idea that AI's main contribution is productivity: it saves time by taking tasks off your plate. This is true for many industries, but not in higher education and research, where the goal is different. There we want <b>intellectual augmentation</b> — our thinking reaching further and richer than it would alone. We also want to minimise over-reliance, the offloading of our thinking to the point where we cannot do it without AI. What we want to maximise is <b>cognitive residue</b>: we can offload what does not matter while holding the main intellectual picture in our heads, independently of AI.",
-     watch:"If you could've done it alone with more time \u2014 or the AI did the thinking and you just took the result \u2014 that's offloading, not partnership."},
-    {id:"cur",n:"03",name:"Curiosity & imagination",color:COL.teal,anchor:{x:73,y:84},
-     essence:"Chase ideas past the obvious.",
-     body:"Curiosity and imagination are what make intellectual augmentation possible. To expand beyond the usual, you need <b>imagination</b> to picture what lies past it, and <b>curiosity</b> to try things you had not thought to try.",
-     watch:"Curiosity is doing real work here, not decoration. Stop exploring and the partnership quietly dims."},
-    {id:"iter",n:"04",name:"Iteration",color:COL.blue,anchor:{x:17,y:83},
-     essence:"The good stuff is in the back-and-forth.",
-     body:"The partnership exists in the back-and-forth: you respond to what AI gave you, push on it, redirect it, and build on it. The thinking lives in the <b>loop</b>, not in any one message. Iteration is also where the work <b>stays ours</b> — by pushing back across rounds and engaging, we keep co-authorship of the product. Accepting the quick answer is the over-reliance mode. Iteration is where the other three become real: openness, curiosity, and the drive to reach further only show up in the repeated interaction.",
-     watch:"Taking the first answer is the easiest way to hand over your thinking without even noticing."},
-  ];
-  const byId=id=>PRIN.find(p=>p.id===id);
-
-  /* ---------------- canvas runner ---------------- */
-  function setup(canvas){
-    const ctx=canvas.getContext("2d");let w=0,h=0,dpr=1;
-    function resize(){const r=canvas.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);w=Math.max(1,r.width);h=Math.max(1,r.height);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);}
-    resize();return {ctx,get w(){return w;},get h(){return h;},resize};
-  }
-  function runner(canvas,factory){
-    const s=setup(canvas);const frame=factory(s);let raf=null,t0=performance.now();
-    function loop(now){frame((now-t0)/1000);raf=requestAnimationFrame(loop);}
-    function start(){if(!raf)raf=requestAnimationFrame(loop);}
-    function stop(){if(raf){cancelAnimationFrame(raf);raf=null;}}
-    const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?start():stop()),{threshold:0.02});
-    io.observe(canvas);
-    let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{s.resize();if(frame.onResize)frame.onResize();},120);});
-    if(window.ResizeObserver){const ro=new ResizeObserver(()=>{s.resize();if(frame.onResize)frame.onResize();});ro.observe(canvas);}
-    if(REDUCED){start();setTimeout(stop,900);}
-    return {s,frame};
-  }
-
-  /* ---------------- shared selection state ---------------- */
-  const state={selected:null};
-  function params(){
-    switch(state.selected){
-      case "onto":return {accent:COL.violet,edgeWob:2.4,morph:1.0,budSpeed:1.0,budCount:1,period:150};
-      case "aug": return {accent:COL.coral, edgeWob:1.0,morph:0.0,budSpeed:2.7,budCount:1,period:118};
-      case "cur": return {accent:COL.teal,  edgeWob:1.3,morph:0.0,budSpeed:1.5,budCount:3,period:108};
-      case "iter":return {accent:COL.blue,  edgeWob:1.0,morph:0.0,budSpeed:1.2,budCount:1,period:80};
-      default:    return {accent:COL.coral, edgeWob:1.0,morph:0.0,budSpeed:1.2,budCount:1,period:150};
-    }
-  }
-
-  /* ---------------- the intra-action animation ---------------- */
-  let nodeEls=[];
-  function intraAction(canvas){
-    const {s,frame}=runner(canvas,(s)=>{
-      let human=[], ai=[], cons=[], lanterns=[], clock=0, round=0;
-      const HUM="#9A86F0", AIC="#2CC6D4";   // distinct: human violet, AI cyan
-      function star(){const a=rand(0,TAU),r=Math.sqrt(Math.random());return {a,r,sp:rand(.03,.10)*(Math.random()<.5?-1:1),tw:rand(0,TAU),tws:rand(.8,1.8),sz:rand(1.7,2.8)};}
-      function build(){human=[];ai=[];cons=[];lanterns=[];const n=Math.round(clamp(s.w/22,16,26));for(let i=0;i<n;i++){human.push(star());ai.push(star());}}
-      build();
-      const f=(t)=>{
-        const {ctx,w,h}=s; ctx.clearRect(0,0,w,h);
-        const P=params(); const ec=P.accent; const sel=state.selected;
-        const onto=sel==="onto", aug=sel==="aug", iter=sel==="iter", cur=sel==="cur";
-        const rC=Math.min(w,h)*0.205;
-        const cy=h/2, cLx=w*0.33, cRx=w*0.67, midX=w/2, midY=cy;
-        const expand = aug ? 0.40+0.85*(0.5+0.5*Math.sin(t*0.6)) : 0;
-        const dRad = rC*0.82*(1+expand);
-        const aiJit = onto ? rC*0.11*(0.5+0.5*Math.sin(t*9)) : 0;
-
-        function posOf(d,cx,jit){const ang=d.a+t*d.sp;const rr=d.r*dRad;let x=cx+Math.cos(ang)*rr,y=cy+Math.sin(ang)*rr;if(jit){x+=Math.sin(t*8+d.tw)*jit;y+=Math.cos(t*7+d.tw*1.3)*jit;}return [x,y];}
-        const hp=human.map(d=>posOf(d,cLx,0));
-        const ap=ai.map(d=>posOf(d,cRx,aiJit));
-
-        // ---- the two circles + labels ----
-        ctx.save();ctx.setLineDash([2,7]);ctx.lineWidth=1;
-        ctx.strokeStyle=rgba(HUM,0.30);ctx.beginPath();ctx.arc(cLx,cy,rC,0,TAU);ctx.stroke();
-        if(onto){for(let q=0;q<2;q++){ctx.strokeStyle=rgba(AIC,(0.12+0.16*Math.sin(t*7+q*2)));ctx.beginPath();ctx.arc(cRx,cy,rC+rand(-5,5),0,TAU);ctx.stroke();}}
-        else{ctx.strokeStyle=rgba(AIC,0.30);ctx.beginPath();ctx.arc(cRx,cy,rC,0,TAU);ctx.stroke();}
-        ctx.restore();
-        ctx.font="11px 'JetBrains Mono',monospace";ctx.textAlign="center";ctx.textBaseline="alphabetic";
-        ctx.fillStyle=rgba(HUM,0.78);ctx.fillText("HUMAN",cLx,cy-rC-14);
-        ctx.fillStyle=rgba(AIC,onto?0.45+0.45*Math.sin(t*6):0.78);ctx.fillText(onto?"AI?":"AI",cRx,cy-rC-14);
-        if(onto){for(let q=0;q<4;q++){const a=t*0.5+q*1.7;const x=cRx+Math.cos(a)*rC*0.55,y=cy+Math.sin(a)*rC*0.55;ctx.fillStyle=rgba(AIC,0.25+0.3*Math.sin(t*5+q));ctx.font="13px 'JetBrains Mono',monospace";ctx.fillText("?",x,y);}}
-
-        // ---- build short-range asterisms bridging the two sides ----
-        clock++;
-        const interval = iter?14 : Math.round((P.period||150)/4);
-        const maxActive = iter?18 : 10;
-        const spawnN = iter?2:1;
-        if(clock>=interval && cons.length<maxActive){clock=0;round++;
-          for(let k=0;k<spawnN;k++){const ch=buildChain();if(ch)cons.push({chain:ch,prog:0,life:0,max:iter?rand(150,250):rand(300,500)});}
-        }
-        function buildChain(){
-          const bridgeD=rC*(1.6)*(1+expand), extD=rC*0.8*(1+expand);
-          // candidate close Human<->AI pairs
-          const cands=[];
-          for(let i=0;i<hp.length;i++)for(let j=0;j<ap.length;j++){const d=Math.hypot(hp[i][0]-ap[j][0],hp[i][1]-ap[j][1]);if(d<bridgeD)cands.push({i,j,d});}
-          if(!cands.length)return null;
-          cands.sort((a,b)=>a.d-b.d);
-          const pk=cands[Math.floor(rand(0,Math.min(cands.length,10)))];
-          const chain=[{side:0,i:pk.i},{side:1,i:pk.j}];
-          function extend(side,fromIdx,n){
-            const pts=side===0?hp:ap;const used=new Set(chain.filter(c=>c.side===side).map(c=>c.i));let cur=fromIdx;
-            for(let s2=0;s2<n;s2++){let best=-1,bd=extD;for(let k=0;k<pts.length;k++){if(used.has(k))continue;const d=Math.hypot(pts[k][0]-pts[cur][0],pts[k][1]-pts[cur][1]);if(d<bd){bd=d;best=k;}}if(best<0)break;used.add(best);if(side===0)chain.unshift({side:0,i:best});else chain.push({side:1,i:best});cur=best;}
-          }
-          extend(0,pk.i,1+Math.floor(rand(0,3)));
-          extend(1,pk.j,1+Math.floor(rand(0,3)));
-          return chain.length>=3?chain:null;
-        }
-
-        // ---- draw asterisms ----
-        const keepC=[];
-        for(const c of cons){
-          c.life++;c.prog=Math.min(c.chain.length-1,c.prog+(iter?0.14:0.07));
-          const k=c.life/c.max;let fade=k<0.78?1:Math.max(0,1-(k-0.78)/0.22);
-          if(onto)fade*=0.6+0.4*Math.sin(t*12+c.life*0.1);
-          const pp=c.chain.map(n=>n.side===0?hp[n.i]:ap[n.i]);const sd=c.chain.map(n=>n.side);
-          for(let q=0;q<pp.length-1;q++){
-            const seg=Math.min(1,c.prog-q);if(seg<=0)break;
-            const a=pp[q],b=pp[q+1];if(!a||!b)continue;
-            const ex=lerp(a[0],b[0],ease(seg)),ey=lerp(a[1],b[1],ease(seg));
-            const ca=sd[q]===0?HUM:AIC, cb=sd[q+1]===0?HUM:AIC;
-            const g=ctx.createLinearGradient(a[0],a[1],b[0],b[1]);g.addColorStop(0,rgba(ca,0.6*fade));g.addColorStop(1,rgba(cb,0.6*fade));
-            ctx.strokeStyle=g;ctx.lineWidth=1.1;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(ex,ey);ctx.stroke();
-            if(seg>=1 && sd[q]!==sd[q+1]){const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;const pl=0.5+0.5*Math.sin(t*2.5+q);
-              const ng=ctx.createRadialGradient(mx,my,0,mx,my,7);ng.addColorStop(0,rgba(ec,0.5*fade*pl));ng.addColorStop(1,rgba(ec,0));ctx.fillStyle=ng;ctx.beginPath();ctx.arc(mx,my,7,0,TAU);ctx.fill();
-              ctx.fillStyle=rgba(ec,0.85*fade);ctx.beginPath();ctx.arc(mx,my,1.6,0,TAU);ctx.fill();}
-          }
-          for(let n2=0;n2<pp.length;n2++){const p=pp[n2];if(!p||c.prog<n2)continue;ctx.fillStyle=rgba(sd[n2]===0?HUM:AIC,0.92*fade);ctx.beginPath();ctx.arc(p[0],p[1],2.5,0,TAU);ctx.fill();}
-          if(c.life<c.max)keepC.push(c);
-        }
-        cons=keepC;
-
-        // ---- base dots (twinkling) ----
-        for(let i=0;i<hp.length;i++){const d=human[i];const tw=0.6+0.4*Math.sin(t*d.tws+d.tw);ctx.fillStyle=rgba(HUM,0.5+0.4*tw);ctx.beginPath();ctx.arc(hp[i][0],hp[i][1],d.sz,0,TAU);ctx.fill();}
-        for(let i=0;i<ap.length;i++){const d=ai[i];let a2,sz=d.sz;if(onto){const cyc=0.5+0.5*Math.sin(t*1.25+d.tw*5.0);a2=Math.pow(cyc,2.8);sz=d.sz*(0.35+0.65*a2);}else{a2=0.5+0.4*(0.6+0.4*Math.sin(t*d.tws+d.tw));}ctx.fillStyle=rgba(AIC,a2);ctx.beginPath();ctx.arc(ap[i][0],ap[i][1],sz,0,TAU);ctx.fill();}
-
-        // ---- curiosity: glowing imagination lanterns from the human side ----
-        if(cur && Math.random()<0.16 && lanterns.length<22){
-          const a=rand(0,TAU),r=Math.sqrt(Math.random())*rC*0.95;const cols=["#34C2A4","#E0855F","#9A86F0"];
-          lanterns.push({x:cLx+Math.cos(a)*r,y:cy+Math.sin(a)*r,vx:rand(-0.25,0.25),vy:rand(-0.55,-0.1),r:rand(11,24),life:0,max:rand(120,210),col:cols[Math.floor(rand(0,3))],tw:rand(0,TAU)});
-        }
-        const keepL=[];
-        for(const L of lanterns){L.life++;L.x+=L.vx;L.y+=L.vy;L.vy+=0.002;const kk=L.life/L.max;const al=Math.sin(Math.min(kk,1)*Math.PI);const pr=L.r*(0.82+0.18*Math.sin(t*3+L.tw));
-          const lg=ctx.createRadialGradient(L.x,L.y,0,L.x,L.y,pr);lg.addColorStop(0,rgba(L.col,0.5*al));lg.addColorStop(0.5,rgba(L.col,0.2*al));lg.addColorStop(1,rgba(L.col,0));ctx.fillStyle=lg;ctx.beginPath();ctx.arc(L.x,L.y,pr,0,TAU);ctx.fill();
-          ctx.fillStyle=rgba(L.col,0.7*al);ctx.beginPath();ctx.arc(L.x,L.y,2,0,TAU);ctx.fill();
-          if(L.life<L.max)keepL.push(L);}
-        lanterns=keepL;
-
-        // iteration round label
-        if(iter){ctx.fillStyle=rgba(COL.blue,0.7);ctx.font="11px 'JetBrains Mono',monospace";ctx.textAlign="center";ctx.fillText("round "+String((round%99)+1).padStart(2,"0"),midX,cy+rC+24);}
-
-        // connector to the selected principle only
-        if(sel){const ne=nodeEls.find(n=>n.id===sel);if(ne){const ax=w*ne.ax/100+ne.bx,ay=h*ne.ay/100+ne.by;ctx.save();ctx.setLineDash([4,6]);ctx.lineDashOffset=-t*30;ctx.strokeStyle=rgba(ne.color,0.4);ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(midX,midY);ctx.lineTo(ax,ay);ctx.stroke();ctx.restore();}}
-      };
-      f.onResize=build;
-      return f;
-    });
-    return frame;
-  }
-
-  /* ---------------- mini animations (per principle panel) ---------------- */
-  let miniStop=null;
-  function startMini(canvas,id){
-    if(miniStop){miniStop();miniStop=null;}
-    const s=setup(canvas);const ctx=s.ctx;let raf,t0=performance.now();
-    const draws={
-      onto:(t)=>{const {w,h}=s;ctx.clearRect(0,0,w,h);const cx=w/2,cy=h/2,R=Math.min(w,h)*0.3;
-        function out(off){ctx.beginPath();for(let i=0;i<=120;i++){const a=i/120*TAU;let n=Math.sin(a*2+t*.5)*.08+Math.sin(a*3-t*.4)*.06+Math.sin(a*5+t)*.04;const rr=R*(1+n)+off;const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.closePath();}
-        out(0);const g=ctx.createRadialGradient(cx,cy,4,cx,cy,R*1.4);g.addColorStop(0,rgba(COL.violet,.14));g.addColorStop(1,rgba(COL.violet,0));ctx.fillStyle=g;ctx.fill();
-        ctx.strokeStyle=rgba(COL.violet,.28);ctx.lineWidth=1;out(rand(-5,5));ctx.stroke();
-        ctx.strokeStyle=rgba(COL.violet,.85);ctx.lineWidth=1.6;out(0);ctx.stroke();
-        ctx.fillStyle=rgba(COL.ink,.7);ctx.font="italic 22px 'DM Serif Display',serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("?",cx,cy);},
-      aug:(t)=>{const {w,h}=s;ctx.clearRect(0,0,w,h);const cx=w/2,cy=h/2,L=Math.min(w,h)*0.18;
-        ctx.setLineDash([3,6]);ctx.strokeStyle=rgba(COL.muted,.5);ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,L,0,TAU);ctx.stroke();ctx.setLineDash([]);
-        const g=(t*0.4)%1; const n=7;
-        for(let b=0;b<n;b++){const a=b/n*TAU;const len=L*(1.2+2.0*ease(clamp(g*1.5-b*0.05,0,1)));ctx.strokeStyle=len>L?rgba(COL.coral,.85):rgba(COL.coral,.4);ctx.lineWidth=1.6;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*len,cy+Math.sin(a)*len);ctx.stroke();
-          ctx.fillStyle=rgba(COL.coral,.8);ctx.beginPath();ctx.arc(cx+Math.cos(a)*len,cy+Math.sin(a)*len,2,0,TAU);ctx.fill();}
-        ctx.fillStyle=COL.coral;ctx.beginPath();ctx.arc(cx,cy,3.5,0,TAU);ctx.fill();},
-      cur:(()=>{const ICONS=["\uD83D\uDC1D","\uD83D\uDC0B","\uD83D\uDC7D","\uD83E\uDE90","\uD83D\uDDFC","\uD83E\uDDAB","\uD83C\uDF38","\uD83D\uDE80","\uD83D\uDD2D","\uD83E\uDD8B","\uD83C\uDF0D","\uD83C\uDF88"];
-        const COLS=["#FF6FB5","#F4C430","#7A4DE0","#19B07E","#2F73E0"];
-        const ocache={};
-        function outline(ic,col){const key=ic+col;if(ocache[key])return ocache[key];
-          const S=80,off=document.createElement("canvas");off.width=off.height=S;const o=off.getContext("2d");
-          o.textAlign="center";o.textBaseline="middle";o.font=(S-14)+"px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif";o.fillText(ic,S/2,S/2);
-          o.globalCompositeOperation="source-in";o.fillStyle=col;o.fillRect(0,0,S,S);
-          const out=document.createElement("canvas");out.width=out.height=S;const oc=out.getContext("2d");
-          const lw=2.4;for(let a=0;a<18;a++){const ang=a/18*TAU;oc.drawImage(off,Math.cos(ang)*lw,Math.sin(ang)*lw);}
-          oc.globalCompositeOperation="destination-out";oc.drawImage(off,0,0);
-          ocache[key]=out;return out;}
-        let pops=[],fr=0;
-        return (t)=>{const {w,h}=s;ctx.clearRect(0,0,w,h);const cx=w/2,cy=h*0.7;fr++;
-          // spawn new ideas, faster and more of them
-          if(fr%14===0&&pops.length<16){const ang=rand(-Math.PI*1.04,Math.PI*0.04),spd=rand(0.4,1.05);
-            pops.push({x:cx+rand(-w*0.18,w*0.18),y:cy+rand(-8,6),vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd-0.14,ic:ICONS[Math.floor(rand(0,ICONS.length))],col:COLS[Math.floor(rand(0,COLS.length))],life:0,max:rand(230,360),sz:rand(22,36),rot:rand(.1,.28)*(Math.random()<.5?-1:1),tw:rand(0,TAU)});}
-          // imagination core
-          const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,16+2*Math.sin(t*3));cg.addColorStop(0,rgba(COL.teal,.45));cg.addColorStop(1,rgba(COL.teal,0));ctx.fillStyle=cg;ctx.beginPath();ctx.arc(cx,cy,18,0,TAU);ctx.fill();
-          ctx.fillStyle=COL.teal;ctx.beginPath();ctx.arc(cx,cy,3.2,0,TAU);ctx.fill();
-          const keep=[];
-          for(const p of pops){p.life++;const k=p.life/p.max;p.x+=p.vx;p.y+=p.vy;p.vy+=0.004;p.vx*=0.992;
-            const sIn=k<0.34?ease(k/0.34):1,over=k<0.34?1+0.2*Math.sin(k/0.34*Math.PI):1,al=k>0.7?Math.max(0,1-(k-0.7)/0.3):Math.min(1,k/0.2);
-            const sz=p.sz*sIn*over;
-            // soft colored glow
-            const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,sz*0.85);g.addColorStop(0,rgba(p.col,.26*al));g.addColorStop(1,rgba(p.col,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,sz*0.85,0,TAU);ctx.fill();
-            // hollow colored contour of the shape
-            ctx.save();ctx.globalAlpha=al;ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.sin(t*1.3+p.tw));const oc=outline(p.ic,p.col);ctx.drawImage(oc,-sz/2,-sz/2,sz,sz);ctx.restore();
-            // sparkle dust
-            if(Math.random()<0.16){ctx.fillStyle=rgba(p.col,.5*al);ctx.beginPath();ctx.arc(p.x+rand(-sz/2,sz/2),p.y+rand(-sz/2,sz/2),rand(.8,1.8),0,TAU);ctx.fill();}
-            if(p.life<p.max&&p.y>-44&&p.x>-44&&p.x<w+44)keep.push(p);}
-          pops=keep;};})(),
-      iter:(()=>{let trips=0,phase=0,trails=[];const maxL=6;
-        return (t)=>{const {w,h}=s;ctx.clearRect(0,0,w,h);
-          const lx=w*0.17,rx=w*0.83,cy=h*0.40,lift=h*0.22;
-          const dir=trips%2;
-          phase+=0.011;
-          if(phase>=1){phase=0;trails.push({dir,age:0});if(trails.length>8)trails.shift();trips++;}
-          const round=Math.floor(trips/2)+1, layers=Math.min(maxL,trips);
-          function arc(d){const a=d===0?lx:rx,b=d===0?rx:lx,mx=(a+b)/2,my=cy-lift;ctx.beginPath();ctx.moveTo(a,cy);ctx.quadraticCurveTo(mx,my,b,cy);return {a,b,mx,my};}
-          // faded past volleys
-          for(const tr of trails){tr.age++;const al=Math.max(0,.22-tr.age*.012);if(al<=0)continue;ctx.strokeStyle=rgba(COL.blue,al);ctx.lineWidth=1;arc(tr.dir);ctx.stroke();}
-          // active volley
-          ctx.strokeStyle=rgba(COL.blue,.42);ctx.lineWidth=1.3;ctx.setLineDash([3,5]);const A=arc(dir);ctx.stroke();ctx.setLineDash([]);
-          // travelling token
-          const tt=ease(phase);const qx=(1-tt)*(1-tt)*A.a+2*(1-tt)*tt*A.mx+tt*tt*A.b;const qy=(1-tt)*(1-tt)*cy+2*(1-tt)*tt*A.my+tt*tt*cy;
-          const g=ctx.createRadialGradient(qx,qy,0,qx,qy,10);g.addColorStop(0,rgba(COL.blue,.55));g.addColorStop(1,rgba(COL.blue,0));ctx.fillStyle=g;ctx.beginPath();ctx.arc(qx,qy,10,0,TAU);ctx.fill();
-          ctx.fillStyle=COL.blue;ctx.beginPath();ctx.arc(qx,qy,3,0,TAU);ctx.fill();
-          // endpoints YOU <-> AI
-          [[lx,"YOU"],[rx,"AI"]].forEach(([x,lab])=>{ctx.fillStyle=rgba(COL.blue,.92);ctx.beginPath();ctx.arc(x,cy,5,0,TAU);ctx.fill();ctx.fillStyle=rgba(COL.muted,.95);ctx.font="10px 'JetBrains Mono',monospace";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(lab,x,cy+17);});
-          // arrival pulse
-          if(phase>.86){const tg=dir===0?rx:lx,k=(phase-.86)/.14;ctx.strokeStyle=rgba(COL.blue,(1-k)*.6);ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(tg,cy,k*12,0,TAU);ctx.stroke();}
-          // central artefact, grows one layer each volley
-          const yb=h-12,bw=Math.min(w*0.46,128);
-          for(let i=0;i<layers;i++){const y=yb-i*9-7,wf=.45+.55*(i+1)/maxL,ww=bw*wf;ctx.fillStyle=rgba(COL.blue,.2+.08*i);ctx.fillRect(w/2-ww/2,y,ww,7);}
-          ctx.fillStyle=rgba(COL.muted,.7);ctx.font="9px 'JetBrains Mono',monospace";ctx.textAlign="center";ctx.textBaseline="alphabetic";ctx.fillText("what you build",w/2,yb+9);
-          // round counter
-          ctx.fillStyle=rgba(COL.blue,.85);ctx.font="11px 'JetBrains Mono',monospace";ctx.textAlign="left";ctx.textBaseline="middle";ctx.fillText("round "+String(round).padStart(2,"0"),12,12);
-          if(trips>12){trips=0;trails=[];}
-        };})(),
-    };
-    const d=draws[id];
-    function loop(now){d((now-t0)/1000);raf=requestAnimationFrame(loop);}
-    raf=requestAnimationFrame(loop);
-    miniStop=()=>cancelAnimationFrame(raf);
-  }
-
-  /* ---------------- panel rendering ---------------- */
-  const pbody=document.getElementById("pbody");
-  const home=document.getElementById("home");
-  const rmeta=document.getElementById("rmeta");
-  const legend=document.getElementById("cplegend");
-
-  function overviewHTML(){
-    return `
-      <h1 class="ptitle">A shared system<br>of thinking.</h1>
-      <p>Cognitive partnership is sustained intellectual work with AI as a genuine partner in a <b>shared system of thinking</b>. It rests on the idea of distributed cognition (Hollan et al., 2000; Salomon et al., 1991) and follows Barad's (2003) idea of intra-action. CP has four main principles for a human-side disposition: holding <b>ontological uncertainty</b> about AI, <b>intellectual augmentation</b> as a purpose, <b>curiosity and imagination</b> as the main mode of work, and <b>iteration</b> as a working principle.</p>
-      <div class="callout" style="--accent:${COL.violet}">
-        <div class="ct">Why \u201cintra-action\u201d?</div>
-        <p>Philosopher Karen Barad uses the word for relationships where the parts don't exist first and then meet \u2014 they take shape <b>through</b> the relating itself. Where \u201cyou\u201d end and \u201cthe AI\u201d begins is a line drawn <i>inside</i> the work, not before it. What you make together is a third thing that belongs to neither of you alone.</p>
-      </div>`;
-  }
-  function principleHTML(p){
-    return `
-      <div class="eyebrow" style="--accent:${p.color}"><span class="sw"></span>Principle ${p.n} \u2014 a habit of partnership</div>
-      <h1 class="ptitle">${p.name}</h1>
-      <p class="essence">${p.essence}</p>
-      <div class="miniwrap"><canvas id="mini"></canvas><span class="mlab" style="color:${p.color}">live</span></div>
-      <p>${p.body}</p>`;
-  }
-
-  function render(){
-    const sel=state.selected;
-    pbody.classList.remove("show");
-    pbody.innerHTML = sel?principleHTML(byId(sel)):overviewHTML();
-    document.getElementById("pwrap").scrollTop=0;
-    home.classList.toggle("canback",!!sel);
-    rmeta.textContent = sel?("Principle "+byId(sel).n):"The configuration";
-    if(sel){const mc=document.getElementById("mini");if(mc)startMini(mc,sel);}
-    else if(miniStop){miniStop();miniStop=null;}
-    requestAnimationFrame(()=>requestAnimationFrame(()=>pbody.classList.add("show")));
-  }
-
-  function select(id){ state.selected=id; syncNodes(); render(); }
-
-  /* ---------------- floating nodes ---------------- */
-  const stage=document.getElementById("stage");
-  function buildNodes(){
-    PRIN.forEach((p,i)=>{
-      const el=document.createElement("button");
-      el.className="node";el.style.setProperty("--c",p.color);
-      el.style.left=p.anchor.x+"%";el.style.top=p.anchor.y+"%";
-      el.innerHTML=`<span class="ndot"></span><span class="nlabel"><span class="nn">${p.n}</span>${p.name}</span>`;
-      el.addEventListener("click",(e)=>{e.stopPropagation();select(state.selected===p.id?null:p.id);});
-      stage.appendChild(el);
-      nodeEls.push({id:p.id,el,color:p.color,ax:p.anchor.x,ay:p.anchor.y,ph:i*1.7,sp:rand(.5,.8),amp:9,bx:0,by:0});
-    });
-  }
-  function buildLegend(){
-    if(!legend)return;
-    PRIN.forEach(p=>{
-      const b=document.createElement("button");
-      b.className="lchip";b.dataset.id=p.id;b.style.setProperty("--lc",p.color);
-      b.innerHTML=`<span class="ldot" style="background:${p.color}"></span><span class="lnn">${p.n}</span>${p.name}`;
-      b.addEventListener("click",()=>select(state.selected===p.id?null:p.id));
-      legend.appendChild(b);
-    });
-  }
-  function syncNodes(){
-    const sel=state.selected;
-    nodeEls.forEach(ne=>{ne.el.classList.toggle("sel",ne.id===sel);ne.el.classList.toggle("dim",!!sel&&ne.id!==sel);});
-    if(legend){legend.querySelectorAll(".lchip").forEach(b=>{const on=b.dataset.id===sel;b.classList.toggle("sel",on);const c=b.style.getPropertyValue("--lc");b.style.background=on?c:"";b.style.borderColor=on?c:"";});}
-  }
-  function bobLoop(now){
-    const t=now/1000;
-    for(const ne of nodeEls){ne.bx=Math.cos(t*ne.sp+ne.ph)*ne.amp;ne.by=Math.sin(t*ne.sp*1.1+ne.ph)*ne.amp;ne.el.style.transform=`translate(-50%,-50%) translate(${ne.bx}px,${ne.by}px)`;}
-    requestAnimationFrame(bobLoop);
-  }
-
-  /* ---------------- boot ---------------- */
-  function boot(){
-    buildNodes();
-    buildLegend();
-    intraAction(document.getElementById("cfg"));
-    if(!REDUCED) requestAnimationFrame(bobLoop);
-    stage.addEventListener("click",()=>select(null));
-    home.addEventListener("click",()=>select(null));
-    select(null);
-  }
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-})();
-</script>
-
 </body>
 </html>

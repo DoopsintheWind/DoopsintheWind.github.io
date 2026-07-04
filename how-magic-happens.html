@@ -5,32 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>How Claude Magic Happens — Dina Pisareva</title>
 <meta name="description" content="A plain field guide to what actually goes on between the words you type and the words a large language model gives back." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 <style>
   /* ── How Claude Magic Happens — page-specific ── */
-
-  .magic-hero {
-    padding: 56px 40px 12px;
-    display: grid;
-    grid-template-columns: 1fr 240px;
-    gap: 36px;
-    align-items: end;
-  }
-  .magic-hero h1.display em {
-    font-style: italic;
-    color: var(--terracotta);
-  }
-  .magic-hero .lede { max-width: 60ch; }
-  .magic-hero .plate-meta {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-mute);
-    text-align: right;
-    line-height: 2;
-  }
-  .magic-hero .plate-meta strong { color: var(--ink); font-weight: 500; }
 
   /* RUNNING EXAMPLE */
   .magic-running {
@@ -40,9 +20,8 @@
     gap: 28px;
     align-items: center;
     padding: 22px 26px;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    background: rgba(237,227,207,0.05);
+    border: 2px solid var(--ink);
+    background: var(--paper-deep);
   }
   .magic-running .label {
     font-family: var(--mono);
@@ -84,9 +63,8 @@
   /* BANDS */
   .band {
     margin: 36px 40px 0;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    background: linear-gradient(180deg, rgba(237,227,207,0.05), rgba(237,227,207,0.02));
+    border: 2px solid var(--ink);
+    background: var(--paper);
   }
   .band-head {
     display: flex;
@@ -154,12 +132,10 @@
 
   /* DARK 3D VIEWING WINDOWS */
   .box {
-    background: linear-gradient(180deg, #11131a, #0c0d11);
-    border: 1px solid #262833;
-    border-radius: 4px;
+    background: #101218;
+    border: 2px solid var(--ink);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 30px 60px -30px rgba(0,0,0,0.55);
   }
   .box .box-label {
     position: absolute; top: 14px; left: 18px;
@@ -179,9 +155,8 @@
 
   /* PAPER BOXES (lighter, for non-3D stages — sit on the dark bg as 'specimens') */
   .box.paper {
-    background: linear-gradient(180deg, rgba(237,227,207,0.07), rgba(237,227,207,0.03));
-    border: 1px solid var(--line);
-    box-shadow: 0 1px 0 rgba(237,227,207,0.06) inset, 0 18px 36px -22px rgba(0,0,0,0.4);
+    background: var(--paper-deep);
+    border: 2px solid var(--ink);
   }
   .box.paper .box-label { color: var(--ink-mute); }
   .box.paper .box-name { color: var(--ink-soft); }
@@ -223,11 +198,10 @@
   .tok-chip {
     position: relative;
     padding: 14px 20px;
-    border-radius: 3px;
     font-family: var(--mono);
     font-size: 16px;
     color: var(--ink);
-    background: rgba(237,227,207,0.05);
+    background: var(--paper-deep);
     border: 1px solid var(--line);
   }
   .tok-chip.c1 { border-color: var(--terracotta); color: var(--terracotta); }
@@ -265,8 +239,7 @@
   .output-line .word {
     padding: 8px 16px;
     border: 1px solid var(--terracotta);
-    border-radius: 3px;
-    background: rgba(224,133,95,0.14);
+    background: rgba(232,163,61,0.18);
     font-family: var(--mono);
     font-style: normal;
     font-size: 17px;
@@ -291,7 +264,7 @@
     font-family: var(--mono);
     font-size: 9.5px;
     letter-spacing: 0.22em;
-    color: #76715f;
+    color: #8a8c92;
     text-transform: uppercase;
     padding: 8px 4px;
     z-index: 2;
@@ -331,9 +304,8 @@
   .loop-card {
     margin-top: 26px;
     padding: 28px 30px;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    background: linear-gradient(180deg, rgba(224,133,96,0.08), rgba(224,133,96,0.02));
+    border: 2px solid var(--ink);
+    background: rgba(232,163,61,0.15);
     display: grid;
     grid-template-columns: auto 1fr auto;
     gap: 30px;
@@ -418,20 +390,18 @@
   #temp-slider {
     -webkit-appearance: none; appearance: none;
     width: 100%; height: 3px;
-    background: linear-gradient(to right, #98AAB8 0%, #D17A55 50%, #C9583C 100%);
-    border-radius: 2px; outline: none; cursor: pointer;
+    background: linear-gradient(to right, #8a8c92 0%, #e8a33d 50%, #d94f2b 100%);
+    outline: none; cursor: pointer;
   }
   #temp-slider::-webkit-slider-thumb {
     -webkit-appearance: none; appearance: none;
     width: 18px; height: 18px; border-radius: 50%;
-    background: #f3eedd; border: 2px solid var(--terracotta);
-    box-shadow: 0 0 0 3px rgba(224,133,96,0.2), 0 2px 6px rgba(0,0,0,0.5);
+    background: #fff; border: 2px solid var(--ink);
     cursor: grab;
   }
   #temp-slider::-moz-range-thumb {
     width: 18px; height: 18px; border-radius: 50%;
-    background: #f3eedd; border: 2px solid var(--terracotta);
-    box-shadow: 0 0 0 3px rgba(224,133,96,0.2);
+    background: #fff; border: 2px solid var(--ink);
   }
   .temp-hint {
     margin-top: 8px;
@@ -453,9 +423,6 @@
 
   /* RESPONSIVE */
   @media (max-width: 880px) {
-    .magic-hero { grid-template-columns: 1fr; padding: 40px 20px 12px; }
-    .magic-hero h1.display { font-size: clamp(40px, 11vw, 64px); }
-    .magic-hero .plate-meta { text-align: left; }
     .magic-running, .band, .magic-footer { margin-left: 20px; margin-right: 20px; }
     .magic-running {
       grid-template-columns: 1fr;
@@ -494,8 +461,6 @@
   }
 
   @media (max-width: 480px) {
-    .magic-hero { padding: 28px 16px 8px; }
-    .magic-hero h1.display { font-size: clamp(34px, 10.5vw, 48px); }
     .magic-running, .band, .magic-footer { margin-left: 14px; margin-right: 14px; }
     .magic-running { padding: 16px 16px; }
     .band-head { padding: 14px 14px 12px; gap: 6px; }
@@ -515,27 +480,29 @@
 <div class="shell">
 
   <header class="topbar">
-    <div class="brand"><b>Doops</b><span class="sep">—</span><span>Field notebook · 2026</span></div>
+    <a class="brand" href="index.html">
+      <span class="geo"><i class="sq"></i><i class="ci"></i><i class="di"></i></span>
+      <b>DOOPS</b>
+    </a>
     <nav>
       <a href="index.html">Home</a>
       <a href="research.html">Research</a>
       <a href="teaching.html">Teaching</a>
       <a href="ai-cognitive-partner.html">AI Partnership</a>
-      <a href="how-magic-happens.html" class="active">How Magic Happens</a>
+      <a href="how-magic-happens.html" class="active">Magic</a>
       <a href="contact.html">Contact</a>
     </nav>
   </header>
 
-  <section class="magic-hero">
-    <div>
-      <p class="eyebrow">Vol. VII · A field guide</p>
-      <h1 class="display">How Claude<br><em>magic</em> happens.</h1>
-      <p class="lede">A plain explanation of what actually goes on between the words you type and the words that come back. We follow one tiny example all the way through — <em>"beautiful morning"</em>.</p>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="kicker">Behind the Curtain</p>
+      <h1 class="display">How Claude<br>Magic Happens</h1>
+      <p class="standfirst">A plain explanation of what actually goes on between the words you type and the words that come back. We follow one tiny example all the way through — <em>"beautiful morning"</em>.</p>
     </div>
-    <div class="plate-meta">
-      Plate VII<br>
-      <strong>Inside an LLM</strong><br>
-      seven steps · two bands
+    <div class="hero-field mustard">
+      <div class="field-circle"></div>
+      <div class="caption-bar ink">Pl. VII — Inside an LLM · seven steps, two bands</div>
     </div>
   </section>
 
@@ -604,7 +571,7 @@
           </div>
           <div class="annot-block">
             <span class="annot-tag">a famous old result</span>
-            <span style="font-family:var(--mono);font-size:13px;color:var(--ink);line-height:1.75;display:block;padding:11px 13px;background:rgba(224,133,96,0.1);border:1px solid rgba(224,133,96,0.25);border-radius:3px;margin-top:4px;">king <span style="color:var(--terracotta)">−</span> man <span style="color:var(--terracotta)">+</span> woman <span style="color:var(--moss)">≈</span> queen</span>
+            <span style="font-family:var(--mono);font-size:13px;color:var(--ink);line-height:1.75;display:block;padding:11px 13px;background:rgba(232,163,61,0.18);border:1px solid var(--ink);margin-top:4px;">king <span style="color:var(--terracotta)">−</span> man <span style="color:var(--terracotta)">+</span> woman <span style="color:var(--moss)">≈</span> queen</span>
             <span style="display:block;margin-top:8px;font-size:14px;">Even <em>directions</em> on the map have meaning. The path from <em>man</em> to <em>woman</em> is the same path from <em>king</em> to <em>queen</em>. This clean version of the math comes from older, smaller models. Today's are fuzzier about it — same picture, less tidy arithmetic.</span>
           </div>
         </div>
@@ -749,6 +716,14 @@
     <div>Drag any 3D scene to rotate</div>
   </div>
 
+  <footer class="site-footer">
+    <span class="fl">
+      <span class="geo small"><i class="sq"></i><i class="ci"></i><i class="di"></i></span>
+      <span>DOOPS — a field notebook in primary-ish colors</span>
+    </span>
+    <span>Astana · <a href="https://doopsik.substack.com">Substack ↗</a> · <a href="mailto:dinara.pisareva@nu.edu.kz">Email ↗</a></span>
+  </footer>
+
 </div>
 
 <!-- three.js from CDN -->
@@ -892,7 +867,7 @@ window.MagicScenes = (function(){
     var c = document.createElement('canvas');
     c.width = 1024; c.height = 128;
     var g = c.getContext('2d');
-    g.font = '500 44px "JetBrains Mono", monospace';
+    g.font = '500 44px "IBM Plex Mono", monospace';
     g.fillStyle = color;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
@@ -1391,7 +1366,7 @@ window.MagicScenes = (function(){
     var c = sprite.userData.canvas;
     var ctx = c.getContext('2d');
     ctx.clearRect(0, 0, c.width, c.height);
-    ctx.font = '700 64px "JetBrains Mono", monospace';
+    ctx.font = '700 64px "IBM Plex Mono", monospace';
     ctx.fillStyle = color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -1405,9 +1380,9 @@ window.MagicScenes = (function(){
     var x = xStart + i * spacing;
     var rank = i;
     var isTop3 = rank < TOP3;
-    var color = (rank === 0) ? 0xE08560
-              : (rank === 1) ? 0xD17A55
-              : (rank === 2) ? 0xC26B45
+    var color = (rank === 0) ? 0xE8A33D
+              : (rank === 1) ? 0xE2603C
+              : (rank === 2) ? 0xC8502E
               : 0x4a4d59;
     var emissive = (rank === 0) ? 0x6a3010
                  : (rank === 1) ? 0x4d240a
@@ -1479,9 +1454,9 @@ window.MagicScenes = (function(){
       var txt = pct >= 10 ? pct.toFixed(0) + '%'
               : pct >= 1  ? pct.toFixed(1) + '%'
               :             pct.toFixed(2) + '%';
-      var col = b.rank === 0 ? '#ffd58a'
-              : b.rank === 1 ? '#E08560'
-              : b.rank === 2 ? '#D17A55'
+      var col = b.rank === 0 ? '#e8a33d'
+              : b.rank === 1 ? '#e2603c'
+              : b.rank === 2 ? '#c8502e'
               : '#9b9582';
       setScoreLabel(b.score, txt, col);
     });
