@@ -252,6 +252,13 @@
   #prevbtn { left: 0; }
   #nextbtn { right: 0; }
 
+  @media (max-width: 1350px) and (min-width: 641px) {
+    .tight h2 { font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 0.6rem; }
+    .tight .card p { font-size: clamp(0.85rem, 1.4vw, 1rem); padding: 0.5rem 0.9rem; }
+    .tight .card h3 { padding: 0.38rem 0.9rem; }
+    .tight p { margin-bottom: 0.5rem; }
+  }
+
   @media (max-width: 640px) {
     .slide { padding-top: 2rem; padding-bottom: 4.6rem; }
     .navbtn { width: 12%; }
@@ -376,7 +383,7 @@
         <p>Pushing back and building over many rounds, not taking the first answer.</p>
       </div>
     </div>
-    <p><strong>Ontological uncertainty</strong> — staying open about what AI <em>is</em> — is the enabling antecedent: taught and measured, but not a facet of the orientation.</p>
+    <p><strong>Ontological openness</strong> — staying open about what AI <em>is</em> — is the enabling antecedent: taught and measured, but not a facet of the orientation.</p>
   </div>
 </section>
 
@@ -438,7 +445,8 @@
       <li>To enter a real partnership, a student must grant AI the standing of a partner <em>worth</em> real effort.</li>
       <li>"It's just a tool" invites the opposite: minimal effort, tasks finished and forgotten.</li>
       <li>So the courses treat <em>what is AI?</em> as genuinely open — because among researchers, it genuinely is.</li>
-      <li><strong>Ontological uncertainty</strong> is the enabling antecedent: taught first, measured alongside the three dimensions, examined separately in the analysis.</li>
+      <li>Presented as one stance among several, never required: students take whatever position they find defensible, and grades never touch it.</li>
+      <li><strong>Ontological openness</strong> is the enabling antecedent: taught first, measured alongside the three dimensions, examined separately in the analysis.</li>
     </ul>
     <p class="item-quote c-red">"I treat what AI is as an open question, not something already settled."</p>
   </div>
@@ -495,6 +503,7 @@
       <li>Self-report cannot separate learning from perceived learning; an objective no-AI measure can.</li>
       <li>The items demand reconstruction, not recall: each presents a scenario and asks which reasoning is correct, and <em>why</em>.</li>
       <li>Administered on paper, in class, both waves; open-ended answers rubric-scored by two raters blind to wave, with inter-rater agreement reported.</li>
+      <li>The two sittings use the same six items — on paper, never returned to students, thirteen weeks apart — so item security holds and practice effects stay bounded.</li>
       <li>What appears on that sheet is residue: knowledge that survives the AI's removal.</li>
     </ul>
   </div>
@@ -506,7 +515,7 @@
     <div class="ghost">15</div>
     <div class="kicker">Hypotheses</div>
     <h2>Three confirmatory hypotheses, <em>preregistered on OSF</em></h2>
-    <p>The predictor is the <strong>partnership composite</strong> — the mean of purpose, engagement, and iteration; the three tests are Holm-corrected.</p>
+    <p>The predictor is the <strong>partnership composite</strong> — the mean of purpose, engagement, and iteration; the three tests are Holm-corrected. <strong>H1 carries the evidential weight</strong> — its outcome is objective; H2 and H3 are self-report and triangulate.</p>
     <div class="card c-blue">
       <h3><span class="num">H1</span> Cognitive residue</h3>
       <p>Controlling for Week-1 levels, the partnership composite positively predicts no-AI knowledge-test scores at Week 14.</p>
@@ -519,7 +528,7 @@
       <h3><span class="num">H3</span> AI literacy</h3>
       <p>Controlling for Week-1 levels, the partnership composite positively predicts total AI-literacy scores at Week 14.</p>
     </div>
-    <p class="small">Per-dimension effects (H1a–c, H2a–c) and the antecedent&rarr;composite link are exploratory: reported with interval estimates, labelled as such.</p>
+    <p class="small">Powered at .80 for medium effects (r &asymp; .33; .38 at the strictest Holm bar); smaller effects arrive as wide intervals, reported as such. Per-dimension effects and the antecedent&rarr;composite link are exploratory.</p>
   </div>
 </section>
 
@@ -530,7 +539,7 @@
     <div class="kicker">Measurements &middot; the predictor</div>
     <h2>Measuring the orientation: <em>twelve items, three per block</em></h2>
     <ul class="points compact">
-      <li>Each dimension is measured by three self-developed 5-point Likert items, one reverse-coded per block; ontological uncertainty has its own three-item block outside the composite.</li>
+      <li>Each dimension is measured by three self-developed 5-point Likert items, one reverse-coded per block; ontological openness has its own three-item block outside the composite.</li>
       <li>The <strong>partnership composite</strong> = the mean of the three dimension means, z-scored within course — the sole confirmatory predictor.</li>
       <li>The items are new, so reliability is estimated from the study data (McDonald's omega and Cronbach's alpha, both waves), with a pre-committed floor: any block below &omega; = .60 leaves the composite and is reported descriptively.</li>
       <li>One behavioural validity check: the iteration items are set against iteration markers coded from students' AI process logs — the check that does not rely on self-report.</li>
@@ -546,7 +555,7 @@
     <h2>Measuring the outcomes: <em>residue, dependence, literacy</em></h2>
     <div class="card c-blue">
       <h3><span class="num">H1</span> No-AI knowledge test</h3>
-      <p>Six course-specific items per wave: 3 multiple-choice (0/1) + 3 open-ended scored 0–2 against a rubric by two raters blind to wave; total 0–9, z-scored within course.</p>
+      <p>The same six course-specific items at both waves: 3 multiple-choice (0/1) + 3 open-ended scored 0–2 against a rubric by two raters blind to wave; total 0–9, z-scored within course.</p>
     </div>
     <div class="card c-gold">
       <h3><span class="num">H2</span> Cognitive dependence</h3>
@@ -581,7 +590,7 @@
         <p>Answers are transcribed, wave-stripped, and shuffled before independent rating; agreement statistics and an instructor-only sensitivity analysis are reported.</p>
       </div>
     </div>
-    <p>Participation is voluntary and pseudonymous; consent decisions are invisible to the instructor and cannot touch grades.</p>
+    <p>Participation is voluntary and pseudonymous; consent decisions are invisible to the instructor and cannot touch grades. Consent self-selection likely tilts the sample toward engaged students — range restriction on the predictor, which makes the tests conservative.</p>
   </div>
 </section>
 
