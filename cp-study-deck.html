@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cognitive Partnership — Study Overview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #111318;
+    --paper: #ffffff;
+    --muted: #4c4e56;
+    --faint: #94969e;
+    --rule: #d8d6d0;
+    --wash: #f4f2ee;
+    --red: #c03516;
+    --blue: #1e4f9c;
+    --gold: #a86e05;
+    --teal: #147468;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  .slide {
+    display: none;
+    position: absolute;
+    inset: 0;
+    padding: clamp(1.2rem, 3vw, 3rem) clamp(1.4rem, 4.5vw, 5rem);
+    padding-bottom: 3.2rem;
+    overflow-y: auto;
+  }
+  .slide.active { display: flex; flex-direction: column; }
+
+  .inner { max-width: 64rem; margin: auto; width: 100%; position: relative; }
+
+  .ghost {
+    position: absolute;
+    top: -1.6rem;
+    right: -0.5rem;
+    font-size: clamp(5rem, 14vw, 11rem);
+    line-height: 1;
+    font-weight: 900;
+    color: #ededea;
+    user-select: none;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+    font-weight: 900;
+    line-height: 1.02;
+    margin-bottom: 1.1rem;
+    letter-spacing: -0.025em;
+  }
+  h2 {
+    font-size: clamp(1.7rem, 4.2vw, 3rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.3rem;
+    max-width: 54rem;
+  }
+  h1 em, h2 em { font-style: normal; color: var(--red); }
+
+  .kicker {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: clamp(0.68rem, 1.3vw, 0.82rem);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 0.45em 0.9em 0.4em;
+    margin-bottom: 1.2rem;
+  }
+
+  p {
+    font-size: clamp(1.02rem, 1.9vw, 1.32rem);
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: 0.9rem;
+    max-width: 56rem;
+  }
+  p.small { font-size: clamp(0.86rem, 1.5vw, 1.02rem); color: var(--muted); }
+  p strong { font-weight: 800; }
+  .accent { color: var(--red); font-weight: 800; }
+
+  ul.points { list-style: none; max-width: 56rem; margin-bottom: 0.9rem; }
+  ul.points li {
+    font-size: clamp(1.02rem, 1.9vw, 1.32rem);
+    line-height: 1.45;
+    margin-bottom: clamp(0.7rem, 1.6vw, 1.15rem);
+    padding-left: 1.4em;
+    position: relative;
+  }
+  ul.points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.42em;
+    width: 0.55em;
+    height: 0.55em;
+    background: var(--red);
+  }
+  ul.points li:last-child { margin-bottom: 0; }
+  ul.points li strong { font-weight: 800; }
+  ul.points li em { font-style: italic; }
+
+  ul.points.compact li {
+    font-size: clamp(0.95rem, 1.7vw, 1.2rem);
+    margin-bottom: clamp(0.6rem, 1.4vw, 1rem);
+  }
+
+  .bigquote {
+    font-size: clamp(1.5rem, 3.4vw, 2.5rem);
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: var(--blue);
+    border-left: 10px solid var(--blue);
+    padding-left: clamp(0.8rem, 2vw, 1.4rem);
+    margin: 1.2rem 0 1.5rem;
+    max-width: 52rem;
+  }
+
+  .cols { display: flex; gap: clamp(0.8rem, 2.4vw, 1.6rem); flex-wrap: wrap; margin: 0.4rem 0 1rem; }
+  .col { flex: 1 1 16rem; }
+
+  .card { background: var(--wash); margin-bottom: 0.9rem; }
+  .card h3 {
+    font-size: clamp(1rem, 1.9vw, 1.3rem);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    background: var(--ink);
+    color: var(--paper);
+    padding: clamp(0.5rem, 1.2vw, 0.7rem) clamp(0.8rem, 1.7vw, 1.2rem);
+  }
+  .c-red h3  { background: var(--red); }
+  .c-blue h3 { background: var(--blue); }
+  .c-gold h3 { background: var(--gold); }
+  .c-teal h3 { background: var(--teal); }
+  .card h3 .sub { font-weight: 500; opacity: 0.8; font-size: 0.82em; }
+  .card h3 .num { font-weight: 900; margin-right: 0.4rem; }
+  .card p {
+    font-size: clamp(0.96rem, 1.7vw, 1.18rem);
+    margin: 0;
+    padding: clamp(0.7rem, 1.6vw, 1.1rem) clamp(0.8rem, 1.7vw, 1.2rem);
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  .tight h2 { margin-bottom: 0.8rem; font-size: clamp(1.5rem, 3.6vw, 2.5rem); }
+  .tight > .inner > p, .tight p { margin-bottom: 0.6rem; }
+  .tight .card { margin-bottom: 0.6rem; }
+  .tight .card h3 { font-size: clamp(0.95rem, 1.7vw, 1.2rem); padding: 0.42rem 0.9rem; }
+  .tight .card p { font-size: clamp(0.9rem, 1.55vw, 1.08rem); padding: 0.55rem 0.9rem; }
+  .tight p.small { margin-bottom: 0; }
+  .tight p { font-size: clamp(0.95rem, 1.7vw, 1.18rem); }
+  .tight table { margin: 0.6rem 0 0.8rem; }
+  .tight th, .tight td {
+    font-size: clamp(0.82rem, 1.45vw, 1rem);
+    padding: clamp(0.38rem, 1vw, 0.55rem);
+    line-height: 1.35;
+  }
+  .tight .kicker { margin-bottom: 0.9rem; }
+
+  .item-quote {
+    font-style: italic;
+    font-size: clamp(1.05rem, 1.9vw, 1.3rem);
+    font-weight: 600;
+    padding-left: 1rem;
+    border-left: 8px solid;
+    margin: 1.1rem 0 0;
+  }
+  .item-quote::before {
+    content: "Sample item · 5-point Likert";
+    display: block;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 0.3rem;
+  }
+  .item-quote.c-blue { color: var(--blue); border-color: var(--blue); }
+  .item-quote.c-gold { color: var(--gold); border-color: var(--gold); }
+  .item-quote.c-teal { color: var(--teal); border-color: var(--teal); }
+  .item-quote.c-red  { color: var(--red);  border-color: var(--red); }
+
+  table { border-collapse: collapse; width: 100%; margin: 0.9rem 0 1rem; }
+  th, td {
+    text-align: left;
+    padding: clamp(0.5rem, 1.3vw, 0.8rem);
+    font-size: clamp(0.92rem, 1.65vw, 1.12rem);
+    border-bottom: 2px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+  th {
+    font-size: clamp(0.64rem, 1.2vw, 0.76rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 800;
+    border-bottom: 3px solid var(--ink);
+  }
+  td:first-child { font-weight: 800; color: var(--blue); }
+
+  .titleslide h1 {
+    font-size: clamp(2.8rem, 9.5vw, 6.4rem);
+    text-transform: uppercase;
+    line-height: 0.98;
+    margin-bottom: 1.6rem;
+  }
+  .titleslide .kicker { margin-bottom: 2rem; }
+  .titleslide h1 .dot { color: var(--red); }
+  .titleslide .q {
+    font-size: clamp(1.2rem, 2.7vw, 1.85rem);
+    font-weight: 500;
+    line-height: 1.34;
+    color: var(--muted);
+    max-width: 46rem;
+    margin-bottom: 2.6rem;
+  }
+  .titleslide .q strong { color: var(--red); font-weight: 800; }
+  .authors { font-size: clamp(1rem, 1.8vw, 1.25rem); line-height: 1.8; border-top: 5px solid var(--ink); padding-top: 1.3rem; max-width: 46rem; }
+  .authors strong { font-weight: 800; }
+  .authors .role { color: var(--faint); font-size: 0.85em; font-weight: 400; }
+
+  .navhint {
+    position: fixed; bottom: 0.8rem; left: 50%; transform: translateX(-50%);
+    font-size: 0.7rem; letter-spacing: 0.1em; color: var(--faint);
+    user-select: none; pointer-events: none;
+  }
+  .counter {
+    position: fixed; bottom: 0.8rem; right: 1.2rem;
+    font-size: 0.72rem; font-weight: 700; color: var(--faint); user-select: none;
+  }
+  .navbtn {
+    position: fixed; top: 0; bottom: 0; width: 18%;
+    background: transparent; border: none; cursor: pointer; z-index: 5;
+  }
+  .navbtn:focus { outline: none; }
+  #prevbtn { left: 0; }
+  #nextbtn { right: 0; }
+
+  @media (max-width: 640px) {
+    .slide { padding-top: 2rem; padding-bottom: 4.6rem; }
+    .navbtn { width: 12%; }
+    .ghost { display: none; }
+    .navhint, .counter {
+      bottom: 0; padding: 0.55rem 0.6rem;
+      background: rgba(255,255,255,0.93);
+    }
+    .navhint { left: 0; right: 0; transform: none; width: 100%; text-align: center; }
+    .counter { right: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 1 · TITLE -->
+<section class="slide titleslide active">
+  <div class="inner">
+    <div class="kicker">A preregistered study of learning with AI &middot; Fall 2026</div>
+    <h1>Cognitive<br>Partnership<span class="dot">.</span></h1>
+    <p class="q">What kind of AI co-working leaves students <strong>understanding more without AI?</strong></p>
+    <div class="authors">
+      <p><strong>Dinara Pisareva</strong> <span class="role">&middot; Nazarbayev University &middot; Principal Investigator</span><br>
+      <strong>Denis de Crombrugghe</strong> <span class="role">&middot; Narxoz Business School &middot; Co-Investigator</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · THE STUDENT -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">02</div>
+    <div class="kicker">Start with one student</div>
+    <h2>The semester went well. The grades are good. <em>Now close the laptop.</em></h2>
+    <ul class="points">
+      <li>Picture a student at semester's end: every essay polished with AI, every reading summarised by AI, strong grades throughout.</li>
+      <li>Now ask them to explain their own argument with the laptop closed.</li>
+      <li>Sometimes the knowledge is in their head — and sometimes it was living in the chat window, and it left when the AI did.</li>
+      <li><strong>This study is about telling those two students apart.</strong></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3 · TWO TRUE THINGS -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">03</div>
+    <div class="kicker">Why this is hard to see</div>
+    <h2>Two things can be true <em>at the same time</em></h2>
+    <ul class="points">
+      <li>Working with AI <em>feels</em> transformative: in a three-wave study of 912 students, handing tasks to AI <em>positively</em> predicted self-reported transformative learning (Wang &amp; Zhang, 2026).</li>
+      <li>But their outcome is self-report — and perceived learning cannot detect erosion: a student can sincerely report transformation while unaided capability declines.</li>
+      <li>Both findings can hold at once: heavy delegation that feels like growth, and a shrinking capacity to work alone.</li>
+      <li><span class="accent">Adjudicating between them requires measuring the student with the AI removed.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4 · OFFLOADING -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">04</div>
+    <div class="kicker">What research already knows</div>
+    <h2>Handing work to a tool is usually smart — <em>until it isn't</em></h2>
+    <ul class="points">
+      <li><strong>Cognitive offloading</strong>: distributing mental work onto external tools — a shopping list carrying your memory.</li>
+      <li>When people expect a computer to store information, they recall less of the content and more about <em>where to find it</em> (Sparrow, Liu &amp; Wegner, 2011).</li>
+      <li>Offloading is usually adaptive: it frees limited cognitive resources for harder work (Risko &amp; Gilbert, 2016).</li>
+      <li>It harms learning under one condition: when it discharges work germane to the learning goal and the freed effort is not reinvested — offload the formatting, fine; <strong>offload the understanding, that's the loss</strong>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 5 · RESIDUE -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">05</div>
+    <div class="kicker">The key concept</div>
+    <h2>Cognitive residue: <em>what stays when the tool is gone</em></h2>
+    <ul class="points">
+      <li>Salomon, Perkins &amp; Globerson (1991) distinguish effects <em>with</em> technology — performance while the tool is in hand — from effects <em>of</em> it: what remains once it is gone.</li>
+      <li>That remainder is <strong>cognitive residue</strong> — for educators, the outcome that matters.</li>
+      <li>The question is not what a student can do while an AI assists, but what they can reconstruct unaided.</li>
+      <li>Residue accrues only under mindful, effortful engagement — it is <strong>earned, not absorbed</strong>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6 · CP DEFINITION -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">06</div>
+    <div class="kicker">The idea we're testing</div>
+    <h2>Cognitive partnership</h2>
+    <p class="bigquote">Sustained intellectual work with AI as a genuine partner in a shared system of thinking.</p>
+    <ul class="points">
+      <li>The idea is grounded in the <strong>distributed cognition</strong> literature (Hollan, Hutchins &amp; Kirsh, 2000): thinking spreads across persons, tools, and settings — the functional system, not the individual, is the unit of analysis.</li>
+      <li>When student and AI work well together, the thinking happens in that configuration, and the product belongs to it.</li>
+      <li>An alternative position to "AI as a tool": sustained co-work, with the understanding retained by the student.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 7 · THREE DIMENSIONS -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">07</div>
+    <div class="kicker">What partnership is made of</div>
+    <h2>Three dimensions, growing from <em>one precondition</em></h2>
+    <p>Teaching cannot act on the student–AI configuration itself, but it can develop what the student brings to it, so we measure the <strong>student-side orientation</strong> — three co-equal dimensions:</p>
+    <div class="cols">
+      <div class="col card c-blue">
+        <h3>Purpose</h3>
+        <p>Working with AI to <em>think further</em>, not to finish faster.</p>
+      </div>
+      <div class="col card c-gold">
+        <h3>Engagement</h3>
+        <p>Bringing curiosity and imagination — trying things you hadn't thought to try.</p>
+      </div>
+      <div class="col card c-teal">
+        <h3>Iteration</h3>
+        <p>Pushing back and building over many rounds, not taking the first answer.</p>
+      </div>
+    </div>
+    <p><strong>Ontological uncertainty</strong> — staying open about what AI <em>is</em> — is the enabling antecedent: taught and measured, but not a facet of the orientation.</p>
+  </div>
+</section>
+
+<!-- 8 · PURPOSE -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">08</div>
+    <div class="kicker">Dimension one</div>
+    <h2>Purpose: <em>think further, not finish faster</em></h2>
+    <ul class="points">
+      <li>The usual story about AI is productivity — but universities are not in the time-saving business.</li>
+      <li>The prize is <strong>a mind that reaches further than it could alone</strong>.</li>
+      <li>Partnership purpose: offload the trivial, keep the core — the student can explain the whole logic without the AI in the room.</li>
+      <li>Handing over the understanding itself is <strong>over-reliance</strong>, the failure mode we want to minimise.</li>
+    </ul>
+    <p class="item-quote c-blue">"My goal with AI is to think further than I could alone."</p>
+  </div>
+</section>
+
+<!-- 9 · ENGAGEMENT -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">09</div>
+    <div class="kicker">Dimension two</div>
+    <h2>Engagement: <em>curiosity and imagination do the reaching</em></h2>
+    <ul class="points">
+      <li>Purpose sets the destination; curiosity and imagination do the travelling.</li>
+      <li>Without them the partnership flattens into transactions: ask, receive, submit.</li>
+      <li>With them, an odd answer becomes a new direction — the student ends up somewhere neither party would have gone alone.</li>
+      <li>Trait curiosity predicts AI self-efficacy, which predicts use (Schutte &amp; Li, 2025); whether engagement predicts <em>lasting knowledge</em> is what we test.</li>
+    </ul>
+    <p class="item-quote c-gold">"I work with AI to come up with options I wouldn't have thought of alone."</p>
+  </div>
+</section>
+
+<!-- 10 · ITERATION -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">10</div>
+    <div class="kicker">Dimension three</div>
+    <h2>Iteration: <em>the partnership lives in the back-and-forth</em></h2>
+    <ul class="points">
+      <li>A single exchange with AI is retrieval, not partnership.</li>
+      <li>Taking the first answer and stopping is over-reliance wearing a friendly face.</li>
+      <li>The partnership lives in the loop — push back, redirect, build — and the loop is where the work stays <em>yours</em>.</li>
+      <li>Iteration is also behaviourally observable: students' AI process logs let self-reports be checked against actual practice.</li>
+    </ul>
+    <p class="item-quote c-teal">"My best work with AI happens over several rounds, not one."</p>
+  </div>
+</section>
+
+<!-- 11 · ONTOLOGICAL UNCERTAINTY -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">11</div>
+    <div class="kicker">The precondition</div>
+    <h2>Staying open about <em>what AI is</em></h2>
+    <ul class="points">
+      <li>To enter a real partnership, a student must grant AI the standing of a partner <em>worth</em> real effort.</li>
+      <li>"It's just a tool" invites the opposite: minimal effort, tasks finished and forgotten.</li>
+      <li>So the courses treat <em>what is AI?</em> as genuinely open — because among researchers, it genuinely is.</li>
+      <li><strong>Ontological uncertainty</strong> is the enabling antecedent: taught first, measured alongside the three dimensions, examined separately in the analysis.</li>
+    </ul>
+    <p class="item-quote c-red">"I treat what AI is as an open question, not something already settled."</p>
+  </div>
+</section>
+
+<!-- 12 · THE STUDY -->
+<section class="slide">
+  <div class="inner tight">
+    <div class="ghost">12</div>
+    <div class="kicker">The study</div>
+    <h2>Three real courses, one semester, <em>Fall 2026</em></h2>
+    <p>A within-person pre/post design embedded in three authentic courses at Nazarbayev University, all taught with the same partnership pedagogy:</p>
+    <table>
+      <tr><th>Course</th><th>Who</th><th>AI work students do</th></tr>
+      <tr><td>Research Methods (PLS210)</td><td>Undergraduates</td><td>Weekly AI conversations; research designs co-built with AI; creative presentation of research projects on GitHub.</td></tr>
+      <tr><td>AI &amp; Social Science (PLS419/519)</td><td>Upper-level + MA</td><td>A semester-long public project built with AI and presented on GitHub, plus two op-eds about AI.</td></tr>
+      <tr><td>Qualitative Methods (PLS514)</td><td>Graduate students</td><td>Analytical portfolios: grounded theory, RTA, and process tracing applied to AI-generated case studies, first without and then with AI, plus a comprehensive comparison of the two passes — differences, commonalities, implications for data interpretation.</td></tr>
+    </table>
+    <ul class="points compact">
+      <li>N = 108 enrolled; analytic sample &asymp; 70 after consent filtering and completeness.</li>
+      <li>Regular teaching and assessment constitute the data collection.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 13 · MEASUREMENT DESIGN -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">13</div>
+    <div class="kicker">How we measure</div>
+    <h2>Week 1 and Week 14: <em>the same measures, twice</em></h2>
+    <p>All measures run in Weeks 1 and 14; every model adjusts for the student's own baseline.</p>
+    <div class="cols">
+      <div class="col card c-blue">
+        <h3>The survey <span class="sub">— online, take-home</span></h3>
+        <p>Twelve self-developed CP items (three per dimension plus the antecedent block), the AIDep-22 Cognitive Dependence subscale (Wu et al., 2026), and an adapted 25-item AI-literacy scale (Lee &amp; Park, 2024).</p>
+      </div>
+      <div class="col card c-red">
+        <h3>The quiz <span class="sub">— in class, on paper, no AI</span></h3>
+        <p>Six course-specific items (3 multiple-choice, 3 open-ended) targeting understanding and application, identical across the two waves.</p>
+      </div>
+    </div>
+    <p>The quiz is the study's objective outcome — <strong>the residue measure</strong>.</p>
+  </div>
+</section>
+
+<!-- 14 · NO-AI TEST -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">14</div>
+    <div class="kicker">The heart of the design</div>
+    <h2>The no-AI test: <em>knowledge you can't google mid-answer</em></h2>
+    <ul class="points">
+      <li>Self-report cannot separate learning from perceived learning; an objective no-AI measure can.</li>
+      <li>The items demand reconstruction, not recall: each presents a scenario and asks which reasoning is correct, and <em>why</em>.</li>
+      <li>Administered on paper, in class, both waves; open-ended answers rubric-scored by two raters blind to wave, with inter-rater agreement reported.</li>
+      <li>What appears on that sheet is residue: knowledge that survives the AI's removal.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 15 · HYPOTHESES -->
+<section class="slide">
+  <div class="inner tight">
+    <div class="ghost">15</div>
+    <div class="kicker">Hypotheses</div>
+    <h2>Three confirmatory hypotheses, <em>preregistered on OSF</em></h2>
+    <p>The predictor is the <strong>partnership composite</strong> — the mean of purpose, engagement, and iteration; the three tests are Holm-corrected.</p>
+    <div class="card c-blue">
+      <h3><span class="num">H1</span> Cognitive residue</h3>
+      <p>Controlling for Week-1 levels, the partnership composite positively predicts no-AI knowledge-test scores at Week 14.</p>
+    </div>
+    <div class="card c-gold">
+      <h3><span class="num">H2</span> Over-reliance</h3>
+      <p>Controlling for Week-1 levels, the partnership composite negatively predicts cognitive dependence on AI at Week 14.</p>
+    </div>
+    <div class="card c-teal">
+      <h3><span class="num">H3</span> AI literacy</h3>
+      <p>Controlling for Week-1 levels, the partnership composite positively predicts total AI-literacy scores at Week 14.</p>
+    </div>
+    <p class="small">Per-dimension effects (H1a–c, H2a–c) and the antecedent&rarr;composite link are exploratory: reported with interval estimates, labelled as such.</p>
+  </div>
+</section>
+
+<!-- 16 · MEASUREMENT: PREDICTOR -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">16</div>
+    <div class="kicker">Measurements &middot; the predictor</div>
+    <h2>Measuring the orientation: <em>twelve items, three per block</em></h2>
+    <ul class="points compact">
+      <li>Each dimension is measured by three self-developed 5-point Likert items, one reverse-coded per block; ontological uncertainty has its own three-item block outside the composite.</li>
+      <li>The <strong>partnership composite</strong> = the mean of the three dimension means, z-scored within course — the sole confirmatory predictor.</li>
+      <li>The items are new, so reliability is estimated from the study data (McDonald's omega and Cronbach's alpha, both waves), with a pre-committed floor: any block below &omega; = .60 leaves the composite and is reported descriptively.</li>
+      <li>One behavioural validity check: the iteration items are set against iteration markers coded from students' AI process logs — the check that does not rely on self-report.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 17 · MEASUREMENT: OUTCOMES -->
+<section class="slide">
+  <div class="inner tight">
+    <div class="ghost">17</div>
+    <div class="kicker">Measurements &middot; the outcomes</div>
+    <h2>Measuring the outcomes: <em>residue, dependence, literacy</em></h2>
+    <div class="card c-blue">
+      <h3><span class="num">H1</span> No-AI knowledge test</h3>
+      <p>Six course-specific items per wave: 3 multiple-choice (0/1) + 3 open-ended scored 0–2 against a rubric by two raters blind to wave; total 0–9, z-scored within course.</p>
+    </div>
+    <div class="card c-gold">
+      <h3><span class="num">H2</span> Cognitive dependence</h3>
+      <p>The Cognitive Dependence subscale of the AIDep-22 (Wu et al., 2026), five items administered intact.</p>
+    </div>
+    <div class="card c-teal">
+      <h3><span class="num">H3</span> AI literacy</h3>
+      <p>An adapted 25-item AI-literacy scale (Lee &amp; Park, 2024): the total score is confirmatory; the five subscales are an exploratory breakdown.</p>
+    </div>
+    <p class="small">Analysis: regression-adjusted change (ANCOVA) with course fixed effects and prior AI use as covariate, robust standard errors; estimation-led reporting with 95% CIs.</p>
+  </div>
+</section>
+
+<!-- 18 · INTEGRITY -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">18</div>
+    <div class="kicker">Doing it honestly</div>
+    <h2>The limitations</h2>
+    <p>The design must answer its own strongest objection: <em>the researcher built the framework, teaches it, and measures it.</em> The answer is architectural.</p>
+    <div class="cols">
+      <div class="col card c-blue">
+        <h3>Preregistered</h3>
+        <p>Hypotheses, instruments, and the full analysis plan are locked on OSF before the first class meets.</p>
+      </div>
+      <div class="col card c-gold">
+        <h3>Gatekeeping</h3>
+        <p>A co-investigator holds all student responses and consent forms during the semester; the PI does not know who consented into the study until final grades and appeals close.</p>
+      </div>
+      <div class="col card c-teal">
+        <h3>Blind-scored</h3>
+        <p>Answers are transcribed, wave-stripped, and shuffled before independent rating; agreement statistics and an instructor-only sensitivity analysis are reported.</p>
+      </div>
+    </div>
+    <p>Participation is voluntary and pseudonymous; consent decisions are invisible to the instructor and cannot touch grades.</p>
+  </div>
+</section>
+
+<!-- 19 · WHY IT MATTERS -->
+<section class="slide">
+  <div class="inner">
+    <div class="ghost">19</div>
+    <div class="kicker">Why it matters</div>
+    <h2>The question isn't <em>whether</em> students will work with AI</h2>
+    <ul class="points">
+      <li>That question is settled — students already work with AI, in every discipline.</li>
+      <li>The open question: <strong>what kind of working relationship leaves students knowing more once the AI is out of the room?</strong></li>
+      <li>If partnership leaves measurable residue, assessment design gains a testable target: AI-free checkpoints, with/without-AI contrasts, process logs as evidence of engagement.</li>
+      <li>Teaching design gains a template too: creative projects where students <strong>build with AI, iterate, and publish</strong> — folding the results into a personal GitHub or LinkedIn — so co-working visibly compounds into a trajectory, not just a grade, and the get-the-essay-done mindset loses its grip.</li>
+      <li>A null is equally informative.</li>
+    </ul>
+  </div>
+</section>
+
+<button class="navbtn" id="prevbtn" aria-label="Previous slide"></button>
+<button class="navbtn" id="nextbtn" aria-label="Next slide"></button>
+<div class="counter" id="counter"></div>
+<div class="navhint">&#8592; &#8594; to navigate</div>
+
+<script>
+  var slides = document.querySelectorAll('.slide');
+  var i = 0;
+  function show(n) {
+    slides[i].classList.remove('active');
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides[i].classList.add('active');
+    slides[i].scrollTop = 0;
+    document.getElementById('counter').textContent = (i + 1) + ' / ' + slides.length;
+    if (history.replaceState) history.replaceState(null, '', '#' + (i + 1));
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') show(i + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(i - 1);
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+  document.getElementById('nextbtn').addEventListener('click', function () { show(i + 1); });
+  document.getElementById('prevbtn').addEventListener('click', function () { show(i - 1); });
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (dx < -40) show(i + 1);
+    if (dx > 40) show(i - 1);
+    x0 = null;
+  });
+  show((parseInt(location.hash.slice(1), 10) || 1) - 1);
+</script>
+
+</body>
+</html>
