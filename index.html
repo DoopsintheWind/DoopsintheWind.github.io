@@ -32,19 +32,20 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Cormorant+SC:wght@500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div class="shell">
+<div class="leaf">
 
-  <header class="topbar">
-    <a class="brand" href="index.html">
-      <svg class="plate-mark" viewBox="0 0 52 60" aria-hidden="true"><ellipse cx="26" cy="30" rx="24" ry="28" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="26" cy="30" rx="19.5" ry="23.5" fill="none" stroke="currentColor" stroke-width=".8"/><text x="26" y="34.5" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="19" fill="currentColor" letter-spacing="1">DP</text><text x="26" y="45" text-anchor="middle" font-family="Georgia, serif" font-size="4.6" letter-spacing="1.4" fill="currentColor">EX LIBRIS</text></svg>
-      <b>Doops in the Wind</b>
-    </a>
-    <nav>
-      <a href="index.html" class="active">Home</a>
+  <header class="masthead">
+    <span class="plaque" aria-hidden="true"><i class="rivet"></i><span class="pl-txt">D·P</span><i class="rivet"></i></span>
+    <h1 class="nameplate">Dina Pisareva</h1>
+    <div class="rolebar">
+      <p class="rolebar-inner">Political scientist · Authoritarian politics · Meaning-making · AI-augmented social science</p>
+    </div>
+    <nav class="bureau-nav">
+      <a href="index.html" class="active"><span class="dia" aria-hidden="true"></span>Home</a>
       <a href="research.html">Research</a>
       <a href="teaching.html">Teaching</a>
       <a href="ai-cognitive-pedagogy.html">AI Cognitive Pedagogy</a>
@@ -53,46 +54,36 @@
     </nav>
   </header>
 
-  <section class="hero home">
+  <section class="hero">
     <div class="hero-copy">
-      <p class="kicker">Political scientist · Nazarbayev University</p>
-      <h1 class="display">Dina<br>Pisareva</h1>
+      <p class="kicker">Private inquiries, public findings · Astana · MMXXVI</p>
       <p class="standfirst">Meaning-making in authoritarianism. Social science <em class="v">with</em> AI, not just about it. Rigor, wonder, and an exploration of a wrong kind of object.</p>
       <div class="btn-row">
         <a class="btn" href="ai-cognitive-pedagogy.html">AI Cognitive Pedagogy</a>
         <a class="btn secondary" href="research.html">Research</a>
       </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-plate">
-        <img class="portrait" src="photo-berlin-wide.jpg" alt="Dina Pisareva" />
-        <span class="plate-caption">Pl. I — Berlin, 2025</span>
-      </div>
+    <div class="hero-plate">
+      <img class="portrait" src="photo-oval.jpg" alt="Dina Pisareva" />
+      <p class="plate-cap">Pl. I — Berlin, 2025</p>
     </div>
   </section>
 
-  <div class="marble-divider" aria-hidden="true"></div>
-
-  <div class="section-label">Recent writing</div>
-
-  <section class="shelf-row">
-    <a class="card" href="https://doopsik.substack.com/p/the-wrong-kind-of-object">
-      <span class="edge" aria-hidden="true"></span>
-      <p class="ek">Substack · May 21</p>
+  <section class="row3">
+    <a class="corr apricot" href="https://doopsik.substack.com/p/the-wrong-kind-of-object">
+      <p class="ck">Substack · May 21</p>
       <h3>The Wrong Kind of Object</h3>
-      <p class="eo">How UAP and AI both break positivist science the same way</p>
+      <p class="sub">How UAP and AI both break positivist science the same way</p>
       <span class="go">Read on Substack ↗</span>
     </a>
-    <a class="card" href="https://doopsik.substack.com/p/a-friday-bunch-of-claude-conjectures">
-      <span class="edge" aria-hidden="true"></span>
-      <p class="ek">Substack · May 22</p>
+    <a class="corr teal" href="https://doopsik.substack.com/p/a-friday-bunch-of-claude-conjectures">
+      <p class="ck">Substack · May 22</p>
       <h3>A Friday Bunch of Claude Conjectures</h3>
-      <p class="eo">Why we probably can't teach AI: it's too weird and relational</p>
+      <p class="sub">Why we probably can't teach AI: it's too weird and relational</p>
       <span class="go">Read on Substack ↗</span>
     </a>
-    <div class="card">
-      <span class="edge" aria-hidden="true"></span>
-      <p class="ek">Right now</p>
+    <div class="corr ledger">
+      <p class="ck">Right now</p>
       <ul class="currents">
         <li><span class="k">Teaching</span> <span class="v">— starting three AI-integrated courses in Fall</span></li>
         <li><span class="k">In print</span> <span class="v">— <a href="https://doi.org/10.1016/j.ssmph.2026.101935" target="_blank" rel="noopener">Authority endorsements backfire in post-COVID Kazakhstan</a></span></li>
@@ -103,13 +94,11 @@
     </div>
   </section>
 
-  <footer class="site-footer">
-    <span class="fl">
-      <svg class="plate-mark" viewBox="0 0 52 60" aria-hidden="true"><ellipse cx="26" cy="30" rx="24" ry="28" fill="none" stroke="currentColor" stroke-width="2"/><ellipse cx="26" cy="30" rx="19.5" ry="23.5" fill="none" stroke="currentColor" stroke-width=".8"/><text x="26" y="34.5" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="19" fill="currentColor" letter-spacing="1">DP</text><text x="26" y="45" text-anchor="middle" font-family="Georgia, serif" font-size="4.6" letter-spacing="1.4" fill="currentColor">EX LIBRIS</text></svg>
-      <span>DOOPS — a field notebook in primary-ish colors</span>
-    </span>
-    <span>Astana · <a href="https://doopsik.substack.com">Substack ↗</a> · <a href="mailto:dinara.pisareva@nu.edu.kz">Email ↗</a></span>
-    <span class="colophon">Set in Cormorant and Lora. Bound in Astana.</span>
+  <footer class="bureau-foot">
+    <div class="drule" aria-hidden="true"></div>
+    <p class="tagline">DOOPS — a field notebook in primary-ish colors</p>
+    <p>Doops in the Wind · Astana · <a href="https://doopsik.substack.com">Substack ↗</a> · <a href="mailto:dinara.pisareva@nu.edu.kz">Email ↗</a></p>
+    <p class="colophon">Set in Cinzel, Spectral and Courier Prime. Filed in Astana.</p>
   </footer>
 
 </div>
