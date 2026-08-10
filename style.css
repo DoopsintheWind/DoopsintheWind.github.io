@@ -33,7 +33,7 @@
   --body:    'Lora', Georgia, serif;
 
   /* Marbling: baked asset first, jewel gradient beneath it as the fallback */
-  --marble-img: url('assets/marble.png');
+  --marble-img: url('assets/marble-quiet.png');
   --marble-fallback: linear-gradient(115deg,
       #0E4A52 0%, #2E2D68 30%, #6E1423 52%, #0E4A52 74%, #2E2D68 100%);
 
