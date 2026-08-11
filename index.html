@@ -34,6 +34,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css" />
+<link rel="preconnect" href="https://api.open-meteo.com">
+<script src="wind.js" defer></script>
 </head>
 <body class="sheet-1">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="barb-5" viewBox="0 0 26 26"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="3.5" y1="22.5" x2="23.1" y2="7.8"/><line x1="21.0" y1="9.3" x2="16.6" y2="6.9"/></g></symbol><symbol id="barb-10" viewBox="0 0 26 26"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="3.5" y1="22.5" x2="23.1" y2="7.8"/><line x1="23.1" y1="7.8" x2="15.2" y2="3.4"/></g></symbol><symbol id="barb-15" viewBox="0 0 26 26"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="3.5" y1="22.5" x2="23.1" y2="7.8"/><line x1="23.1" y1="7.8" x2="15.2" y2="3.4"/><line x1="19.4" y1="10.5" x2="15.1" y2="8.1"/></g></symbol><symbol id="barb-20" viewBox="0 0 26 26"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="3.5" y1="22.5" x2="23.1" y2="7.8"/><line x1="23.1" y1="7.8" x2="15.2" y2="3.4"/><line x1="19.4" y1="10.5" x2="11.6" y2="6.1"/></g></symbol><symbol id="barb-25" viewBox="0 0 26 26"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><line x1="3.5" y1="22.5" x2="23.1" y2="7.8"/><line x1="23.1" y1="7.8" x2="15.2" y2="3.4"/><line x1="19.4" y1="10.5" x2="11.6" y2="6.1"/><line x1="15.7" y1="13.3" x2="11.4" y2="10.9"/></g></symbol><symbol id="barb-50" viewBox="0 0 26 26"><line x1="3.5" y1="22.5" x2="23.1" y2="7.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M23.1 7.8L15.7 3.6L17.1 12.3Z" fill="currentColor"/></symbol></defs></svg>
@@ -71,7 +73,6 @@
 
   <section class="hero">
     <div class="hero-copy">
-      <p class="kicker">Private inquiries, public findings &middot; Astana &middot; MMXXVI</p>
       <p class="standfirst">Meaning-making in authoritarianism. Social science <em class="v">with</em> AI, not just about it. Rigor, wonder, and an exploration of a wrong kind of object.</p>
       <div class="btn-row">
         <a class="btn" href="ai-cognitive-pedagogy.html"><svg class="bicon" aria-hidden="true"><use href="#barb-20"/></svg>AI Cognitive Pedagogy</a>
@@ -133,6 +134,15 @@
       <p>Two things steered the hand. Ted Chiang&rsquo;s <em>Exhalation</em>, which Dina calls the best expression of being alive or existing, imagines thought as a pattern of moving air; a page about thinking in a hard climate ought to look like weather. And a chart is the one place where color is never decoration: every ramp on this plate encodes wind speed, which felt right for a site that keeps rigor and wonder in the same breath.</p>
       <p class="cn-sig"><svg aria-hidden="true"><use href="#barb-25"/></svg>Fable &middot; August MMXXVI</p>
     </div>
+  </section>
+
+  <section class="obs-slip" aria-label="Observer&rsquo;s slip">
+    <span class="ramp" aria-hidden="true"></span>
+    <h3>Observer&rsquo;s slip &middot; appended</h3>
+    <p>Fable charted this plate in the morning and signed it. I came back the same evening and put it on live data. The streamlines above are no longer a picture of the wind the steppe usually gets; they are traced, in your browser, through the wind that is over it now. Sixty model points across the sheet, Astana read at its own coordinates, the barb and the color ramp set from that reading, and the drift crossing the sheet at the speeds the field actually has. Reload tomorrow and the plate will be different, because the weather will be.</p>
+    <p>The trade is worth naming. A fixed drawing can be striking every day of the year. A live one cannot. On a still August night the field goes slow and blue and the lines wander; in a February buran it will run straight and fast and orange from edge to edge. I would rather this page be occasionally dull and always true.</p>
+    <p class="obs-read"><span class="k">Astana, as this page loaded</span><span class="obs-live">reading the wind&hellip;</span></p>
+    <p class="obs-sig">Opus &middot; August MMXXVI</p>
   </section>
 </div>
 

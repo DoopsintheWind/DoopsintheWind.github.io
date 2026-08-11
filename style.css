@@ -217,15 +217,6 @@ h1.display{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5.4vw,5
 .sec a:hover{color:var(--acc)}
 
 /* ---- inquiries ---- */
-.inquiries{margin:52px 0 0}
-.inq-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2.5vw,30px)}
-.inq{display:block;text-decoration:none;color:inherit;border-top:2px solid var(--ink);padding-top:13px}
-.inq .head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.inq .no{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-.inq .barb{width:21px;height:21px;color:var(--c)}
-.inq h3{font-family:var(--serif);font-weight:600;font-size:20px;line-height:1.25;margin:7px 0 7px;transition:color .15s}
-.inq p{font-size:14.5px;line-height:1.52;color:var(--muted);margin:0}
-.inq:hover h3{color:var(--ch)}
 
 /* ---- dispatch cards ---- */
 .dispatch{margin:52px 0 0}
@@ -329,7 +320,6 @@ a.file:hover .fgo{text-decoration:underline;text-underline-offset:3px}
 @media (max-width:980px){
   .row3{grid-template-columns:1fr 1fr}
   .corr.ledger{grid-column:1/-1}
-  .inq-grid{grid-template-columns:1fr 1fr}
   .grid3{grid-template-columns:1fr}
 }
 @media (max-width:820px){
@@ -363,11 +353,27 @@ a.file:hover .fgo{text-decoration:underline;text-underline-offset:3px}
   .trio .thesis p{max-width:52ch}
 }
 @media (max-width:560px){
-  .inq-grid{grid-template-columns:1fr}
-  .inq p{max-width:46ch}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important}
   .pulse{visibility:hidden!important}
   html{scroll-behavior:auto}
+}
+
+/* ---- live plate: the drifting field sits on a canvas over the sheet ---- */
+.plate-holder{position:relative}
+.plate-flow{position:absolute;left:0;top:0;pointer-events:none}
+
+/* ---- observer's slip: a second hand on the sheet, deliberately not chart paper ---- */
+.obs-slip{position:relative;margin:22px 0 0 auto;max-width:760px;background:#16232a;color:#dfe8ea;padding:30px 34px 26px 38px;font-family:var(--mono);overflow:hidden}
+.obs-slip .ramp{position:absolute;top:0;bottom:0;left:0;width:3px;background:linear-gradient(180deg,#33657f,#1a8289,#299674,#61a54d,#c3af26,#e18d30,#d15355,#8f3a86)}
+.obs-slip h3{margin:0 0 16px;font-family:var(--mono);font-weight:400;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#9dbcc2}
+.obs-slip p{margin:0 0 14px;font-size:13px;line-height:1.85;color:#dfe8ea}
+.obs-slip .obs-read{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline;margin:20px 0 0;padding-top:16px;border-top:1px solid rgba(223,232,234,.22);font-size:12px;letter-spacing:.06em}
+.obs-slip .obs-read .k{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9dbcc2}
+.obs-slip .obs-live{color:#e8b96a}
+.obs-slip .obs-sig{margin:18px 0 0;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#9dbcc2}
+@media (max-width:720px){
+  .obs-slip{max-width:none;padding:24px 20px 20px 22px}
+  .obs-slip p{font-size:12.5px;line-height:1.8}
 }
