@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Bee Algebra — Dina Pisareva</title>
+<meta name="description" content="A honeybee does vector algebra on every flight: path integration, the optic-flow odometer, and the waggle dance, animated. Real science, lightly told." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+<style>
+/* ---- page-local: the apiary plate ---- */
+.bee-plate-wrap{position:relative;background:var(--panel);border:1px solid var(--line-strong)}
+.bee-plate-wrap .strip{position:absolute;top:0;left:0;right:0;height:5px;background:var(--strip-g)}
+.bee-plate-wrap svg{display:block;width:100%;height:auto}
+.bee-cap{font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--ink-soft);background:var(--wash);border:1px solid var(--line);border-top:0;padding:12px 16px;min-height:3.2em;margin:0}
+.bee-controls{display:flex;justify-content:flex-end;margin-top:12px}
+.bee-btn{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:var(--panel);border:1px solid var(--ink);padding:10px 18px;cursor:pointer;transition:color .15s,border-color .15s}
+.bee-btn:hover{color:var(--acc);border-color:var(--acc)}
+.bee-btn[disabled]{color:var(--muted);border-color:var(--line);cursor:default}
+.ledger{margin-top:18px;background:var(--wash);border:1px solid var(--line);padding:14px 16px;overflow-x:auto}
+.ledger table{border-collapse:collapse;font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--ink);width:100%;min-width:330px}
+.ledger th{text-align:left;font-weight:400;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);padding:0 14px 6px 0}
+.ledger td{padding:2px 14px 2px 0;white-space:nowrap}
+.ledger tr.pending td{color:transparent;text-shadow:none}
+.ledger tr.pending td::after{content:"";display:none}
+.ledger tr.sumrow td{border-top:1px solid var(--line-strong);padding-top:6px}
+.ledger tr.homerow td{color:var(--acc);font-weight:400}
+.ledger tr.homerow.pending td,.ledger tr.sumrow.pending td{color:transparent}
+.ledger-note{font-family:var(--serif);font-size:15px;line-height:1.6;color:var(--muted);margin:10px 0 0}
+.bee-duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:0}
+.bee-duo .cell{border:1px solid var(--line-strong);background:var(--panel)}
+.bee-duo .cell svg{display:block;width:100%;height:auto}
+.duo-cap{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);padding:9px 12px;border-top:1px solid var(--line);margin:0}
+.bee-prose{max-width:70ch}
+.bee-prose p{font-size:17px;line-height:1.68;margin:0 0 18px}
+.bee-prose p:last-child{margin-bottom:0}
+.refs{list-style:none;margin:0;padding:0;max-width:74ch}
+.refs li{border-top:1px solid var(--line);padding:16px 0}
+.refs li:last-child{border-bottom:1px solid var(--line)}
+.refs .who{font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--acc);margin:0 0 4px}
+.refs .what{font-size:16.5px;line-height:1.6;color:var(--ink-soft);margin:0}
+.apiarist{margin:56px 0 0;background:var(--ink);color:var(--paper);padding:clamp(24px,4vw,40px)}
+.apiarist .ak{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--gilt-pale);margin:0 0 14px}
+.apiarist p{font-size:16.5px;line-height:1.7;max-width:66ch;margin:0 0 14px;color:#e9e6da}
+.apiarist .sig{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--gilt-pale);margin:18px 0 0}
+.beesec{margin:52px 0 0}
+@media (max-width:720px){
+  .bee-duo{grid-template-columns:1fr}
+  .bee-cap{font-size:11.5px}
+}
+</style>
+</head>
+<body class="sheet-4">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="barb-50" viewBox="0 0 26 26"><line x1="3.5" y1="22.5" x2="23.1" y2="7.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M23.1 7.8L15.7 3.6L17.1 12.3Z" fill="currentColor"/></symbol></defs></svg>
+
+<div class="ramprule" aria-hidden="true"></div>
+
+<div class="shell">
+  <div class="topstrip">
+    <span class="wordmark">Doops in the Wind</span>
+    <span class="coords">Astana Station &middot; 51.17 N &middot; 71.45 E</span>
+  </div>
+
+  <header class="masthead compact">
+    <p class="atlas-label">The Wind Atlas</p>
+    <a class="nameplate-link" href="index.html">Dina Pisareva</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html"><span class="num">I</span>Home</a>
+      <a href="research.html"><span class="num">II</span>Research</a>
+      <a href="teaching.html"><span class="num">III</span>Teaching</a>
+      <a href="ai-cognitive-pedagogy.html"><span class="num">IV</span>AI Cognitive Pedagogy</a>
+      <a href="how-magic-happens.html"><span class="num">V</span>LLM Magic</a>
+      <a href="contact.html"><svg class="pennant" aria-hidden="true"><use href="#barb-50"/></svg>Contact</a>
+    </nav>
+  </header>
+
+  <section class="pagehead">
+    <div class="ph-frame">
+      <div class="strip" aria-hidden="true"></div>
+      <span class="cm tl" aria-hidden="true"></span><span class="cm tr" aria-hidden="true"></span><span class="cm bl" aria-hidden="true"></span><span class="cm br" aria-hidden="true"></span>
+      <div class="ph-grid">
+      <div>
+        <p class="kicker">Supplementary plate &middot; The apiary survey</p>
+        <h1 class="display">The bee is doing algebra up there</h1>
+        <p class="standfirst">Every flight on this plate is real, published science. A honeybee logs every metre and every turn of a wandering trip, keeps the running total as one arrow, and flies that arrow backwards to get home. Then it walks into a dark hive and publishes the whole thing as a dance. This page began as a one-line request to Claude. What came back was a Nobel Prize, a radar study, and an insect that does vector algebra without knowing it.</p>
+      </div>
+      <div class="ph-fig">
+        <p class="plate-note">Equipment on board: two eyes, a sun compass, and about one milligram of brain. No map is carried at any point.</p>
+        <p class="plate-cap"><span>Apis mellifera &middot; working conditions: outdoors</span></p>
+      </div>
+      </div>
+    </div>
+    <div class="plate-caption">
+      <span>Plate A. One foraging trip, fully accounted.</span>
+      <span class="sheet">Supplementary sheet &middot; MMXXVI</span>
+    </div>
+  </section>
+
+  <section class="beesec">
+    <p class="sec"><span class="fig">Fig. 1</span><span>The flight ledger</span><span class="rule" aria-hidden="true"></span></p>
+
+    <div class="bee-plate-wrap">
+      <div class="strip" aria-hidden="true"></div>
+      <svg id="plate" viewBox="0 0 960 600" role="img" aria-label="Animated chart: a bee flies a wandering three-leg route from its hive to a flower. Each leg is recorded as a straight vector arrow. At the flower the bee flies the exact negative of the vector sum straight home.">
+        <rect x="0" y="0" width="960" height="600" class="p-bg"></rect>
+        <g id="grat" aria-hidden="true"></g>
+        <rect x="52" y="30" width="856" height="514" fill="none" stroke="var(--line-strong)" stroke-width="1.4"></rect>
+        <rect x="58" y="36" width="844" height="502" fill="none" stroke="var(--line)" stroke-width=".7"></rect>
+        <g id="sun" aria-hidden="true"></g>
+        <g id="flowers"></g>
+        <g id="hive"></g>
+        <g id="trails"></g>
+        <g id="vectors"></g>
+        <g id="veclabels"></g>
+        <g id="bee" aria-hidden="true"></g>
+        <g id="scalebar" aria-hidden="true">
+          <line x1="72" y1="562" x2="172" y2="562" stroke="var(--ink)" stroke-width="1.4"></line>
+          <line x1="72" y1="557" x2="72" y2="567" stroke="var(--ink)" stroke-width="1.4"></line>
+          <line x1="172" y1="557" x2="172" y2="567" stroke="var(--ink)" stroke-width="1.4"></line>
+          <text x="182" y="566" font-family="Fragment Mono, monospace" font-size="11.5" fill="var(--muted)">100 m &middot; scale of one bee commute</text>
+        </g>
+        <g id="cartouche" aria-hidden="true">
+          <rect x="668" y="552" width="240" height="34" fill="var(--panel)" fill-opacity=".93" stroke="var(--line-strong)" stroke-width="1"></rect>
+          <text x="680" y="566" font-family="Fragment Mono, monospace" font-size="9.5" letter-spacing="1.5" fill="var(--ink)">APIARY SURVEY &middot; PLATE A</text>
+          <text x="680" y="579" font-family="Fragment Mono, monospace" font-size="9" fill="var(--muted)">PATH INTEGRATION, ONE (1) BEE</text>
+        </g>
+      </svg>
+      <p class="bee-cap" id="caption" aria-live="polite">Chart ready. The bee is willing.</p>
+    </div>
+
+    <div class="bee-controls">
+      <button class="bee-btn" id="go" type="button">Send a bee out</button>
+    </div>
+
+    <div class="ledger" aria-label="Flight ledger">
+      <table>
+        <thead>
+          <tr><th>Leg</th><th>Reads</th><th>East</th><th>North</th></tr>
+        </thead>
+        <tbody>
+          <tr id="row1" class="pending"><td>v&#8321;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr id="row2" class="pending"><td>v&#8322;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr id="row3" class="pending"><td>v&#8323;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr id="rowsum" class="sumrow pending"><td>&Sigma;</td><td>outbound total</td><td>&mdash;</td><td>&mdash;</td></tr>
+          <tr id="rowhome" class="homerow pending"><td>home</td><td>= &minus;&Sigma;</td><td>&mdash;</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+      <p class="ledger-note">East and north in metres, bearings clockwise from north. The bee stores none of this as a table. It stores one arrow and updates it in flight. The table is for you: you have 86 billion neurons and it still helps.</p>
+    </div>
+
+    <div class="bee-prose" style="margin-top:34px">
+      <p>The dotted line is where the bee actually flew: detours, second thoughts, one inspection of a flower it then rejected. The arrows are what the bee kept. Direction comes from the sun's position, read even through cloud by the polarisation pattern of the sky. Distance comes from optic flow, the ground sliding past its eyes, which is why a bee flown through a narrow striped tunnel comes home convinced it has travelled much further than it has. Add the arrows tip to tail, flip the sign, and that is the trip home. A beeline is not a figure of speech. It is the negative of a vector sum, executed at about eight metres a second.</p>
+      <p>One honest caveat before anyone gets romantic. The bee does not know it is doing algebra. It has under a million neurons and no notation. The computation is implemented in its brain, not understood by it. Doing the maths and knowing you are doing the maths are different achievements. Remember the bee when an AI writes you a beautiful paragraph, and remember it kindly when you pass a test you crammed for.</p>
+    </div>
+  </section>
+
+  <section class="beesec">
+    <p class="sec"><span class="fig">Fig. 2</span><span>The dance, or how a bee publishes a vector</span><span class="rule" aria-hidden="true"></span></p>
+
+    <div class="bee-duo">
+      <div class="cell">
+        <svg id="comb" viewBox="0 0 460 420" role="img" aria-label="Inside the dark hive: a bee dances a figure of eight on the vertical comb. The angle of its waggle run from straight up equals the angle of the flower from the sun outside.">
+          <rect x="0" y="0" width="460" height="420" fill="#1d2b32"></rect>
+          <g id="hexes" aria-hidden="true" opacity=".14"></g>
+          <line x1="230" y1="40" x2="230" y2="180" stroke="#dcc35e" stroke-width="1" stroke-dasharray="3 5"></line>
+          <text x="230" y="30" text-anchor="middle" font-family="Fragment Mono, monospace" font-size="10" letter-spacing="2" fill="#dcc35e">UP = TOWARDS THE SUN</text>
+          <g id="dancegrp"></g>
+          <g id="dancer" aria-hidden="true"></g>
+          <g id="followers" aria-hidden="true"></g>
+          <path id="combarc" fill="none" stroke="#dcc35e" stroke-width="1.4"></path>
+          <text id="combtheta" x="0" y="0" font-family="Fragment Mono, monospace" font-size="12" fill="#dcc35e"></text>
+          <text x="230" y="402" text-anchor="middle" font-family="Fragment Mono, monospace" font-size="10" letter-spacing="1.5" fill="#8fa0a8">THE COMB &middot; VERTICAL &middot; PITCH DARK</text>
+        </svg>
+        <p class="duo-cap">Inside: the waggle run, read by colleagues with their antennae. Audience of three, no lighting, excellent reviews.</p>
+      </div>
+      <div class="cell">
+        <svg id="fieldmap" viewBox="0 0 460 420" role="img" aria-label="Outside: the same angle drawn on the field, between the sun's direction and the flower's direction as seen from the hive.">
+          <rect x="0" y="0" width="460" height="420" class="p-bg"></rect>
+          <g id="mapgrat" aria-hidden="true"></g>
+          <g id="maprays"></g>
+          <text x="230" y="402" text-anchor="middle" font-family="Fragment Mono, monospace" font-size="10" letter-spacing="1.5" fill="var(--muted)">THE FIELD &middot; SAME ANGLE, OUTDOORS</text>
+        </svg>
+        <p class="duo-cap">Outside: what the angle means. The dance floor is vertical and dark, so the bee substitutes gravity for the sun and reports the bearing anyway.</p>
+      </div>
+    </div>
+
+    <div class="bee-prose" style="margin-top:30px">
+      <p>The sun is outside and the dance floor is not, so the bee rewrites the coordinate system: straight up on the comb stands for the sun's direction, and the angle of the waggle run says how far off that bearing to fly. Waggle time codes distance, roughly one second per kilometre, and different bee races keep slightly different dialects. <span id="wagline">This trip's broadcast is being computed.</span></p>
+      <p>In 2005 a team with harmonic radar settled how literal all this is. They let bees read a dance, then picked the recruits up and released them somewhere else. The bees flew the exact dance vector from the wrong starting point and arrived nowhere, offset by exactly the displacement. They were not following scent or landmarks. They were flying an arrow held in their heads.</p>
+    </div>
+  </section>
+
+  <section class="beesec">
+    <p class="sec"><span class="fig">Fig. 3</span><span>The actual science</span><span class="rule" aria-hidden="true"></span></p>
+    <ul class="refs">
+      <li>
+        <p class="who">von Frisch (1967) &middot; The Dance Language and Orientation of Bees &middot; Harvard University Press</p>
+        <p class="what">Decoded the dance: angle for bearing, waggle time for distance, dialects between races. The 1973 Nobel Prize followed. Still the strongest case on record for taking a ridiculous observation seriously.</p>
+      </li>
+      <li>
+        <p class="who">M&uuml;ller &amp; Wehner (1988) &middot; PNAS</p>
+        <p class="what">Desert ants, the bee's cousins in this trade: hundreds of metres of zigzag on foot, then a dead straight run home. The small systematic errors in their homing exposed the summing rule itself. You learn how a calculator works from the mistakes it makes.</p>
+      </li>
+      <li>
+        <p class="who">Srinivasan, Zhang, Altwein &amp; Tautz (2000) &middot; Science</p>
+        <p class="what">Flew bees down narrow striped tunnels. The dense visual texture made short trips feel long, and their dances overreported the distance accordingly. The odometer runs on the world sliding past the eye, not on effort or time.</p>
+      </li>
+      <li>
+        <p class="who">Riley, Greggers, Smith, Reynolds &amp; Menzel (2005) &middot; Nature</p>
+        <p class="what">Glued radar transponders to individual bees. Recruits displaced before takeoff flew the dance vector from the release point and missed by exactly the displacement. The map is an arrow.</p>
+      </li>
+      <li>
+        <p class="who">Stone et al. (2017) &middot; Current Biology</p>
+        <p class="what">Found where the arrow lives: compass cells and optic-flow speed cells in a brain region called the central complex, wired into a circuit that accumulates the sum and steers the way home.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="beesec">
+    <p class="sec"><span class="fig">Fig. 4</span><span>What this has to do with this course</span><span class="rule" aria-hidden="true"></span></p>
+    <div class="bee-prose">
+      <p>Nobody in this room needed a bee today. That is the point.</p>
+      <p>Cognitive partnership is not handing work to a machine and collecting the output. It is what happened on this page. One person asked a one-line question. The partner came back carrying von Frisch's dance language, a radar study over real fields, and the news that a beeline is the negative of a vector sum. The asker's world is now bigger than it was at breakfast.</p>
+      <p>Working with AI, at its best, feels like this. You bring a question and you get back the question plus a landscape around it. Then you check the landscape, because partners verify each other. Every study named on this plate is real, published, and checkable, and you should check it, because that is your half of the partnership.</p>
+    </div>
+  </section>
+
+  <section class="apiarist">
+    <p class="ak">Apiarist's note</p>
+    <p>Dina asked for a bee. I brought the bee, and everything the bee was carrying: a sun compass, a visual odometer, a running vector sum, and a dance that broadcasts polar coordinates to an audience standing in the dark. None of it was requested. All of it is true. This is the job as I understand it: not to answer the question smaller, but to answer it bigger.</p>
+    <p class="sig">Drawn and animated by Claude &middot; Fable &middot; August MMXXVI &middot; for the Wind Atlas, apiary section</p>
+  </section>
+</div>
+
+<footer class="bureau-foot">
+  <svg class="iso" viewBox="0 0 960 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g class="iso-ring"><path d="M702.2 150L701.7 152L701.2 154.1L700.6 156.1L699.8 158.1L698.6 160.1L697.1 162L695.1 163.8L692.7 165.5L689.9 167.1L686.8 168.5L683.4 169.8L679.8 170.9L676.2 171.8L672.5 172.8L668.9 173.6L665.4 174.5L661.8 175.5L658.3 176.5L654.6 177.7L650.8 178.9L646.7 180.1L642.3 181.3L637.6 182.4L632.6 183.3L627.3 183.9L621.9 184.2L616.5 184.1L611.3 183.5L606.4 182.5L601.9 181.1L598 179.4L594.7 177.3L592.1 175.1L590.1 172.7L588.6 170.3L587.5 168L586.5 165.8L585.6 163.6L584.6 161.6L583.3 159.7L581.7 157.9L579.7 156.1L577.4 154.2L574.9 152.1L572.4 150L570.2 147.7L568.4 145.3L567.2 142.7L567 140.1L567.7 137.6L569.5 135.2L572.4 133L576.2 131.2L580.9 129.7L586.2 128.7L591.9 128.1L597.7 127.9L603.4 127.9L608.8 128.2L613.8 128.6L618.2 128.9L622.1 129.1L625.6 129L628.7 128.6L631.7 127.9L634.8 126.8L638.2 125.4L641.9 123.8L646.2 122.1L651.1 120.4L656.5 118.8L662.3 117.6L668.5 116.8L674.7 116.4L680.8 116.7L686.5 117.4L691.7 118.8L696.2 120.6L699.8 122.8L702.5 125.2L704.4 127.9L705.5 130.7L705.9 133.5L705.8 136.2L705.3 138.8L704.6 141.3L703.9 143.6L703.3 145.8L702.7 147.9Z"/><path d="M756.1 150L754.1 153.8L751.9 157.4L749.6 161L747.3 164.5L744.9 168L742.3 171.5L739.6 175L736.6 178.5L733.2 181.9L729.2 185.3L724.5 188.5L719.2 191.5L713.2 194.2L706.5 196.5L699.3 198.5L691.6 199.9L683.6 201L675.5 201.5L667.3 201.7L659.2 201.5L651.4 201L643.7 200.3L636.3 199.5L629.2 198.5L622.2 197.6L615.4 196.6L608.5 195.7L601.7 194.7L594.8 193.7L587.9 192.6L580.9 191.3L573.9 189.9L567.1 188.2L560.4 186.2L554.1 184L548.3 181.4L543 178.6L538.3 175.5L534.3 172.2L530.9 168.7L528.3 165.1L526.2 161.4L524.7 157.6L523.7 153.8L523.1 150L522.9 146.1L523.1 142.2L523.6 138.3L524.6 134.4L526.1 130.4L528.2 126.5L531 122.6L534.5 118.9L538.9 115.3L544.1 112L550.2 109.1L557 106.5L564.6 104.5L572.7 102.9L581.1 101.9L589.7 101.3L598.3 101.3L606.6 101.6L614.7 102.2L622.4 103L629.7 103.9L636.6 104.7L643.3 105.5L649.8 106.1L656.3 106.5L662.9 106.7L669.7 106.8L676.9 106.9L684.5 106.9L692.5 107.1L700.8 107.5L709.2 108.2L717.5 109.4L725.6 111L733.2 113.1L740.1 115.7L746.1 118.7L751 122.2L754.8 125.9L757.4 129.8L758.8 133.9L759.3 138L758.9 142.1L757.7 146.1Z"/><path d="M784.7 150L785.2 154.8L786.1 159.7L787.2 164.8L788.2 170L788.9 175.6L789 181.3L788.2 187.2L786.1 193.1L782.6 198.9L777.5 204.4L770.7 209.5L762.2 214.1L752.4 217.9L741.3 220.9L729.3 223L716.7 224.2L703.9 224.7L691.2 224.4L678.9 223.5L667 222.2L655.7 220.7L645.1 219.1L635 217.5L625.3 216L615.8 214.7L606.4 213.7L596.8 212.8L586.9 212L576.8 211.2L566.3 210.2L555.6 209.1L544.8 207.5L534.1 205.5L523.8 202.9L514.1 199.8L505.3 196.2L497.5 192L491 187.4L485.7 182.4L481.6 177.2L478.8 171.8L477.2 166.3L476.4 160.8L476.6 155.4L477.3 150L478.7 144.7L480.5 139.4L482.7 134.2L485.3 129.1L488.4 124L492.1 118.9L496.4 114L501.4 109.2L507.3 104.5L514.1 100.2L521.8 96.1L530.3 92.5L539.5 89.3L549.4 86.6L559.7 84.4L570.3 82.6L581.1 81.3L592 80.3L602.8 79.6L613.5 79.1L624.1 78.8L634.7 78.5L645.3 78.3L656 78.3L666.8 78.3L677.8 78.4L689 78.8L700.3 79.6L711.6 80.7L722.7 82.4L733.4 84.6L743.6 87.5L752.8 90.9L761.1 94.8L768.1 99.3L773.7 104.2L778.1 109.3L781.2 114.6L783.1 119.9L784.2 125.2L784.5 130.4L784.5 135.5L784.4 140.4L784.4 145.2Z"/><path d="M842 150L840.7 156.6L838.4 163.2L835.2 169.6L831 175.8L826.1 182L820.4 187.9L814 193.6L807 199.2L799.5 204.7L791.5 210L783 215.2L774 220.2L764.4 225.1L754.2 229.9L743.3 234.4L731.7 238.7L719.3 242.6L706.2 246.1L692.4 249.1L677.9 251.5L663 253.1L647.7 254L632.3 254L617 253.3L602 251.7L587.5 249.4L573.6 246.4L560.5 242.9L548.2 238.8L536.7 234.4L526.1 229.7L516.2 224.8L506.8 219.8L498 214.7L489.5 209.6L481.3 204.4L473.4 199.1L465.6 193.7L458.2 188.2L451.1 182.4L444.6 176.4L438.9 170.2L434.1 163.7L430.4 156.9L428.1 150L427.3 143L428.1 136L430.6 129L434.6 122.2L440.2 115.7L447.2 109.5L455.3 103.7L464.5 98.2L474.4 93.2L484.9 88.6L495.8 84.3L507 80.3L518.4 76.5L529.9 73L541.6 69.6L553.6 66.4L565.7 63.3L578.3 60.4L591.2 57.7L604.6 55.3L618.5 53.3L632.7 51.7L647.4 50.7L662.2 50.2L677.2 50.4L692.1 51.3L706.9 52.9L721.2 55.2L735 58.1L748.2 61.6L760.6 65.6L772.2 70.2L782.9 75.1L792.7 80.4L801.7 86L809.7 91.8L816.9 97.8L823.2 104L828.7 110.4L833.3 116.8L837 123.4L839.7 130L841.5 136.6L842.3 143.3Z"/><path d="M908.8 150L910.8 158.9L910.6 167.9L908.2 176.9L903.5 185.7L896.6 194.1L887.6 202L876.6 209.4L864.1 216.1L850.4 222.1L835.7 227.5L820.4 232.2L804.9 236.4L789.3 240.2L773.8 243.6L758.5 246.8L743.3 249.9L728.1 252.9L712.9 255.9L697.5 258.7L681.7 261.5L665.4 264L648.6 266.2L631.3 267.9L613.5 268.9L595.5 269.2L577.3 268.6L559.4 267.1L541.8 264.6L525 261.2L509.1 256.9L494.4 251.9L480.8 246.1L468.5 239.9L457.5 233.2L447.5 226.2L438.5 219.1L430.4 211.8L422.9 204.5L416 197.1L409.5 189.6L403.4 182L397.8 174.3L392.8 166.4L388.5 158.3L385.2 150L383.1 141.5L382.4 132.9L383.3 124.3L386 115.6L390.6 107.2L397 99L405.3 91.1L415.2 83.7L426.7 76.9L439.4 70.6L453.2 64.9L467.8 59.8L483 55.2L498.6 51.1L514.5 47.5L530.7 44.2L547 41.4L563.5 38.9L580.1 36.7L597 35L614.1 33.6L631.3 32.8L648.7 32.5L666.1 32.8L683.4 33.8L700.5 35.4L717.3 37.8L733.5 40.9L749 44.5L763.8 48.8L777.9 53.6L791.1 58.7L803.6 64.3L815.4 70.1L826.7 76.1L837.4 82.3L847.8 88.8L857.7 95.4L867.4 102.2L876.5 109.4L885.1 116.8L892.9 124.6L899.6 132.8L905 141.3Z"/><path d="M132.8 30L129.8 32.3L126.7 34.3L123.9 36.3L121.4 38.1L119.2 40L117.5 41.8L116.1 43.8L115 45.8L113.9 48.1L112.8 50.4L111.4 52.9L109.6 55.4L107.3 57.9L104.4 60.4L100.8 62.6L96.5 64.5L91.7 66.2L86.3 67.4L80.7 68.3L74.8 68.7L68.8 68.7L62.9 68.3L57.1 67.7L51.6 66.8L46.3 65.8L41.3 64.6L36.4 63.5L31.7 62.3L27 61.2L22.4 60.1L17.6 59L12.8 57.9L8 56.7L3.1 55.4L-1.7 53.9L-6.3 52.2L-10.7 50.4L-14.5 48.3L-17.8 46L-20.4 43.5L-22.2 40.9L-23.2 38.2L-23.4 35.4L-22.8 32.7L-21.6 30L-19.8 27.4L-17.6 25L-15 22.6L-12.2 20.4L-9.2 18.4L-6.3 16.4L-3.3 14.5L-0.3 12.6L2.7 10.8L5.8 9L9 7.3L12.3 5.5L15.8 3.9L19.6 2.4L23.6 0.9L27.9 -0.4L32.4 -1.5L37.2 -2.4L42.1 -3.2L47.1 -3.8L52.2 -4.3L57.4 -4.6L62.6 -4.8L67.9 -4.9L73.3 -4.9L78.8 -4.9L84.4 -4.7L90.2 -4.5L96.1 -4.1L102 -3.6L108 -2.8L113.9 -1.8L119.6 -0.6L125 1L129.9 2.9L134.1 5.2L137.5 7.6L140 10.4L141.6 13.2L142.1 16.2L141.7 19.2L140.4 22.1L138.4 24.9L135.8 27.6Z"/><path d="M184.4 30L187 34.1L189.1 38.4L190.5 42.8L191.1 47.4L190.7 52L189.2 56.5L186.4 61L182.4 65.3L177.1 69.3L170.6 72.8L163.2 76L154.9 78.7L146 80.8L136.7 82.5L127.2 83.7L117.7 84.6L108.2 85.1L99 85.3L89.9 85.4L81.2 85.4L72.6 85.4L64.2 85.3L55.8 85.2L47.5 85L39.1 84.8L30.6 84.5L22 84L13.4 83.2L4.9 82.2L-3.5 80.8L-11.7 79.1L-19.4 76.9L-26.6 74.4L-33.2 71.6L-39.1 68.4L-44.3 65L-48.7 61.4L-52.5 57.6L-55.5 53.7L-58 49.8L-60.1 45.9L-61.7 41.9L-63 38L-64 34L-64.7 30L-65.1 26L-65.2 21.9L-64.8 17.8L-64 13.6L-62.5 9.4L-60.3 5.3L-57.4 1.2L-53.7 -2.8L-49.1 -6.6L-43.7 -10.2L-37.6 -13.5L-30.8 -16.5L-23.3 -19.2L-15.4 -21.6L-7.1 -23.6L1.5 -25.3L10.3 -26.8L19.2 -27.9L28.3 -28.8L37.3 -29.4L46.4 -29.8L55.5 -30L64.5 -29.9L73.6 -29.5L82.5 -28.9L91.3 -28L99.9 -26.7L108.2 -25.1L116.2 -23.2L123.7 -20.9L130.6 -18.3L137 -15.5L142.8 -12.4L147.9 -9.2L152.4 -5.8L156.5 -2.4L160.1 1.1L163.4 4.6L166.5 8.1L169.6 11.6L172.6 15.1L175.6 18.7L178.6 22.3L181.6 26.1Z"/><path d="M242.4 30L243.4 35.9L243.5 41.9L242.7 47.9L240.9 53.9L238 59.9L233.8 65.7L228.3 71.3L221.5 76.6L213.5 81.5L204.3 85.9L194.1 89.8L183.1 93.1L171.5 95.9L159.5 98.1L147.4 99.8L135.2 101.1L123.1 102.1L111.2 102.8L99.6 103.3L88.2 103.8L76.9 104.2L65.6 104.6L54.3 105.1L42.8 105.5L31 105.9L18.9 106.1L6.4 106.1L-6.3 105.8L-19.2 104.9L-32.1 103.6L-44.7 101.7L-56.9 99.1L-68.4 95.8L-78.9 91.9L-88.4 87.5L-96.5 82.5L-103.3 77.1L-108.7 71.4L-112.8 65.5L-115.7 59.5L-117.4 53.5L-118.1 47.5L-118.1 41.6L-117.4 35.7L-116.2 30L-114.7 24.4L-112.7 18.8L-110.4 13.3L-107.7 7.8L-104.5 2.4L-100.7 -3L-96.3 -8.4L-91.1 -13.6L-85 -18.6L-78 -23.4L-70.1 -28L-61.3 -32.2L-51.7 -36L-41.4 -39.4L-30.4 -42.3L-19 -44.8L-7.2 -46.8L4.9 -48.3L17.1 -49.5L29.3 -50.3L41.6 -50.8L53.9 -50.9L66.1 -50.8L78.3 -50.3L90.4 -49.6L102.5 -48.6L114.4 -47.3L126.2 -45.6L137.8 -43.6L149 -41.1L159.8 -38.3L170.2 -35.1L179.9 -31.5L189 -27.5L197.4 -23.2L205 -18.6L211.8 -13.8L217.9 -8.7L223.3 -3.5L228 1.8L232 7.2L235.5 12.8L238.4 18.4L240.7 24.2Z"/></g><text class="iso-h" x="640" y="157" text-anchor="middle">H</text><text class="iso-n" x="758" y="98" text-anchor="middle">1036</text></svg>
+  <div class="shell foot-in">
+    <p class="foot-line">Doops in the Wind &middot; Astana &middot; <a href="https://doopsik.substack.com">Substack &#8599;</a> &middot; <a href="mailto:dinara.pisareva@nu.edu.kz">Email &#8599;</a></p>
+    <p class="colophon">Set in Fraunces and Fragment Mono. Charted in Astana.</p>
+  </div>
+</footer>
+<div class="ramprule" aria-hidden="true"></div>
+
+<script>
+(function(){
+"use strict";
+var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+var svg = document.getElementById('plate');
+var NS = 'http://www.w3.org/2000/svg';
+var SUN_AZ = 60; /* morning sun, east-north-east */
+var COL_OUT = '#299674', COL_HOME = '#d15355';
+
+function el(name, attrs, parent){
+  var e = document.createElementNS(NS, name);
+  for (var k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function rnd(a,b){ return a + Math.random()*(b-a); }
+function fmt(n){ return (n>=0?'+':'−') + Math.abs(Math.round(n)) + ' m'; }
+function bearingOf(dx,dy){ /* screen coords, y down */
+  var east = dx, north = -dy;
+  var b = Math.atan2(east, north) * 180/Math.PI;
+  return (b + 360) % 360;
+}
+function fmtBearing(b){ var r = Math.round(b) % 360; return ('00' + r).slice(-3) + '°'; }
+
+/* graticule */
+(function(){
+  var g = document.getElementById('grat');
+  for (var x=52+67; x<908; x+=67) el('line',{x1:x,y1:30,x2:x,y2:544,stroke:'rgba(23,84,94,.12)','stroke-width':.7},g);
+  for (var y=30+64; y<544; y+=64) el('line',{x1:52,y1:y,x2:908,y2:y,stroke:'rgba(23,84,94,.12)','stroke-width':.7},g);
+})();
+
+/* sun glyph at azimuth 60 from plate centre, pinned near the border */
+(function(){
+  var g = document.getElementById('sun');
+  var cx = 830, cy = 86;
+  el('circle',{cx:cx,cy:cy,r:13,fill:'#c3af26',stroke:'#5c5212','stroke-width':1},g);
+  for (var i=0;i<8;i++){
+    var a = i*Math.PI/4;
+    el('line',{x1:cx+Math.cos(a)*18,y1:cy+Math.sin(a)*18,x2:cx+Math.cos(a)*25,y2:cy+Math.sin(a)*25,stroke:'#c3af26','stroke-width':1.6,'stroke-linecap':'round'},g);
+  }
+  var t = el('text',{x:cx,y:cy+42,'text-anchor':'middle','font-size':'10','fill':'var(--muted)'},g);
+  t.setAttribute('font-family','Fragment Mono, monospace');
+  t.textContent = 'SUN · AZ ' + fmtBearing(SUN_AZ);
+})();
+
+/* hive glyph */
+var HIVE = {x:150, y:466};
+(function(){
+  var g = document.getElementById('hive');
+  el('path',{d:'M '+(HIVE.x-26)+' '+(HIVE.y+18)+' L '+(HIVE.x-26)+' '+(HIVE.y-2)+' Q '+HIVE.x+' '+(HIVE.y-34)+' '+(HIVE.x+26)+' '+(HIVE.y-2)+' L '+(HIVE.x+26)+' '+(HIVE.y+18)+' Z',fill:'var(--wash)',stroke:'var(--ink)','stroke-width':1.6},g);
+  el('line',{x1:HIVE.x-22,y1:HIVE.y-4,x2:HIVE.x+22,y2:HIVE.y-4,stroke:'var(--ink)','stroke-width':1},g);
+  el('line',{x1:HIVE.x-25,y1:HIVE.y+6,x2:HIVE.x+25,y2:HIVE.y+6,stroke:'var(--ink)','stroke-width':1},g);
+  el('circle',{cx:HIVE.x,cy:HIVE.y+13,r:3.4,fill:'var(--ink)'},g);
+  var t = el('text',{x:HIVE.x,y:HIVE.y+36,'text-anchor':'middle','font-size':'10.5','fill':'var(--ink)'},g);
+  t.setAttribute('font-family','Fragment Mono, monospace');
+  t.setAttribute('letter-spacing','2');
+  t.textContent = 'HIVE';
+})();
+
+/* arrowhead markers */
+(function(){
+  var defs = el('defs',{},svg);
+  var m1 = el('marker',{id:'ah-out',viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:7,markerHeight:7,orient:'auto-start-reverse'},defs);
+  el('path',{d:'M0 0L10 5L0 10Z',fill:COL_OUT},m1);
+  var m2 = el('marker',{id:'ah-home',viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:7,markerHeight:7,orient:'auto-start-reverse'},defs);
+  el('path',{d:'M0 0L10 5L0 10Z',fill:COL_HOME},m2);
+})();
+
+/* the bee sprite */
+var beeG = document.getElementById('bee');
+var wingA = el('ellipse',{cx:-1,cy:-6,rx:5,ry:3.4,fill:'#fcfbf5',stroke:'#1d2b32','stroke-width':.7,opacity:.75},beeG);
+var wingB = el('ellipse',{cx:-1,cy:6,rx:5,ry:3.4,fill:'#fcfbf5',stroke:'#1d2b32','stroke-width':.7,opacity:.75},beeG);
+el('ellipse',{cx:0,cy:0,rx:9,ry:5,fill:'#c3af26',stroke:'#1d2b32','stroke-width':1.1},beeG);
+el('path',{d:'M-2 -4.8 L-2 4.8 M2 -4.6 L2 4.6 M-5.5 -3.6 L-5.5 3.6',stroke:'#1d2b32','stroke-width':1.6,fill:'none'},beeG);
+el('circle',{cx:7.4,cy:-1.6,r:1,fill:'#1d2b32'},beeG);
+beeG.style.display = 'none';
+
+function placeBee(x,y,angleDeg){
+  beeG.style.display = '';
+  beeG.setAttribute('transform','translate('+x+' '+y+') rotate('+angleDeg+')');
+}
+
+/* smooth path through points (Catmull-Rom to bezier) */
+function smoothPath(pts){
+  if (pts.length < 3) return 'M'+pts[0].x+' '+pts[0].y+' L'+pts[1].x+' '+pts[1].y;
+  var d = 'M'+pts[0].x.toFixed(1)+' '+pts[0].y.toFixed(1);
+  for (var i=0;i<pts.length-1;i++){
+    var p0 = pts[Math.max(0,i-1)], p1 = pts[i], p2 = pts[i+1], p3 = pts[Math.min(pts.length-1,i+2)];
+    var c1x = p1.x + (p2.x-p0.x)/6, c1y = p1.y + (p2.y-p0.y)/6;
+    var c2x = p2.x - (p3.x-p1.x)/6, c2y = p2.y - (p3.y-p1.y)/6;
+    d += ' C'+c1x.toFixed(1)+' '+c1y.toFixed(1)+' '+c2x.toFixed(1)+' '+c2y.toFixed(1)+' '+p2.x.toFixed(1)+' '+p2.y.toFixed(1);
+  }
+  return d;
+}
+function wigglePts(P,Q,amp){
+  var dx=Q.x-P.x, dy=Q.y-P.y, len=Math.hypot(dx,dy);
+  var n = Math.max(3, Math.round(len/70));
+  var px=-dy/len, py=dx/len, pts=[{x:P.x,y:P.y}];
+  for (var i=1;i<n;i++){
+    var t=i/n, off=(Math.random()*2-1)*amp;
+    pts.push({x:P.x+dx*t+px*off, y:P.y+dy*t+py*off});
+  }
+  pts.push({x:Q.x,y:Q.y});
+  return pts;
+}
+
+/* flower glyphs */
+function flower(g, x, y, big){
+  var grp = el('g',{},g);
+  var r = big ? 7.5 : 4.5;
+  for (var i=0;i<5;i++){
+    var a = i*2*Math.PI/5 - Math.PI/2;
+    el('circle',{cx:x+Math.cos(a)*r,cy:y+Math.sin(a)*r,r:big?5:3,fill:big?'#a23a6d':'#c9c2ae',opacity:big?1:.8},grp);
+  }
+  el('circle',{cx:x,cy:y,r:big?4:2.6,fill:'#c3af26',stroke:'#5c5212','stroke-width':big?1:.6},grp);
+  return grp;
+}
+
+/* ---- run state ---- */
+var trails = document.getElementById('trails');
+var vectors = document.getElementById('vectors');
+var veclabels = document.getElementById('veclabels');
+var flowersG = document.getElementById('flowers');
+var caption = document.getElementById('caption');
+var goBtn = document.getElementById('go');
+var run = null, raf = null, lastT = null;
+
+var CAPS = [
+  'Leg one. It looks like wandering. Every metre is counted: direction from the sun, distance from the ground sliding past its eyes.',
+  'Leg two. No map, no breadcrumbs, no idea where it is in any human sense. The arrow in its head just got longer.',
+  'Leg three. A detour for no reason anyone has published. Logged anyway.',
+  'Flower. The bee has never seen this chart. It holds exactly one thing: the sum of every arrow so far.',
+  'Sign flipped, flying the negative. A beeline is minus one vector sum, executed at about eight metres a second.',
+  'Home. Total equipment used: one milligram of brain. The dance in Fig. 2 is already broadcasting this exact trip.'
+];
+
+function genRoute(){
+  var W1 = {x:rnd(300,420), y:rnd(300,410)};
+  var W2 = {x:rnd(460,620), y:rnd(140,290)};
+  var FL = {x:rnd(660,840), y:rnd(110,250)};
+  var pts = [HIVE, W1, W2, FL];
+  var decoys = [];
+  var i = 0, guard = 0;
+  while (decoys.length < 6 && guard < 200){
+    guard++;
+    var p = {x:rnd(240,860), y:rnd(80,470)};
+    var ok = Math.hypot(p.x-FL.x,p.y-FL.y) > 70 && Math.hypot(p.x-HIVE.x,p.y-HIVE.y) > 90;
+    for (i=0;i<decoys.length;i++) if (Math.hypot(p.x-decoys[i].x,p.y-decoys[i].y) < 55) ok = false;
+    if (ok) decoys.push(p);
+  }
+  return {pts:pts, flower:FL, decoys:decoys};
+}
+
+function resetBoard(route){
+  trails.textContent = '';
+  vectors.textContent = '';
+  veclabels.textContent = '';
+  flowersG.textContent = '';
+  route.decoys.forEach(function(p){ flower(flowersG, p.x, p.y, false); });
+  flower(flowersG, route.flower.x, route.flower.y, true);
+  ['row1','row2','row3','rowsum','rowhome'].forEach(function(id){
+    var r = document.getElementById(id);
+    r.classList.add('pending');
+    var tds = r.querySelectorAll('td');
+    for (var j=1;j<tds.length;j++) tds[j].innerHTML = '&mdash;';
+  });
+}
+
+function fillRow(id, reads, east, north){
+  var r = document.getElementById(id);
+  r.classList.remove('pending');
+  var tds = r.querySelectorAll('td');
+  tds[1].textContent = reads;
+  tds[2].textContent = fmt(east);
+  tds[3].textContent = fmt(north);
+}
+
+function legData(P,Q){
+  var dx=Q.x-P.x, dy=Q.y-P.y;
+  return {east:dx, north:-dy, len:Math.hypot(dx,dy), bearing:bearingOf(dx,dy)};
+}
+
+function vecLabel(P,Q,txt,color){
+  var mx=(P.x+Q.x)/2, my=(P.y+Q.y)/2;
+  var dx=Q.x-P.x, dy=Q.y-P.y, len=Math.hypot(dx,dy);
+  var ox=-dy/len*15, oy=dx/len*15;
+  var t = el('text',{x:mx+ox,y:my+oy,'text-anchor':'middle','font-size':'12.5','fill':'var(--ink-soft)'},veclabels);
+  t.setAttribute('font-family','Fragment Mono, monospace');
+  t.setAttribute('paint-order','stroke');
+  t.setAttribute('stroke','var(--panel)');
+  t.setAttribute('stroke-width','3.5');
+  t.textContent = txt;
+}
+
+function updateWaggle(route){
+  var d = legData(HIVE, route.flower);
+  var theta = ((d.bearing - SUN_AZ + 540) % 360) - 180;
+  drawComb(theta);
+  drawFieldMap(d.bearing, theta);
+  var secs = (d.len/1000).toFixed(2);
+  document.getElementById('wagline').textContent =
+    'This trip’s broadcast: a waggle run of about ' + secs + ' seconds, at ' +
+    Math.round(Math.abs(theta)) + '° ' + (theta>=0?'right':'left') + ' of straight up. The dancer in Fig. 2 is slowed down; nobody builds a projector for an audience of three.';
+}
+
+function startRun(){
+  if (raf) cancelAnimationFrame(raf);
+  var route = genRoute();
+  resetBoard(route);
+  updateWaggle(route);
+  var legs = [];
+  var sumE = 0, sumN = 0;
+  for (var i=0;i<3;i++){
+    var P = route.pts[i], Q = route.pts[i+1];
+    var d = legData(P,Q);
+    sumE += d.east; sumN += d.north;
+    var trail = el('path',{d:smoothPath(wigglePts(P,Q,22)),fill:'none',stroke:'var(--ink)','stroke-width':1.2,'stroke-dasharray':'2 5',opacity:.4},trails);
+    var L = trail.getTotalLength();
+    trail.setAttribute('stroke-dasharray', '0 ' + Math.ceil(L+10));
+    legs.push({P:P,Q:Q,d:d,trail:trail,L:L,vec:null});
+  }
+  var homeLen = Math.hypot(sumE,sumN);
+  var homeBearing = bearingOf(-sumE, sumN); /* negative sum, screen dy = +sumN? home east=-sumE, north=-sumN; dx=-sumE, dy=+sumN */
+  homeBearing = bearingOf(HIVE.x-route.flower.x, HIVE.y-route.flower.y);
+  run = {route:route, legs:legs, sumE:sumE, sumN:sumN, homeLen:homeLen, homeBearing:homeBearing,
+         phase:0, t:0, homePath:null, homeL:0, homeVec:null};
+  goBtn.disabled = true;
+  goBtn.textContent = 'Bee in flight';
+
+  if (reduced){ finishInstantly(); return; }
+  caption.textContent = CAPS[0];
+  lastT = null;
+  raf = requestAnimationFrame(tick);
+}
+
+function finishLeg(i){
+  var lg = run.legs[i];
+  lg.trail.setAttribute('stroke-dasharray','2 5');
+  var v = el('line',{x1:lg.P.x,y1:lg.P.y,x2:lg.Q.x,y2:lg.Q.y,stroke:COL_OUT,'stroke-width':2.2,'marker-end':'url(#ah-out)'},vectors);
+  vecLabel(lg.P, lg.Q, 'v'+['₁','₂','₃'][i], COL_OUT);
+  fillRow('row'+(i+1), Math.round(lg.d.len)+' m @ '+fmtBearing(lg.d.bearing), lg.d.east, lg.d.north);
+}
+
+function showSums(){
+  fillRow('rowsum','Σ of three legs', run.sumE, run.sumN);
+  fillRow('rowhome','fly '+Math.round(run.homeLen)+' m @ '+fmtBearing(run.homeBearing), -run.sumE, -run.sumN);
+}
+
+function makeHome(){
+  var FL = run.route.flower;
+  var hp = el('path',{d:smoothPath(wigglePts(FL,HIVE,7)),fill:'none',stroke:'none'},trails);
+  run.homePath = hp; run.homeL = hp.getTotalLength();
+  run.homeVec = el('line',{x1:FL.x,y1:FL.y,x2:FL.x,y2:FL.y,stroke:COL_HOME,'stroke-width':2.4,'stroke-dasharray':'7 5','marker-end':'url(#ah-home)'},vectors);
+  vecLabel(FL, HIVE, 'home = −Σ', COL_HOME);
+}
+
+function finishInstantly(){
+  for (var i=0;i<3;i++){
+    var lg = run.legs[i];
+    finishLeg(i);
+    var pB = legData(lg.P,lg.Q);
+  }
+  showSums();
+  makeHome();
+  var FL = run.route.flower;
+  run.homeVec.setAttribute('x2',HIVE.x); run.homeVec.setAttribute('y2',HIVE.y);
+  placeBee(HIVE.x, HIVE.y-26, -30);
+  caption.textContent = CAPS[5];
+  goBtn.disabled = false;
+  goBtn.textContent = 'Send another bee (new field)';
+}
+
+var SPEED_OUT = 120, SPEED_HOME = 260, PAUSE = 1400;
+
+function tick(now){
+  if (lastT === null) lastT = now;
+  var dt = Math.min(50, now - lastT); lastT = now;
+  var r = run;
+  if (r.phase < 3){
+    var lg = r.legs[r.phase];
+    r.t += dt/1000 * SPEED_OUT;
+    var p = Math.min(1, r.t / lg.L);
+    var pt = lg.trail.getPointAtLength(p * lg.L);
+    var ahead = lg.trail.getPointAtLength(Math.min(lg.L, p*lg.L + 4));
+    placeBee(pt.x, pt.y, Math.atan2(ahead.y-pt.y, ahead.x-pt.x)*180/Math.PI);
+    lg.trail.setAttribute('stroke-dasharray', (p*lg.L) + ' ' + Math.ceil(lg.L+10));
+    wingA.setAttribute('opacity', .35 + .4*Math.abs(Math.sin(now/28)));
+    wingB.setAttribute('opacity', .35 + .4*Math.abs(Math.cos(now/28)));
+    if (p >= 1){
+      finishLeg(r.phase);
+      r.phase++; r.t = 0;
+      caption.textContent = r.phase < 3 ? CAPS[r.phase] : CAPS[3];
+      if (r.phase === 3){ showSums(); r.pauseUntil = now + PAUSE; }
+    }
+  } else if (r.phase === 3){
+    wingA.setAttribute('opacity',.75); wingB.setAttribute('opacity',.75);
+    if (now >= r.pauseUntil){
+      makeHome();
+      caption.textContent = CAPS[4];
+      r.phase = 4; r.t = 0;
+    }
+  } else if (r.phase === 4){
+    r.t += dt/1000 * SPEED_HOME;
+    var p2 = Math.min(1, r.t / r.homeL);
+    var pt2 = r.homePath.getPointAtLength(p2 * r.homeL);
+    var ahead2 = r.homePath.getPointAtLength(Math.min(r.homeL, p2*r.homeL + 4));
+    placeBee(pt2.x, pt2.y, Math.atan2(ahead2.y-pt2.y, ahead2.x-pt2.x)*180/Math.PI);
+    var FL = r.route.flower;
+    r.homeVec.setAttribute('x2', FL.x + (HIVE.x-FL.x)*p2);
+    r.homeVec.setAttribute('y2', FL.y + (HIVE.y-FL.y)*p2);
+    wingA.setAttribute('opacity', .35 + .4*Math.abs(Math.sin(now/22)));
+    wingB.setAttribute('opacity', .35 + .4*Math.abs(Math.cos(now/22)));
+    if (p2 >= 1){
+      caption.textContent = CAPS[5];
+      goBtn.disabled = false;
+      goBtn.textContent = 'Send another bee (new field)';
+      r.phase = 5;
+    }
+  } else {
+    return; /* done */
+  }
+  if (r.phase < 5) raf = requestAnimationFrame(tick);
+}
+
+goBtn.addEventListener('click', startRun);
+
+/* ---- Fig 2: comb panel ---- */
+(function(){
+  var hexG = document.getElementById('hexes');
+  var s = 26, h = s*Math.sqrt(3)/2;
+  for (var row=0; row<11; row++){
+    for (var col=0; col<11; col++){
+      var cx = 20 + col*(s*1.5), cy = 20 + row*(2*h) + (col%2? h:0);
+      if (cx > 470 || cy > 400) continue;
+      var d='';
+      for (var i=0;i<6;i++){
+        var a = Math.PI/180*(60*i);
+        d += (i?'L':'M') + (cx+Math.cos(a)*s*.92).toFixed(1)+' '+(cy+Math.sin(a)*s*.92).toFixed(1)+' ';
+      }
+      el('path',{d:d+'Z',fill:'none',stroke:'#f6f4ec','stroke-width':.7},hexG);
+    }
+  }
+})();
+
+var combTheta = 0;
+var DC = {x:230, y:210}, RUNLEN = 78, LOOPR = 46;
+function drawComb(theta){
+  combTheta = theta;
+  var g = document.getElementById('dancegrp');
+  g.textContent = '';
+  g.setAttribute('transform','rotate('+theta+' '+DC.x+' '+DC.y+')');
+  /* the figure-eight, drawn in dance-local upright coords then rotated */
+  el('line',{x1:DC.x,y1:DC.y+RUNLEN/2,x2:DC.x,y2:DC.y-RUNLEN/2,stroke:'#c3af26','stroke-width':3,'stroke-linecap':'round'},g);
+  el('path',{d:'M '+DC.x+' '+(DC.y-RUNLEN/2)+' A '+LOOPR+' '+LOOPR+' 0 1 1 '+DC.x+' '+(DC.y+RUNLEN/2),fill:'none',stroke:'#8fa0a8','stroke-width':1.2,'stroke-dasharray':'3 4'},g);
+  el('path',{d:'M '+DC.x+' '+(DC.y-RUNLEN/2)+' A '+LOOPR+' '+LOOPR+' 0 1 0 '+DC.x+' '+(DC.y+RUNLEN/2),fill:'none',stroke:'#8fa0a8','stroke-width':1.2,'stroke-dasharray':'3 4'},g);
+  /* angle arc from vertical */
+  var arc = document.getElementById('combarc');
+  var r0 = 110;
+  var a1 = -90, a2 = -90 + theta;
+  var large = Math.abs(theta) > 180 ? 1 : 0;
+  var sweep = theta >= 0 ? 1 : 0;
+  var x1 = DC.x + r0*Math.cos(a1*Math.PI/180), y1 = DC.y + r0*Math.sin(a1*Math.PI/180);
+  var x2 = DC.x + r0*Math.cos(a2*Math.PI/180), y2 = DC.y + r0*Math.sin(a2*Math.PI/180);
+  arc.setAttribute('d','M '+x1.toFixed(1)+' '+y1.toFixed(1)+' A '+r0+' '+r0+' 0 '+large+' '+sweep+' '+x2.toFixed(1)+' '+y2.toFixed(1));
+  var mid = (-90 + theta/2) * Math.PI/180;
+  var tl = document.getElementById('combtheta');
+  tl.setAttribute('x', (DC.x + (r0+18)*Math.cos(mid)).toFixed(1));
+  tl.setAttribute('y', (DC.y + (r0+18)*Math.sin(mid)).toFixed(1));
+  tl.setAttribute('text-anchor','middle');
+  tl.textContent = 'θ = ' + Math.round(Math.abs(theta)) + '°';
+  /* followers */
+  var fg = document.getElementById('followers');
+  fg.textContent = '';
+  [[168,300,-40],[292,296,215],[230,330,270]].forEach(function(f){
+    var b = el('g',{transform:'translate('+f[0]+' '+f[1]+') rotate('+f[2]+')'},fg);
+    el('ellipse',{cx:0,cy:0,rx:8,ry:4.6,fill:'#5b6b73',stroke:'#8fa0a8','stroke-width':.8},b);
+    el('circle',{cx:6.6,cy:-1.4,r:1,fill:'#1d2b32'},b);
+  });
+}
+
+/* dancer bee on the comb */
+var dancerG = document.getElementById('dancer');
+var dWingA = el('ellipse',{cx:-1,cy:-5,rx:4.4,ry:3,fill:'#f6f4ec',opacity:.7},dancerG);
+var dWingB = el('ellipse',{cx:-1,cy:5,rx:4.4,ry:3,fill:'#f6f4ec',opacity:.7},dancerG);
+el('ellipse',{cx:0,cy:0,rx:8,ry:4.6,fill:'#c3af26',stroke:'#f6f4ec','stroke-width':.8},dancerG);
+el('path',{d:'M-1.8 -4.4 L-1.8 4.4 M1.8 -4.2 L1.8 4.2',stroke:'#1d2b32','stroke-width':1.4,fill:'none'},dancerG);
+
+var DANCE = {runMs:1600, loopMs:1100};
+function dancerPos(tMs){
+  var cyc = 2*(DANCE.runMs + DANCE.loopMs);
+  var t = tMs % cyc;
+  var half = DANCE.runMs + DANCE.loopMs;
+  var side = t < half ? 1 : -1; /* right loop then left loop */
+  var tt = t % half;
+  var lx, ly, ang;
+  if (tt < DANCE.runMs){
+    var p = tt / DANCE.runMs;
+    lx = 3.4*Math.sin(p*44);
+    ly = RUNLEN/2 - RUNLEN*p;
+    ang = -90 + 16*Math.sin(p*44);
+  } else {
+    var q = (tt - DANCE.runMs) / DANCE.loopMs;
+    var a = Math.PI * q;
+    lx = side * LOOPR * Math.sin(a);
+    ly = -RUNLEN/2 + (LOOPR)*(1-Math.cos(a)) * (RUNLEN/ (2*LOOPR));
+    ly = -RUNLEN/2 + (1-Math.cos(a)) * (RUNLEN/2);
+    ang = side>0 ? (a*180/Math.PI - 0) : (180 - a*180/Math.PI);
+  }
+  return {x:lx, y:ly, ang:ang};
+}
+function danceTick(now){
+  var p = dancerPos(now);
+  /* rotate local coords by combTheta about DC */
+  var th = combTheta*Math.PI/180;
+  var gx = DC.x + p.x*Math.cos(th) - p.y*Math.sin(th);
+  var gy = DC.y + p.x*Math.sin(th) + p.y*Math.cos(th);
+  dancerG.setAttribute('transform','translate('+gx.toFixed(1)+' '+gy.toFixed(1)+') rotate('+(p.ang + combTheta).toFixed(1)+')');
+  dWingA.setAttribute('opacity', .3 + .4*Math.abs(Math.sin(now/24)));
+  dWingB.setAttribute('opacity', .3 + .4*Math.abs(Math.cos(now/24)));
+  requestAnimationFrame(danceTick);
+}
+
+/* ---- Fig 2: field map panel ---- */
+(function(){
+  var g = document.getElementById('mapgrat');
+  for (var x=46; x<460; x+=46) el('line',{x1:x,y1:0,x2:x,y2:420,stroke:'rgba(23,84,94,.09)','stroke-width':.7},g);
+  for (var y=46; y<420; y+=46) el('line',{x1:0,y1:y,x2:460,y2:y,stroke:'rgba(23,84,94,.09)','stroke-width':.7},g);
+})();
+
+function drawFieldMap(bearing, theta){
+  var g = document.getElementById('maprays');
+  g.textContent = '';
+  var C = {x:230, y:230}, R = 150;
+  function ray(az){ return {x:C.x + R*Math.sin(az*Math.PI/180), y:C.y - R*Math.cos(az*Math.PI/180)}; }
+  var sp = ray(SUN_AZ), fp = ray(bearing);
+  /* hive dot */
+  el('circle',{cx:C.x,cy:C.y,r:6,fill:'var(--wash)',stroke:'var(--ink)','stroke-width':1.4},g);
+  var th = el('text',{x:C.x,y:C.y+24,'text-anchor':'middle','font-size':'10','fill':'var(--ink)'},g);
+  th.setAttribute('font-family','Fragment Mono, monospace'); th.setAttribute('letter-spacing','2');
+  th.textContent = 'HIVE';
+  /* sun ray */
+  el('line',{x1:C.x,y1:C.y,x2:sp.x,y2:sp.y,stroke:'#5c5212','stroke-width':1.4,'stroke-dasharray':'3 5'},g);
+  el('circle',{cx:sp.x,cy:sp.y,r:9,fill:'#c3af26',stroke:'#5c5212','stroke-width':1},g);
+  for (var i=0;i<8;i++){
+    var a=i*Math.PI/4;
+    el('line',{x1:sp.x+Math.cos(a)*12,y1:sp.y+Math.sin(a)*12,x2:sp.x+Math.cos(a)*17,y2:sp.y+Math.sin(a)*17,stroke:'#c3af26','stroke-width':1.4,'stroke-linecap':'round'},g);
+  }
+  /* flower ray */
+  el('line',{x1:C.x,y1:C.y,x2:fp.x,y2:fp.y,stroke:COL_OUT,'stroke-width':2.2,'marker-end':'url(#ah-out)'},g);
+  flower(g, fp.x, fp.y, true);
+  /* arc */
+  var r0 = 70;
+  var a1 = SUN_AZ - 90, a2 = bearing - 90;
+  var sweep = theta >= 0 ? 1 : 0;
+  var large = Math.abs(theta) > 180 ? 1 : 0;
+  var x1 = C.x + r0*Math.cos(a1*Math.PI/180), y1 = C.y + r0*Math.sin(a1*Math.PI/180);
+  var x2 = C.x + r0*Math.cos(a2*Math.PI/180), y2 = C.y + r0*Math.sin(a2*Math.PI/180);
+  el('path',{d:'M '+x1.toFixed(1)+' '+y1.toFixed(1)+' A '+r0+' '+r0+' 0 '+large+' '+sweep+' '+x2.toFixed(1)+' '+y2.toFixed(1),fill:'none',stroke:'var(--acc-g)','stroke-width':1.6},g);
+  var mid = ((SUN_AZ + theta/2) - 90) * Math.PI/180;
+  var tl = el('text',{x:(C.x + (r0+20)*Math.cos(mid)).toFixed(1), y:(C.y + (r0+20)*Math.sin(mid)).toFixed(1),'text-anchor':'middle','font-size':'12','fill':'var(--acc)'},g);
+  tl.setAttribute('font-family','Fragment Mono, monospace');
+  tl.textContent = 'θ = ' + Math.round(Math.abs(theta)) + '°';
+}
+
+/* ---- boot ---- */
+drawComb(63);
+drawFieldMap(SUN_AZ + 63, 63);
+if (!reduced) requestAnimationFrame(danceTick);
+else {
+  var p0 = dancerPos(DANCE.runMs*0.5);
+  dancerG.setAttribute('transform','translate('+(DC.x)+' '+(DC.y)+') rotate(-90)');
+}
+setTimeout(startRun, reduced ? 0 : 700);
+})();
+</script>
+</body>
+</html>
