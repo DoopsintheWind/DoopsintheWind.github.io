@@ -1,0 +1,121 @@
+/* Doops · The Sketchbook, inner pages.
+   The hub (index.html) carries its styles inline, straight from the Claude Design
+   handoff. This sheet repeats its tokens and chrome so the Playbox pages sit in
+   the same book: paper ground, Newsreader for reading, IBM Plex Mono for labels,
+   Caveat for the hand in the margin, the live wind traced in pencil behind it all. */
+
+:root{
+  --paper:#f3efe6; --panel:#fbf9f4; --panel-a:rgba(251,249,244,.94); --leaf:rgba(255,254,251,.92); --wash:#ebe6da;
+  --ink:#1a1815; --ink-soft:#3b3630; --muted:#3e3b37; --pencil:#3a3632;
+  --line-strong:rgba(26,24,21,.35); --line:rgba(26,24,21,.18); --line-faint:rgba(26,24,21,.1);
+  --plum:#8f3a86; --plum-ink:#5e2558; --teal:#1a8289; --teal-ink:#15666b;
+  --ochre:#c3772a; --ochre-ink:#8a4f14; --blue:#33657f; --blue-ink:#2f5563; --link:#233f4a;
+  --green:#299674; --yellow:#c3af26; --yellow-deep:#5c5212; --yellow-pale:#dcc35e;
+  --tape:rgba(228,214,170,.62);
+  --serif:'Newsreader',Georgia,serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --hand:'Caveat',cursive;
+  /* per-page accent: --acc holds for small text, --acc-g is the coloured pencil */
+  --acc:var(--ochre-ink); --acc-g:var(--ochre);
+  /* names the page-local styles were written against */
+  --gilt:var(--yellow); --gilt-deep:var(--yellow-deep); --gilt-pale:var(--yellow-pale);
+  --paper-deep:var(--wash); --ink-mute:var(--muted); --terracotta:var(--ochre-ink); --moss:var(--teal-ink);
+  --hair:var(--line-strong); --hair-soft:var(--line); --line-soft:var(--line-faint);
+  --serif-display:var(--serif); --serif-body:var(--serif);
+}
+body.acc-ochre{--acc:var(--ochre-ink);--acc-g:var(--ochre)}
+body.acc-plum{--acc:var(--plum);--acc-g:var(--plum)}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.6;-webkit-text-size-adjust:100%;overflow-x:hidden}
+h1,h2,h3,p,ul,ol,blockquote,figure{margin:0}
+a{color:var(--link);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--ink)}
+img{max-width:100%}
+::selection{background:rgba(47,83,99,.22)}
+:focus-visible{outline:2px solid var(--blue-ink);outline-offset:3px}
+#wind-bg{z-index:0}
+.skip{position:absolute;left:-999px;top:8px;z-index:9;background:var(--panel);padding:8px 12px;border:1px solid var(--ink)}
+.skip:focus{left:8px}
+
+/* the sheet over the wind: a soft veil and paper grain, both fixed */
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 90% at 60% 10%,rgba(243,239,230,.5) 0%,rgba(243,239,230,.58) 50%,rgba(243,239,230,.66) 100%)}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.45;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .55 0 0 0 0 .53 0 0 0 0 .5 0 0 0 .12 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>")}
+
+.book{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:clamp(28px,5vh,64px) clamp(18px,4vw,64px) clamp(60px,10vh,120px)}
+
+/* ---- header spread: page on the left, margin on the right ---- */
+.spread{display:flex;flex-wrap:wrap;gap:32px 56px;align-items:flex-start}
+.spread>.page{flex:1 1 440px;min-width:0}
+.spread>.margin{flex:0 1 300px;min-width:240px;display:flex;flex-direction:column;gap:26px;padding-top:10px}
+.mast{font-family:var(--hand);font-size:26px;line-height:1;color:var(--muted);transform:rotate(-2deg);display:inline-block}
+.byname{display:inline-block;margin-top:14px;font-weight:350;font-size:clamp(30px,3.4vw,44px);line-height:1;letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+.byname:hover{color:var(--blue-ink)}
+.underline{display:block;margin-top:6px;max-width:70%;filter:url(#pencil)}
+.kicker{margin-top:34px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--ink)}
+h1.title{margin-top:12px;font-weight:350;font-size:clamp(38px,5vw,66px);line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
+.stand{position:relative;margin-top:28px;max-width:640px;background:var(--panel-a);border:1px solid rgba(26,24,21,.14);padding:24px 28px 22px;box-shadow:0 10px 30px -18px rgba(26,24,21,.4);transform:rotate(-.4deg)}
+.stand p{font-size:18px;line-height:1.6;color:var(--ink);text-wrap:pretty}
+.stand p+p{margin-top:12px}
+.stand em{font-family:var(--hand);font-style:normal;font-weight:500;font-size:1.25em;color:var(--acc-g)}
+
+.tape{position:absolute;top:-12px;width:84px;height:24px;background:var(--tape);box-shadow:0 1px 2px rgba(0,0,0,.08);pointer-events:none;z-index:2}
+.tape.l{left:28px;transform:rotate(-4deg)}
+.tape.r{right:26px;transform:rotate(5deg)}
+.tape.c{left:50%;width:92px;margin-left:-46px;transform:rotate(-3deg)}
+
+/* the book's contents, in the margin */
+.booknav{font-family:var(--hand);font-size:23px;line-height:1.35;color:var(--ink);transform:rotate(-.6deg)}
+.booknav .lbl{font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-size:10.5px}
+.booknav .rows{display:flex;flex-direction:column;gap:2px}
+.booknav a{text-decoration:none;color:inherit;display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(26,24,21,.25)}
+.booknav a:last-child{border-bottom:0}
+.booknav a span:last-child{color:var(--muted)}
+.booknav a:hover{color:var(--blue-ink)}
+.booknav a.here,.booknav a.here span:last-child{color:var(--acc-g)}
+
+/* the wind, as an instrument reading */
+.windread{display:flex;gap:14px;align-items:flex-start}
+.windread svg{flex:0 0 auto;filter:url(#pencil)}
+.windread .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+#wind-line{margin-top:4px;font-family:var(--hand);font-size:22px;line-height:1.1;color:var(--blue)}
+.windread .sub{margin-top:2px;font-family:var(--hand);font-size:16px;color:var(--muted)}
+#wind-barb{transform-origin:32px 32px;transform:rotate(0deg);transition:transform 1.2s ease}
+
+/* a line in coloured pencil, in the margin */
+.aside{font-family:var(--hand);font-size:20px;line-height:1.25;color:var(--acc-g);transform:rotate(-1.2deg)}
+
+/* ---- section heads, as on the hub ---- */
+.sec{display:flex;align-items:baseline;gap:16px;margin:clamp(52px,8vh,88px) 0 26px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--ink)}
+.sec .fig{color:var(--muted)}
+.sec .rule{flex:1;min-width:40px;height:6px;filter:url(#pencil)}
+.sec .hand{font-family:var(--hand);font-size:20px;letter-spacing:0;text-transform:none;font-weight:400;color:var(--acc-g);white-space:nowrap}
+
+/* a taped-in sheet */
+.leaf{position:relative;background:var(--leaf);border:1px solid rgba(26,24,21,.16);box-shadow:0 10px 30px -18px rgba(26,24,21,.45);color:var(--ink)}
+
+/* a note the model left, kept word for word */
+.note{position:relative;margin-top:clamp(52px,8vh,88px);max-width:720px;background:var(--leaf);border:1px solid rgba(26,24,21,.14);padding:26px 28px 24px;transform:rotate(.4deg);box-shadow:0 8px 26px -18px rgba(26,24,21,.45)}
+.note .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.note blockquote{margin-top:14px;padding-left:18px;border-left:2px solid var(--blue-ink);max-width:58ch;display:flex;flex-direction:column;gap:12px}
+.note blockquote p{font-size:17px;line-height:1.62;color:var(--ink-soft);text-wrap:pretty}
+.note .sig{margin-top:14px;font-family:var(--hand);font-size:21px;line-height:1.2;color:var(--blue-ink);text-align:right;transform:rotate(-2deg)}
+
+/* ---- foot of the page ---- */
+.bookfoot{margin-top:clamp(56px,9vh,104px);padding-top:34px}
+.bookfoot .rule{display:block;height:6px;width:100%;filter:url(#pencil);margin-bottom:22px}
+.bookfoot .row{display:flex;flex-wrap:wrap;gap:14px 40px;align-items:baseline}
+.bookfoot .back{font-family:var(--hand);font-size:22px;line-height:1.4;color:var(--muted)}
+.bookfoot .back a{color:var(--acc-g);font-weight:600;text-decoration:none}
+.bookfoot .back a:hover{text-decoration:underline}
+.bookfoot .m{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.bookfoot .colophon{margin-top:30px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;line-height:1.9;color:var(--muted);max-width:78ch}
+
+@media (max-width:640px){
+  .sec{flex-wrap:wrap;gap:8px 14px}
+  .sec .rule{display:none}
+  .sec .hand{white-space:normal;flex-basis:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  #wind-barb{transition:none!important}
+}
