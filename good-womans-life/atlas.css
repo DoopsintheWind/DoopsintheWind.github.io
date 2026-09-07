@@ -86,7 +86,8 @@ img { display: block; max-width: 100%; height: auto; }
 .strip__art { display: block; width: 100%; height: auto; margin-top: 2px; }
 @media (max-width: 720px) {
   .title { gap: 8px 40px; }
-  .title__fig { flex: 0 1 200px; min-width: 180px; }
+  .title__fig { flex: 0 1 200px; min-width: 180px; margin: 4px auto 0; }
+  .title__fig .cap { text-align: center; }
   .hand text { font-size: 18px; }
   .strip__art text { font-size: 28px; letter-spacing: .3px; }
   .strip__art circle { r: 12px; }
