@@ -1,0 +1,12 @@
+# Files that must NOT be uploaded as Cloudflare Workers static assets.
+# The deploy command (npx wrangler deploy) uses assets.directory = "." (repo root),
+# which otherwise sweeps in .git — whose pack files exceed the 25 MiB per-asset
+# limit and must never be served publicly. Keep this file in the deploy repo.
+.git
+.gitignore
+.assetsignore
+README.md
+.DS_Store
+**/.DS_Store
+wrangler.jsonc
+wrangler.toml
