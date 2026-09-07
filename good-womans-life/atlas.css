@@ -53,6 +53,7 @@ img { display: block; max-width: 100%; height: auto; }
 .fig--tea { flex: 0 1 380px; min-width: 260px; }
 .fig--hands { flex: 0 1 220px; min-width: 160px; margin-left: auto; gap: 6px; }
 .fig--expect { flex: 0 1 420px; min-width: 260px; margin-left: auto; }
+.fig--big { flex: 0 1 480px; min-width: 280px; margin-left: auto; }
 .plate__head--us { align-items: center; }
 
 /* plates B to D */
@@ -85,6 +86,7 @@ img { display: block; max-width: 100%; height: auto; }
 .strip__nat b { font-family: 'Archivo Narrow', sans-serif; font-weight: 500; font-size: 16px; color: #1a1613; margin-left: 6px; }
 .strip__art { display: block; width: 100%; height: auto; margin-top: 2px; }
 @media (max-width: 720px) {
+  .hand text { font-size: 18px; }
   .strip__art text { font-size: 32px; letter-spacing: .4px; }
   .strip__art circle { r: 12px; }
 }
