@@ -25,11 +25,11 @@ img { display: block; max-width: 100%; height: auto; }
 /* title plate */
 .title { display: flex; flex-wrap: wrap; gap: 24px 40px; padding: clamp(28px, 5vh, 56px) clamp(20px, 3.4vw, 48px) clamp(28px, 5vh, 52px); }
 .title__col { flex: 1 1 520px; min-width: 0; }
-.title__h { margin-top: 22px; font-weight: 300; font-size: clamp(40px, 6.6vw, 96px); line-height: 1; letter-spacing: -.02em; text-wrap: balance; color: #1a1613; }
+.title__h { margin-top: 22px; font-weight: 300; font-size: clamp(36px, 5vw, 72px); line-height: 1; letter-spacing: -.02em; text-wrap: balance; color: #1a1613; }
 .title__h em { font-style: italic; font-weight: 400; color: #7c2417; }
 .title__lede { margin-top: clamp(24px, 3.5vh, 40px); max-width: 58ch; font-size: clamp(19px, 2vw, 24px); line-height: 1.5; color: #3b352e; text-wrap: pretty; }
 .title__note { margin-top: 18px; max-width: 56ch; font-size: 17px; line-height: 1.62; color: #4b433d; text-wrap: pretty; }
-.title__fig { flex: 0 1 400px; min-width: 240px; justify-content: flex-end; margin-left: auto; }
+.title__fig { flex: 0 1 340px; min-width: 220px; justify-content: flex-end; margin-left: auto; }
 
 /* right now */
 .now { padding: 16px clamp(20px, 3.4vw, 48px) 14px; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
