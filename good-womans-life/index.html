@@ -123,6 +123,21 @@
       <circle cx="642" cy="172" r="9" stroke="#b5402c"></circle><circle cx="657" cy="172" r="9" stroke="#b5402c"></circle>
       <circle cx="782" cy="120" r="6"></circle><path d="M775,128 H789 L792,158 H772 Z"></path><circle cx="802" cy="136" r="4"></circle><path d="M797,142 H807 L809,158 H795 Z" stroke="#c3772a"></path><path d="M789,142 L797,146"></path>
     </g>
+    <g id="art-expect" fill="none" stroke="#3a342e" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20,206 H300"></path>
+      <circle cx="160" cy="112" r="11"></circle>
+      <path d="M149,110 Q160,95 171,110" stroke="#8f3a86"></path>
+      <path d="M160,123 V128 M148,128 L142,178 H178 L172,128 Z" stroke="#8f3a86"></path>
+      <path d="M148,134 L134,160 M172,134 L186,160 M152,178 V206 M168,178 V206 M146,206 H158 M164,206 H176"></path>
+      <path d="M30,40 H116 Q124,40 124,48 V88 Q124,96 116,96 H100 L114,112 L90,96 H38 Q30,96 30,88 V48 Q30,40 38,40 Z"></path>
+      <circle cx="66" cy="68" r="9" stroke="#b5402c"></circle><circle cx="82" cy="68" r="9" stroke="#b5402c"></circle>
+      <path d="M196,40 H282 Q290,40 290,48 V88 Q290,96 282,96 H230 L206,112 L220,96 H204 Q196,96 196,88 V48 Q196,40 204,40 Z"></path>
+      <circle cx="243" cy="58" r="6" stroke="#c3772a"></circle><path d="M243,64 V80 M234,71 H252 M243,80 L237,91 M243,80 L249,91" stroke="#c3772a"></path>
+      <path d="M20,130 H96 Q104,130 104,138 V148 L120,156 L104,162 V172 Q104,180 96,180 H28 Q20,180 20,172 V138 Q20,130 28,130 Z"></path>
+      <path d="M46,152 H78 V172 H46 Z M56,152 V146 H68 V152 M46,161 H78" stroke="#1a8289"></path>
+      <path d="M216,130 H292 Q300,130 300,138 V172 Q300,180 292,180 H224 Q216,180 216,172 V162 L200,156 L216,148 V138 Q216,130 224,130 Z"></path>
+      <path d="M242,166 V150 L258,138 L274,150 V166 Z M254,166 V157 H262 V166" stroke="#33657f"></path>
+    </g>
   </defs>
 </svg>
 
@@ -130,7 +145,6 @@
 
   <div class="running">
     <span class="running__name">Living a Good Woman's Life</span>
-    <span>An atlas of the study &middot; twelve plates</span>
     <span>Updated 2026-09-07</span>
   </div>
 
@@ -138,7 +152,7 @@
 
     <header class="cell title">
       <div class="title__col">
-        <p class="eyebrow">Title plate &middot; What we want to know</p>
+        <p class="eyebrow">What we want to know</p>
         <h1 class="title__h">What does it mean to live a <em>good woman's</em> life in Qazaqstan?</h1>
         <p class="title__lede">We look at the roles women are expected to fulfil, how they make choices, the settings in which decisions are made, and the actors who influence them.</p>
         <p class="title__note">More than one hundred life histories from every region of the country, to learn how the stories differ by region, by generation, and by household.</p>
@@ -158,18 +172,24 @@
     </div>
 
     <section class="cell plate" id="expectations">
-      <div class="plate__head"><span class="letter">Plate A</span><h2 class="plate__title">Living inside expectations</h2></div>
+      <div class="plate__head"><h2 class="plate__title">Living inside expectations</h2></div>
       <div class="body">
         <div class="text">
           <p>Every woman grows up inside a set of expectations about what her life should be: when to marry, how many children to have, whether and where to work, what she owes her husband's family, and what happens if she goes against any of it. We want to understand how those expectations shape a woman's life across the country, and which actors have a say in what she decides, and how much.</p>
           <p>Much has been written about what is expected of women here. Far less about how women live through those expectations from school to marriage to children, what they give up, what they get in return, and how that differs by region and by generation. That is what a hundred life histories can show and a survey cannot.</p>
-          <p>Three actors have a say. Their portraits follow, plates B to D.</p>
+          <p>Three actors have a say. Their portraits follow.</p>
         </div>
+        <figure class="fig fig--side fig--expect">
+          <svg viewBox="0 0 320 226" role="img" aria-label="A pencil drawing of a young woman standing between four speech bubbles: wedding rings, a child, a briefcase and a house">
+          <use href="#art-expect" fill="none" stroke="#3a342e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".26" transform="translate(1.4,-1)" filter="url(#pencil)"></use>
+          <use href="#art-expect" fill="none" stroke="#3a342e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#pencil)"></use>
+          </svg>
+          <figcaption class="cap cap--right">Expectations, from every side</figcaption>
+        </figure>
       </div>
     </section>
 
     <figure class="cell actor">
-      <span class="letter">Plate B</span>
       <svg viewBox="0 0 320 226" role="img" aria-label="A pencil drawing of three generations, a grandmother with a stick, a mother and a daughter, holding hands under a shanyrak">
           <use href="#art-family" fill="none" stroke="#3a342e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".26" transform="translate(1.4,-1)" filter="url(#pencil)"></use>
           <use href="#art-family" fill="none" stroke="#3a342e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#pencil)"></use>
@@ -177,7 +197,6 @@
       <figcaption class="actor__name">The family</figcaption>
     </figure>
     <figure class="cell actor">
-      <span class="letter">Plate C</span>
       <svg viewBox="0 0 320 226" role="img" aria-label="A pencil drawing of three neighbours on a bench under a tree, watching a woman with a bag walk past">
           <use href="#art-community" fill="none" stroke="#3a342e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".26" transform="translate(1.4,-1)" filter="url(#pencil)"></use>
           <use href="#art-community" fill="none" stroke="#3a342e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#pencil)"></use>
@@ -185,7 +204,6 @@
       <figcaption class="actor__name">The community</figcaption>
     </figure>
     <figure class="cell actor">
-      <span class="letter">Plate D</span>
       <svg viewBox="0 0 320 226" role="img" aria-label="A pencil drawing of an office counter: an official behind a small window, a stamp and a stack of papers, and a woman holding up her document">
           <use href="#art-state" fill="none" stroke="#3a342e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".26" transform="translate(1.4,-1)" filter="url(#pencil)"></use>
           <use href="#art-state" fill="none" stroke="#3a342e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#pencil)"></use>
@@ -194,7 +212,7 @@
     </figure>
 
     <section class="cell plate" id="regions">
-      <div class="plate__head"><span class="letter">Plate E</span><h2 class="plate__title">Qazaqstan in five regions</h2><span class="plate__aside">Interviews planned by region</span></div>
+      <div class="plate__head"><h2 class="plate__title">Qazaqstan in five regions</h2><span class="plate__aside">Interviews planned by region</span></div>
       <div class="map-body">
         <div class="map">
           <svg viewBox="0 0 1000 551" role="img" aria-label="A pencil map of Qazaqstan divided into five regions with the number of interviews in each: North 24, West 24, Centre 24, East 12, South 36">
@@ -244,10 +262,9 @@
     </section>
 
     <section class="cell plate" id="measures">
-      <div class="plate__head"><span class="letter">Plate F</span><h2 class="plate__title">Life across the regions</h2></div>
+      <div class="plate__head"><h2 class="plate__title">Life across the regions</h2></div>
       <div class="strips-intro">
         <p class="p">Women's lives, opportunities, constraints and choices differ across the country. Five measures; each region a dot, placed where it falls between the lowest and highest region.</p>
-        <p class="legend"><span><span class="legend__dot"></span>Region</span><span><span class="legend__tick"></span>Qazaqstan</span></p>
       </div>
       <div class="strips">
 <div class="strip">
@@ -305,7 +322,7 @@
     </section>
 
     <section class="cell plate" id="turning-points">
-      <div class="plate__head"><span class="letter">Plate G</span><h2 class="plate__title">Turning points</h2><span class="plate__aside">The moments in a life we want to learn about</span></div>
+      <div class="plate__head"><h2 class="plate__title">Turning points</h2><span class="plate__aside">The moments in a life we want to learn about</span></div>
       <div class="scroll">
         <svg class="turns" viewBox="0 0 1000 260" role="img" aria-label="A pencil drawing of a winding road with seven stops: school, university, work, relationships, marriage, children, and the unknown moment, where a dashed path branches off">
           <use href="#art-turns" fill="none" stroke="#3a342e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".26" transform="translate(1.4,-1)" filter="url(#pencil)"></use>
@@ -322,7 +339,7 @@
     </section>
 
     <section class="cell plate" id="interview">
-      <div class="plate__head"><span class="letter">Plate H</span><h2 class="plate__title">One conversation, one life</h2></div>
+      <div class="plate__head"><h2 class="plate__title">One conversation, one life</h2></div>
       <div class="body">
         <div class="conv">
           <p class="p">We want to interview more than one hundred women aged eighteen and over across the country: in cities and villages, in big households and living alone. The interview is in Qazaq or Russian, whichever participants choose. In every paper we will say who answered our call and who did not.</p>
@@ -344,7 +361,7 @@
     </section>
 
     <section class="cell plate" id="road">
-      <div class="plate__head"><span class="letter">Plate I</span><h2 class="plate__title">The road</h2><span class="plate__aside">Seven road trips &middot; about 13,100 km &middot; 34 nights away</span></div>
+      <div class="plate__head"><h2 class="plate__title">The road</h2><span class="plate__aside">Seven road trips &middot; about 13,100 km &middot; 34 nights away</span></div>
       <svg class="road-art" viewBox="0 0 640 226" role="img" aria-label="A pencil drawing of a two-lane road running straight to the horizon across the steppe, telegraph poles along it and a small car on the way">
           <use href="#art-road" fill="none" stroke="#3a342e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".26" transform="translate(1.4,-1)" filter="url(#pencil)"></use>
           <use href="#art-road" fill="none" stroke="#3a342e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#pencil)"></use>
@@ -372,7 +389,7 @@
     </section>
 
     <section class="cell plate" id="data">
-      <div class="plate__head"><span class="letter">Plate J</span><h2 class="plate__title">What the stories become</h2><span class="plate__aside">What we will do with the data</span></div>
+      <div class="plate__head"><h2 class="plate__title">What the stories become</h2><span class="plate__aside">What we will do with the data</span></div>
       <div class="body">
         <div class="text">
           <p>Imagine a hundred women, each telling us her life for an hour and a half. That is about a hundred and fifty hours of talk that we will turn into larger stories of what it's like to be a woman in different corners of our country.</p>
@@ -391,7 +408,7 @@
     </section>
 
     <section class="cell plate" id="ai">
-      <div class="plate__head"><span class="letter">Plate K</span><h2 class="plate__title">Four people and one AI</h2><span class="plate__aside">AI and qualitative research</span></div>
+      <div class="plate__head"><h2 class="plate__title">Four people and one AI</h2><span class="plate__aside">AI and qualitative research</span></div>
       <div class="body">
         <div class="text">
           <p>This study was co-designed with an AI system, <span class="claude">Claude</span>, from the first day. <span class="claude">Claude</span> has been a fifth member of the team with a defined job at every stage: research co-design and adversarial testing, the interview guide draft, the sampling and recruitment strategy, the analysis plan, and, yes, even this page.</p>
@@ -411,14 +428,14 @@
     </section>
 
     <section class="cell plate plate--team" id="team">
-      <div class="plate__head"><span class="letter">Plate L</span><h2 class="plate__title">Us</h2></div>
-      <div class="us-body">
+      <div class="plate__head plate__head--us">
+        <h2 class="plate__title">Us</h2>
         <figure class="fig fig--hands">
           <svg viewBox="0 0 320 226" role="img" aria-label="A pencil drawing of a hand writing in an open notebook, a bowl of tea steaming beside it">
           <use href="#art-hands" fill="none" stroke="#3a342e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".26" transform="translate(1.4,-1)" filter="url(#pencil)"></use>
           <use href="#art-hands" fill="none" stroke="#3a342e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#pencil)"></use>
           </svg>
-          <figcaption class="cap">Field notes</figcaption>
+          <figcaption class="cap cap--right">Field notes</figcaption>
         </figure>
       </div>
     </section>
