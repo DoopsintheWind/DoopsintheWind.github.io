@@ -51,7 +51,7 @@ img { display: block; max-width: 100%; height: auto; }
 .fig svg { display: block; width: 100%; height: auto; }
 .fig--side { flex: 0 1 340px; min-width: 240px; }
 .fig--tea { flex: 0 1 380px; min-width: 260px; }
-.fig--hands { flex: 0 1 220px; min-width: 160px; margin-left: auto; gap: 6px; }
+.fig--desk { flex: 1 1 520px; min-width: 260px; max-width: 1180px; margin-left: auto; }
 .fig--expect { flex: 0 1 420px; min-width: 260px; margin-left: auto; }
 .fig--big { flex: 0 1 480px; min-width: 280px; margin-left: auto; }
 .plate__head--us { align-items: center; }
