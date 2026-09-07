@@ -87,7 +87,7 @@ img { display: block; max-width: 100%; height: auto; }
 .strip__art { display: block; width: 100%; height: auto; margin-top: 2px; }
 @media (max-width: 720px) {
   .hand text { font-size: 18px; }
-  .strip__art text { font-size: 32px; letter-spacing: .4px; }
+  .strip__art text { font-size: 28px; letter-spacing: .3px; }
   .strip__art circle { r: 12px; }
 }
 .source { margin-top: 14px; font-size: 13.5px; line-height: 1.6; font-style: italic; color: #4b433d; }
