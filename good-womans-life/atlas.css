@@ -25,16 +25,19 @@
 }
 
 /* ---------- language ---------- */
-html[data-lang="en"] :is([lang=kk],[lang=ru]),
-html[data-lang="kk"] :is([lang=en],[lang=ru]),
-html[data-lang="ru"] :is([lang=en],[lang=kk]){display:none !important}
+/* the switcher labels are English by nature and must survive the language hiding below */
+html[data-lang="en"] :is([lang=kk],[lang=ru]):not(.lang),
+html[data-lang="kk"] :is([lang=en],[lang=ru]):not(.lang),
+html[data-lang="ru"] :is([lang=en],[lang=kk]):not(.lang){display:none !important}
 
 /* ---------- base ---------- */
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:#dfe4ec}
+/* the page is a sheet: it stops growing past 1600 and centres on wider screens */
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
-  margin:0;background:var(--ground);color:var(--ink);
+  margin:0 auto;max-width:1600px;background:var(--ground);color:var(--ink);
+  box-shadow:0 0 0 1px rgba(27,32,48,.10),0 10px 60px rgba(27,32,48,.15);
   font-family:var(--sans);-webkit-text-size-adjust:100%;
 }
 a{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
@@ -87,16 +90,16 @@ html[data-lang="ru"] .lang[data-setlang="ru"]{opacity:1;text-decoration:underlin
 }
 .hero__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 58%}
 .hero__card{
-  position:relative;margin:clamp(24px,5vh,56px) var(--side) 0;max-width:660px;
-  background:var(--ground);padding:clamp(22px,3vw,34px);box-shadow:var(--shadow-hero);
+  position:relative;margin:clamp(24px,5vh,56px) var(--side) 0;max-width:772px;
+  background:var(--ground);padding:clamp(24px,3.2vw,42px);box-shadow:var(--shadow-hero);
 }
 .hero__h1{
   margin:14px 0 0;font-family:var(--serif);font-weight:400;
-  font-size:clamp(34px,4.4vw,54px);line-height:1.04;letter-spacing:-.01em;text-wrap:balance;
+  font-size:clamp(35px,4.8vw,61px);line-height:1.04;letter-spacing:-.01em;text-wrap:balance;
 }
 .hero__h1 em{color:var(--accent)}
-.hero__lede{margin:20px 0 0;font-size:clamp(16px,1.4vw,17px);line-height:1.55;color:var(--body);text-wrap:pretty}
-.hero__note{margin:14px 0 0;font-family:var(--serif);font-style:italic;font-size:15.5px;line-height:1.6;color:var(--muted);text-wrap:pretty}
+.hero__lede{margin:22px 0 0;font-size:clamp(17px,1.6vw,19.5px);line-height:1.6;color:var(--body);text-wrap:pretty}
+.hero__note{margin:16px 0 0;font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.62;color:var(--muted);text-wrap:pretty}
 .hero__foot{position:relative;display:flex;justify-content:flex-end;padding:24px var(--side) clamp(24px,4vh,40px)}
 .sticker{
   transform:rotate(-2deg);background:var(--ink);padding:10px 16px 8px;
@@ -253,7 +256,7 @@ html[data-lang="ru"] .lang[data-setlang="ru"]{opacity:1;text-decoration:underlin
 html[data-lang="kk"] .sticker,html[data-lang="ru"] .sticker{font-size:clamp(21px,2.2vw,25px)}
 html[data-lang="kk"] .funded span,html[data-lang="ru"] .funded span{font-size:clamp(22px,2.2vw,27px)}
 html[data-lang="kk"] .legend__row,html[data-lang="ru"] .legend__row{font-size:14px}
-html[data-lang="kk"] .hero__h1,html[data-lang="ru"] .hero__h1{font-size:clamp(32px,4.1vw,50px)}
+html[data-lang="kk"] .hero__h1,html[data-lang="ru"] .hero__h1{font-size:clamp(33px,4.4vw,56px)}
 html[data-lang="kk"] .h2,html[data-lang="ru"] .h2{font-size:28px}
 html[data-lang="kk"] .card figcaption,html[data-lang="ru"] .card figcaption{font-size:20px}
 html[data-lang="kk"] .team__name,html[data-lang="ru"] .team__name{font-size:21px}
@@ -281,4 +284,8 @@ html[data-lang="kk"] .t-hand,html[data-lang="ru"] .t-hand{font-size:14px}
   .us__desk{margin-left:0}
   .strip{overflow-x:auto}
   .strip .art{min-width:640px}
+  .nav{gap:0}
+  .nav__tabs{flex:1 1 auto}
+  .tab{padding:0 10px}
+  .nav__langs{position:sticky;right:0;gap:10px;padding:0 0 0 12px;background:var(--ground);box-shadow:-14px 0 12px -8px var(--ground)}
 }
