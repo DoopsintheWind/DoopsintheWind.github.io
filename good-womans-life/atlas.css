@@ -221,7 +221,7 @@ html[data-lang="ru"] .lang[data-setlang="ru"]{opacity:1;text-decoration:underlin
 
 /* ---------- us ---------- */
 .us__head{display:flex;flex-wrap:wrap;align-items:baseline;gap:16px 24px}
-.us__desk{flex:1 1 520px;min-width:260px;max-width:1180px;margin-left:auto;display:block;height:auto}
+.us__desk{flex:1 1 520px;min-width:260px;max-width:880px;margin-left:auto;display:block;height:auto}
 /* six of us: three across, two down, and the sheet of portraits stops growing at 1360 */
 .team{max-width:1360px;margin:0 auto;padding:8px var(--side) 64px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 28px;align-items:start}
 .team .print img{aspect-ratio:1/1;object-position:50% 8%}
