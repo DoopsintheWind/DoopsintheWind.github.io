@@ -222,8 +222,8 @@ html[data-lang="ru"] .lang[data-setlang="ru"]{opacity:1;text-decoration:underlin
 /* ---------- us ---------- */
 .us__head{display:flex;flex-wrap:wrap;align-items:baseline;gap:16px 24px}
 .us__desk{flex:1 1 520px;min-width:260px;max-width:880px;margin-left:auto;display:block;height:auto}
-/* six of us: three across, two down, and the sheet of portraits stops growing at 1360 */
-.team{max-width:1360px;margin:0 auto;padding:8px var(--side) 64px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px 28px;align-items:start}
+/* four of us: four across on a wide screen, two by two under 1200, one column on a phone; the sheet of portraits stops growing at 1360 */
+.team{max-width:1360px;margin:0 auto;padding:8px var(--side) 64px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px 28px;align-items:start}
 .team .print img{aspect-ratio:1/1;object-position:50% 8%}
 .team__ph{display:block;width:100%;height:auto;aspect-ratio:1/1}
 .team__name{margin:20px 0 0;font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.15}
@@ -264,7 +264,7 @@ html[data-lang="kk"] .t-map,html[data-lang="ru"] .t-map{font-size:22px;letter-sp
 html[data-lang="kk"] .t-hand,html[data-lang="ru"] .t-hand{font-size:14px}
 
 /* ---------- the portraits drop to two across, then one ---------- */
-@media (max-width:980px){.team{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:1200px){.team{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.team{grid-template-columns:minmax(0,1fr)}}
 
 /* ---------- narrow screens ---------- */

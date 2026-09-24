@@ -8,4 +8,4 @@ A life-course study of women in Kazakhstan: a hundred and twenty life-history in
 
 https://doopsinthewind.github.io/good-womans-life/
 
-Research team: Dinara Pisareva, Aruzhan Seidaliyeva, Dilnaz Mukhtarkhanova, Akerke Mukhtarkyzy (Nazarbayev University).
+Research team: Dinara Pisareva and Aruzhan Seidaliyeva (Nazarbayev University), Nurmakhan Tastaibek and Maiya Talipova (independent researchers).
