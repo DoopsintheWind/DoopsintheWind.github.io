@@ -9,3 +9,9 @@ A life-course study of women in Kazakhstan: a hundred and twenty life-history in
 https://doopsinthewind.github.io/good-womans-life/
 
 Research team: Dinara Pisareva and Aruzhan Seidaliyeva (Nazarbayev University), Nurmakhan Tastaibek and Maiya Talipova (independent researchers).
+
+## Cognitive Partnership
+
+How Dina Pisareva teaches students at Nazarbayev University to work with AI as a partner in thinking, in four courses, and the preregistered study with Denis de Crombrugghe (Coventry University Kazakhstan) that tests what students keep when the AI is gone.
+
+https://doopsinthewind.github.io/cognitive-partnership/
