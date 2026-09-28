@@ -84,6 +84,17 @@ img{max-width:100%}
   font:800 14px/1 var(--text);letter-spacing:.06em;text-transform:uppercase;color:#fff;
 }
 .lang:hover{text-decoration:underline;text-underline-offset:4px}
+/* the names need about 1470px; below that the bar tightens, and up to 1280px it carries the numbers only */
+@media (max-width:1480px){
+  .tab{padding-right:10px;margin-right:10px;gap:6px;font-size:12.5px;letter-spacing:.04em}
+  .lang{padding:0 13px;min-width:46px}
+}
+@media (max-width:1280px){
+  .nav__tabs{overflow:visible}
+  .tab{flex:1 1 0;justify-content:center;min-width:0;padding:0;margin:0;gap:0}
+  .tab span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .tab i{font-size:16px;letter-spacing:.02em}
+}
 html[data-lang="en"] .lang[data-setlang="en"],
 html[data-lang="kk"] .lang[data-setlang="kk"],
 html[data-lang="ru"] .lang[data-setlang="ru"]{background:var(--ink);color:#fff}
@@ -340,10 +351,10 @@ html[data-lang="kk"] .fig span,html[data-lang="ru"] .fig span{font-size:13px;let
   .wall__tulips{flex-direction:column;align-items:flex-start}
   .entry__tulips{height:auto;width:100%;max-height:none}
   .fromroad--block{height:auto}
-  .nav{padding:0 0 0 var(--side)}
-  .tab{height:50px;padding-right:12px;margin-right:12px}
-  .lang{padding:0 12px;min-width:44px}
-  .nav__langs{position:sticky;right:0}
+  .nav{padding:0}
+  .tab{height:50px}
+  .tab i{font-size:15px}
+  .lang{padding:0 10px;min-width:42px}
   /* labels drawn inside the map and the cloud would shrink to 8 to 11px; set them in screen terms */
   html[data-lang] .t-map{font-size:40px;letter-spacing:2}
   svg[data-alt="cloud"] text[font-size="11"]{font-size:14px;letter-spacing:.5}
