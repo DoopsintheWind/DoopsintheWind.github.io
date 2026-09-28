@@ -70,11 +70,10 @@ a:focus-visible{outline:3px solid var(--ink);outline-offset:4px;border-radius:1p
 /* ---------- cover ---------- */
 .cover{display:grid;grid-template-columns:var(--spine) minmax(0,1fr);column-gap:var(--sgap);padding:0 var(--mr) 0 var(--ml);background:var(--paper)}
 .cover-spine{border-right:1px solid #cfd0cc}
-.cover-main{padding:72px 0 168px;max-width:calc(var(--a) + var(--cg) + var(--b))}
+.cover-main{padding:72px 0 168px;max-width:calc(var(--a) + var(--cg) + var(--b));container-type:inline-size}
 .kicker{font-weight:600;font-size:16px;line-height:1.5;letter-spacing:.2em;text-transform:uppercase}
-.title{margin-top:28px;font-family:var(--serif);font-style:italic;font-weight:300;font-size:140px;line-height:.9;letter-spacing:-.025em;font-variation-settings:"SOFT" 0,"WONK" 0}
-.title span{display:block}
-.title .l2{text-align:right}
+.title{margin-top:28px;font-family:var(--serif);font-style:italic;font-weight:300;font-size:120px;font-size:min(140px,calc(100cqw / 7.6));white-space:nowrap;line-height:.9;letter-spacing:-.025em;font-variation-settings:"SOFT" 0,"WONK" 0}
+.title span{display:inline}
 .cover-lower{display:grid;grid-template-columns:var(--a) minmax(0,var(--b));column-gap:var(--cg);align-items:start;margin-top:56px}
 .subtitle{font-family:var(--serif);font-weight:300;font-size:34px;line-height:1.2;letter-spacing:-.01em;font-variation-settings:"SOFT" 0,"WONK" 0;text-wrap:balance}
 .lede{font-size:22px;line-height:1.55;text-wrap:pretty}
@@ -207,7 +206,7 @@ h4{font-weight:600;font-size:23px;line-height:1.3;letter-spacing:-.005em}
   .cover,.sec,.colophon{grid-template-columns:minmax(0,1fr);column-gap:0}
   .cover-spine,.spine,.colophon-spine{display:none}
   .cover-main{padding-top:56px;padding-bottom:150px}
-  .title{font-size:clamp(68px,9.6vw,140px)}
+  .title{font-size:96px;font-size:min(140px,calc(100cqw / 7.6))}
   .display{font-size:clamp(44px,6.2vw,84px)}
   .ex-n{font-size:112px}
 }
@@ -256,9 +255,9 @@ h4{font-weight:600;font-size:23px;line-height:1.3;letter-spacing:-.005em}
   .tab-name{font-size:15px}
   .cover-main{padding-top:36px;padding-bottom:156px}
   .kicker{font-size:14px;letter-spacing:.16em}
-  .title{margin-top:18px;font-size:clamp(52px,16.4vw,90px);line-height:.94;letter-spacing:-.02em}
+  .title{margin-top:18px;font-size:38px;font-size:calc(100cqw / 8.9);line-height:1;letter-spacing:-.02em}
   .cover-lower{margin-top:36px}
-  .subtitle{font-size:28px}
+  .subtitle{font-size:24px}
   .lede{font-size:20px}
   .byline{font-size:16px}
   .byline .pl{white-space:normal}
