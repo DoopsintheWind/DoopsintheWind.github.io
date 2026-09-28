@@ -197,6 +197,7 @@ html[data-lang="ru"] .lang[data-setlang="ru"]{background:var(--ink);color:#fff}
 
 /* ---------- turning points ---------- */
 .turns__scroll{overflow-x:auto}
+.strip__list,.turns__list{display:none}
 
 /* ---------- interview ---------- */
 .interview__text{grid-column:4/10}
@@ -304,9 +305,26 @@ html[data-lang="kk"] .fig span,html[data-lang="ru"] .fig span{font-size:13px;let
   .actor--a,.actor--b,.actor--c{grid-column:1/-1;margin-bottom:28px}
   .us .art{grid-column:1/-1}
   .team__m{grid-column:1/-1}
-  .strip__scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .strip__scroll .art{min-width:1000px}
-  .turns__scroll .art{min-width:960px}
+  /* the strips and the turning points are drawn 1000 units wide; on a phone they become lists that fit the screen */
+  .strip__scroll,.turns__scroll{display:none}
+  .strip__list{display:block;list-style:none;margin:12px 0 10px;padding:0}
+  .sl{display:grid;grid-template-columns:7.4em minmax(0,1fr) 3.6em;align-items:center;column-gap:10px;padding:4px 0;font:500 16px/1.3 var(--text)}
+  .sl__track{position:relative;height:18px}
+  .sl__track::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--ink)}
+  .sl__track i{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--ink)}
+  .sl__v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+  .sl--c{color:var(--green);font-weight:800}
+  .sl--c .sl__track i{width:5px;height:24px;margin:-12px 0 0 -2.5px;border-radius:0;background:var(--green)}
+  .turns__list{display:block;list-style:none;margin:28px 0 0;padding:0}
+  .turns__list li{position:relative;padding:0 0 24px 38px;font:700 16px/1.3 var(--text);letter-spacing:.08em;text-transform:uppercase}
+  .turns__list li::before{content:"";position:absolute;left:4px;top:2px;width:16px;height:16px;border-radius:50%;background:var(--green)}
+  .turns__list li::after{content:"";position:absolute;left:11px;top:18px;bottom:-2px;border-left:2px solid var(--ink)}
+  .turns__list li:nth-last-child(2)::after{border-left:2px dashed var(--green)}
+  .turns__list li:last-child{padding-bottom:0}
+  .turns__list li:last-child::after{display:none}
+  .turns__list .tl--unknown::before{background:#fff;border:3px solid var(--green);width:12px;height:12px}
+  .tl--unknown b{color:var(--green);font-weight:800}
+  .tl--unknown em{display:block;margin-top:6px;font:italic 400 17px/1.4 var(--text);text-transform:none;letter-spacing:0}
   .fig:nth-child(n+2){grid-column:span 6;border-left:0;padding-left:22px}
   .fig:nth-child(3),.fig:nth-child(5){border-left:2px solid #fff}
   .fig:nth-child(2),.fig:nth-child(3){border-bottom:2px solid #fff}
