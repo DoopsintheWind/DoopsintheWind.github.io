@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ai="on">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,665 +7,428 @@
 <meta name="description" content="How I teach students to work with AI as a partner in thinking, and the preregistered study that tests what stays with them when the AI is gone.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Hanken+Grotesk:wght@400..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=Instrument+Sans:wdth,wght@75..100,400..700&display=swap">
+<script>
+(function(){
+  var off = /[?&]ai=off/.test(location.search);
+  try { if (!off && localStorage.getItem('cp-ai') === 'off') off = true; } catch (e) {}
+  if (off) document.documentElement.setAttribute('data-ai', 'off');
+})();
+</script>
 <style>
 :root{
-  --ink:#15181d;
-  --ink-2:#2d3238;
-  --paper:#f9f9f7;
-  --mat:#fcfcfa;
-  --mint:#e4efe8;
-  --lilac:#ebe9f4;
-  --sand:#f0ebe1;
-  --sky:#e3edf5;
-  --rose:#f5e9e6;
-  --cobalt:#2a4bcc;
-  --coral:#ef6b55;
-  --serif:"Fraunces", Georgia, "Times New Roman", serif;
-  --sans:"Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --ml:max(48px, calc((100vw - 1440px) / 2 + 48px)); --mr:var(--ml);
-  --spine:168px; --sgap:56px;
-  --a:356px; --cg:48px; --b:660px; --measure:580px;
-  --art:clamp(300px, 27.8vw, 400px);
-  --door-w:280px; --door-h:340px;
-  --door1-w:170px; --door1-h:200px;
-  --ground:var(--paper);
+  --paper:#f5f1e8; --ink:#1a1814; --ink-2:#4a463e; --rule:#cbc2b0;
+  --blue:#1f33b8; --blue-t:#dfe2f5;
+  --text:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --pad:48px; --col:680px; --gap:88px;
+  --ease:cubic-bezier(.65,0,.25,1);
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:19px;line-height:1.6;font-kerning:normal;overflow-wrap:break-word}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-top:90px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:20px;line-height:1.6;font-optical-sizing:auto;overflow-wrap:break-word;overflow-x:clip}
 h1,h2,h3,h4,p,ol,ul,figure,table{margin:0}
 ol,ul{padding:0;list-style:none}
 img{display:block;max-width:100%;height:auto}
-
-a{color:inherit;text-decoration-line:underline;text-decoration-thickness:1.5px;text-underline-offset:.22em}
-a:hover{text-decoration-thickness:3px}
-a:focus-visible{outline:3px solid var(--ink);outline-offset:4px;border-radius:1px}
+a{color:inherit;text-decoration-line:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
 .nw{white-space:nowrap}
+.skip{position:absolute;left:12px;top:-60px;z-index:50;background:var(--ink);color:var(--paper);padding:10px 16px;font-family:var(--sans);font-weight:600}
+.skip:focus{top:12px}
 
-/* ---------- navigation: fixed floor plan on desktop ---------- */
-.masthead{position:fixed;top:0;left:0;z-index:20;width:calc(var(--ml) + var(--spine) - 16px);padding:34px 0 0 var(--ml);display:flex;flex-direction:column;align-items:flex-start;gap:26px}
-.site-name{font-weight:600;font-size:17px;line-height:1.3;text-decoration:none;max-width:7.5em}
-.site-name:hover{text-decoration:underline;text-decoration-thickness:2px}
-.index{display:none}
-.plan{display:block;width:138px;height:auto;overflow:visible}
-.plan a{text-decoration:none}
-.plan .room{fill:var(--room)}
-.plan .walls{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:square}
-.plan text{font-family:var(--serif);font-style:italic;font-weight:300;font-size:17px;fill:var(--ink);font-variation-settings:"SOFT" 0,"WONK" 0;pointer-events:none}
-.plan a:hover .room{fill:color-mix(in srgb,var(--ink) 16%,var(--room))}
-.plan a:focus{outline:none}
-.plan a.is-here .room{fill:var(--ink)}
-.plan a.is-here text{fill:var(--paper)}
-.plan a:focus-visible .room{fill:var(--cobalt)}
-.plan a:focus-visible text{fill:var(--paper)}
+/* bar */
+.bar{position:sticky;top:0;z-index:30;background:var(--paper);border-bottom:1px solid var(--ink)}
+.bar-in{max-width:1280px;margin:0 auto;padding:0 var(--pad);display:flex;align-items:center;gap:24px;min-height:68px}
+.mark{font-family:var(--text);font-style:italic;font-size:21px;text-decoration:none;white-space:nowrap}
+.menu{display:flex;gap:0;margin-left:auto}
+.menu a{display:block;padding:10px 12px;font-family:var(--sans);font-weight:500;font-size:16px;text-decoration:none;white-space:nowrap}
+.menu a:hover{text-decoration:underline}
+.menu a[aria-current]{text-decoration:underline;text-decoration-thickness:2px}
+.switch{display:flex;flex:none;font-family:var(--sans);border:1px solid var(--ink)}
+.switch button{appearance:none;border:0;background:transparent;color:var(--ink);font:600 15px/1 var(--sans);padding:12px 14px;cursor:pointer;white-space:nowrap;min-height:42px}
+.switch button+button{border-left:1px solid var(--ink)}
+.switch button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.switch .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--blue);margin-right:8px;vertical-align:1px;box-shadow:0 0 0 1.5px var(--paper)}
 
-/* tab index, used below desktop */
-.index a{display:flex;flex-direction:column;justify-content:flex-end;gap:4px;min-height:84px;padding:12px 16px 14px;background:var(--tab);text-decoration:none}
-.index a:hover .tab-name{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.22em}
-.index a:focus-visible{outline-offset:-3px}
-.tab-n{font-family:var(--serif);font-style:italic;font-weight:300;font-size:24px;line-height:1;font-variation-settings:"SOFT" 0,"WONK" 0;font-variant-numeric:lining-nums}
-.tab-name{font-weight:600;font-size:16px;line-height:1.25}
+/* page frame: one centred column without AI; the column moves left and the margin opens with AI */
+.sec{padding:0 var(--pad)}
+.sec-in{position:relative;max-width:1180px;margin-left:max(0px, calc((100% - 1180px) / 2));transition:margin-left .9s var(--ease),max-width .9s var(--ease)}
+[data-ai="off"] .sec-in{max-width:var(--col);margin-left:max(0px, calc((100% - var(--col)) / 2))}
+.sec-in > *{max-width:var(--col)}
+main .sec{padding-top:112px}
 
-/* ---------- cover ---------- */
-.cover{display:grid;grid-template-columns:var(--spine) minmax(0,1fr);column-gap:var(--sgap);padding:0 var(--mr) 0 var(--ml);background:var(--paper)}
-.cover-spine{border-right:1px solid #cfd0cc}
-.cover-main{padding:72px 0 168px;max-width:calc(var(--a) + var(--cg) + var(--b));container-type:inline-size}
-.kicker{font-weight:600;font-size:16px;line-height:1.5;letter-spacing:.2em;text-transform:uppercase}
-.title{margin-top:28px;font-family:var(--serif);font-style:italic;font-weight:300;font-size:120px;font-size:min(140px,calc(100cqw / 7.6));white-space:nowrap;line-height:.9;letter-spacing:-.025em;font-variation-settings:"SOFT" 0,"WONK" 0}
-.title span{display:inline}
-.cover-lower{display:grid;grid-template-columns:var(--a) minmax(0,var(--b));column-gap:var(--cg);align-items:start;margin-top:56px}
-.subtitle{font-family:var(--serif);font-weight:300;font-size:34px;line-height:1.2;letter-spacing:-.01em;font-variation-settings:"SOFT" 0,"WONK" 0;text-wrap:balance}
-.lede{font-size:22px;line-height:1.55;text-wrap:pretty}
-.byline{margin-top:26px;font-size:18px;line-height:1.5;color:var(--ink-2)}
-.byline .pl{white-space:nowrap}
+/* hero */
+.hero{padding-top:96px;padding-bottom:24px}
+.kicker{font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.title-box{container-type:inline-size;margin-top:28px;transition:max-width .9s var(--ease)}
+.title{font-weight:420;font-size:min(150px, calc(100cqw / 10.4));line-height:1;letter-spacing:-.015em;white-space:nowrap;font-variation-settings:"opsz" 72}
+.subtitle{margin-top:30px;font-style:italic;font-size:27px;line-height:1.35}
+.lede{margin-top:26px;font-size:21px}
+.byline{margin-top:26px;font-family:var(--sans);font-size:16px;color:var(--ink-2);line-height:1.55}
+[data-ai="off"] .hero .sec-in{text-align:center}
+[data-ai="on"] .title-box{max-width:100%}
+[data-ai="on"] .title{font-weight:560}
 
-/* ---------- rooms ---------- */
-.sec{background:var(--ground);display:grid;grid-template-columns:var(--spine) minmax(0,1fr);column-gap:var(--sgap);padding:0 var(--mr) 0 var(--ml);--rule:color-mix(in srgb,var(--ink) 20%,var(--ground))}
-.spine{border-right:1px solid var(--rule)}
-.sec-body{position:relative;padding:112px 0 calc(var(--door-h) + 104px);min-width:0;max-width:calc(var(--a) + var(--cg) + var(--b))}
+/* section heads */
+.sec-head{margin-bottom:40px}
+.num{display:block;font-family:var(--sans);font-weight:600;font-size:16px;letter-spacing:.12em;color:var(--ink-2)}
+.sec-name{display:inline-block;font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
+.sec-head h2{font-weight:400;font-style:italic;font-size:44px;line-height:1.12;margin-top:10px;letter-spacing:-.01em}
+[data-ai="off"] .sec-head{text-align:center}
+[data-ai="off"] .sec-head::after{content:"";display:block;width:56px;height:1px;background:var(--ink);margin:28px auto 0}
+[data-ai="on"] .sec-head{display:grid;grid-template-columns:auto 1fr;column-gap:22px;align-items:baseline}
+[data-ai="on"] .num{grid-row:1 / span 2;font-family:var(--text);font-weight:300;font-size:92px;line-height:.8;letter-spacing:-.02em;color:var(--blue)}
+[data-ai="on"] .sec-name{margin-top:0}
 
-/* doorways: an arch in the next room's colour rises into the room before it */
-.sec-body::before,.colophon-body::before{content:"";position:absolute;bottom:100%;width:var(--door-w);height:var(--door-h);background:var(--ground);border-radius:calc(var(--door-w) / 2) calc(var(--door-w) / 2) 0 0;pointer-events:none}
-.door-l::before{left:0}
-.door-r::before{right:0}
-#the-idea .sec-body::before{width:var(--door1-w);height:var(--door1-h);border-radius:calc(var(--door1-w) / 2) calc(var(--door1-w) / 2) 0 0}
+.statement{font-size:29px;line-height:1.35;font-weight:450;margin-bottom:34px}
+.para + .para{margin-top:18px}
+.para{margin-top:0}
+.hl{background:none}
+.sub-head,.part-head{font-family:var(--sans);font-size:15px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:64px 0 10px}
+[data-ai="off"] .sub-head,[data-ai="off"] .part-head,[data-ai="off"] .bet-block h3{text-align:center}
 
-.room-sign{display:flex;align-items:baseline;gap:18px;padding-bottom:16px;border-bottom:1px solid var(--rule);margin-bottom:48px}
-.room-n{font-family:var(--serif);font-style:italic;font-weight:300;font-size:88px;line-height:.78;letter-spacing:-.02em;font-variation-settings:"SOFT" 0,"WONK" 0;font-variant-numeric:lining-nums}
-.room-name{font-weight:600;font-size:16px;line-height:1;letter-spacing:.2em;text-transform:uppercase}
+/* principles */
+.principles{counter-reset:none}
+.pr{padding:26px 0 24px;border-top:1px solid var(--rule);position:relative}
+.pr:last-child{border-bottom:1px solid var(--rule)}
+.pr-n{float:left;font-weight:300;font-size:64px;line-height:.9;width:64px;margin-top:2px}
+.pr h4{font-size:25px;font-weight:600;line-height:1.25}
+.label{font-style:italic;color:var(--ink-2);margin-bottom:8px}
+.pr-text{clear:left;padding-left:64px}
+.pr h4,.pr .label{padding-left:0}
 
-h2{font-weight:500;font-size:50px;line-height:1.08;letter-spacing:-.022em;max-width:20ch;text-wrap:balance}
-h3{font-weight:500;font-size:34px;line-height:1.15;letter-spacing:-.012em}
-h4{font-weight:600;font-size:23px;line-height:1.3;letter-spacing:-.005em}
-.display{font-family:var(--serif);font-style:italic;font-weight:300;font-size:84px;line-height:1.05;letter-spacing:-.015em;font-variation-settings:"SOFT" 0,"WONK" 0;margin-top:56px;text-wrap:balance}
+/* courses */
+.intro{margin-bottom:40px}
+.course{margin-top:48px}
+.feature{margin-top:0}
+.shot{position:relative;margin:0 0 30px;border:1px solid var(--ink)}
+.shot .layer{display:none}
+.course h3{font-size:28px;font-weight:600;line-height:1.2}
+.meta{font-family:var(--sans);font-size:16px;color:var(--ink-2);margin-top:6px;line-height:1.5}
+.work-title{font-style:italic;font-weight:400;font-size:23px;margin-top:18px}
+.course .text{margin-top:12px}
+.links{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:14px;font-family:var(--sans);font-size:16px;font-weight:600}
+.license{font-family:var(--sans);font-size:15px;color:var(--ink-2);margin-top:10px}
+.trio .course{padding-top:28px;border-top:1px solid var(--rule)}
 
-.grid2{display:grid;grid-template-columns:var(--a) minmax(0,var(--b));column-gap:var(--cg)}
-.colA{grid-column:1}
-.colB{grid-column:2}
-.prose p + p{margin-top:1.1em}
-.prose p, .text{text-wrap:pretty}
-.prose p,.ex-body p,.text,.item p,.practice-note p,.ethics,.license{max-width:var(--measure)}
-.intro{font-size:21px;line-height:1.55;text-wrap:pretty}
-.label{font-weight:600;font-size:16px;line-height:1.4;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
-.meta{font-size:18px;line-height:1.5;color:var(--ink-2);margin-top:12px}
-.links{display:flex;flex-wrap:wrap;gap:10px 32px;margin-top:22px;font-weight:600}
+/* table */
+.tablecard{margin-top:8px}
+.practice{width:100%;border-collapse:collapse;font-size:17px;line-height:1.45;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.practice col.rowh{width:24%}
+.practice thead td{border-bottom:1px solid var(--ink)}
+.practice thead th{font-family:var(--sans);font-size:15px;font-weight:700;text-align:left;vertical-align:bottom;padding:14px 12px 12px;border-bottom:1px solid var(--ink)}
+.practice tbody th{text-align:left;font-weight:600;font-style:italic;vertical-align:top;padding:14px 12px}
+.practice td{vertical-align:top;padding:14px 12px}
+.practice tbody tr + tr > *{border-top:1px solid var(--rule)}
+.practice tr.without > *{border-top:1px solid var(--ink)}
+.practice tr.without th{font-style:normal;font-family:var(--sans);font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;padding-top:17px}
+.note{margin-top:22px;font-style:italic}
 
-/* ---------- framed works ---------- */
-.framed{background:var(--mat);border:14px solid var(--ink);padding:30px 30px 42px}
-.framed img{width:100%}
+/* study */
+.question{font-size:34px;line-height:1.25;font-style:italic;margin-bottom:34px}
+.measures{display:grid;gap:22px}
+.measure h4,.item h4{font-size:22px;font-weight:600;line-height:1.3}
+.measure p,.item p{margin-top:4px}
+.bet-block{margin-top:56px;padding:30px 0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.bet-block h3{font-family:var(--sans);font-size:15px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.bet{font-size:25px;line-height:1.42}
+.honest{display:grid;gap:22px}
+.timeline li{display:grid;grid-template-columns:170px 1fr;gap:18px;padding:12px 0;border-top:1px solid var(--rule)}
+.timeline li:last-child{border-bottom:1px solid var(--rule)}
+.when{font-family:var(--sans);font-weight:600;font-size:16px;padding-top:3px}
+.ethics{margin-top:34px;font-style:italic;color:var(--ink-2)}
 
-/* ---------- 01 the idea: four exhibits ---------- */
-.idea-prose{margin-top:80px}
-.sub-head{margin-top:136px}
-.exhibits{margin-top:64px;display:grid;row-gap:112px}
-.exhibit{display:grid;grid-template-columns:var(--art) minmax(0,var(--measure));column-gap:64px;justify-content:space-between;align-items:center}
-.exhibit:nth-child(even){grid-template-columns:minmax(0,var(--measure)) var(--art)}
-.exhibit:nth-child(even) .ex-art{order:2}
-.ex-art{display:block;width:100%;height:auto}
-.ex-n{display:block;font-family:var(--serif);font-style:italic;font-weight:200;font-size:136px;line-height:.74;letter-spacing:-.03em;font-variation-settings:"SOFT" 0,"WONK" 0;font-variant-numeric:lining-nums}
-.ex-name{margin-top:26px;font-family:var(--serif);font-style:italic;font-weight:400;font-size:30px;line-height:1.12;letter-spacing:-.01em;font-variation-settings:"SOFT" 0,"WONK" 0}
-.ex-body .label{margin-top:12px}
-.ex-body p:last-child{margin-top:16px;text-wrap:pretty}
-@media (prefers-reduced-motion:no-preference){
-  .turn{transform-box:view-box;transform-origin:200px 200px;animation:turn 64s linear infinite}
-  .turn-slow{transform-box:view-box;transform-origin:200px 200px;animation:turn 90s linear infinite reverse}
+/* people */
+.photo{margin-bottom:34px}
+.person + .person{margin-top:40px}
+.person h3{font-size:30px;font-weight:600}
+.person .text{margin-top:12px}
+
+.foot{margin-top:128px;border-top:1px solid var(--ink);padding:40px var(--pad) 56px}
+.foot-in{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px 40px;justify-content:space-between;align-items:baseline;font-family:var(--sans);font-size:16px}
+.foot .links{margin:0}
+
+/* anchors and marginal notes: present only with AI */
+.g{text-decoration:none;transition:box-shadow .6s var(--ease)}
+[data-ai="on"] .g{box-shadow:inset 0 -2px 0 var(--blue)}
+.mnote{display:block;text-decoration:none;font-family:var(--sans);color:var(--ink);line-height:1.4;opacity:0;visibility:hidden;transition:opacity .5s var(--ease),visibility 0s linear .5s}
+[data-ai="on"] .mnote{opacity:1;visibility:visible;transition:opacity .6s var(--ease) .35s,visibility 0s}
+.mnote .to{display:block;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+.mnote .q{display:block;font-family:var(--text);font-style:italic;font-size:18px;margin-top:2px}
+.mnote:hover .q{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
+.mnote.wide-mode{position:absolute;max-width:none;width:calc(100% - var(--col) - var(--gap));left:calc(var(--col) + var(--gap));padding:0 0 0 14px;border-left:2px solid var(--blue)}
+.mnote.inline{margin:14px 0 4px;padding:8px 0 8px 14px;border-left:2px solid var(--blue)}
+[data-ai="off"] .mnote.inline{display:none}
+.links-svg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;max-width:none}
+.links-svg path{fill:none;stroke:var(--blue);stroke-width:1.25}
+.links-svg circle{fill:var(--blue)}
+.links-svg .rail{stroke-width:1;stroke-dasharray:2 5}
+.hit{position:relative}
+.hit::before{content:"";position:absolute;left:-30px;top:.35em;width:9px;height:9px;border-radius:50%;border:2px solid var(--blue);opacity:0;transition:opacity .5s var(--ease)}
+.practice th.hit::before{left:-30px;top:1.05em}
+@media (min-width:1101px){ [data-ai="on"] .hit::before{opacity:1;transition:opacity .6s var(--ease) .5s} }
+.links-svg g{opacity:0;transition:opacity .4s var(--ease)}
+[data-ai="on"] .links-svg g{opacity:1;transition:opacity .7s var(--ease) .45s}
+
+/* wide objects reach into the margin with AI */
+@media (min-width:1101px){
+  [data-ai="on"] .sec-in > .feature .shot{width:calc(100% + 0px)}
+  [data-ai="on"] .sec-in > .feature,[data-ai="on"] .sec-in > .tablecard{max-width:100%}
+  [data-ai="on"] .feature{display:grid;grid-template-columns:var(--col) 1fr;column-gap:var(--gap);align-items:start}
+  [data-ai="on"] .feature .shot{grid-column:2;grid-row:1;margin:6px 0 0}
+  [data-ai="on"] .feature .course-body{grid-column:1;grid-row:1}
+  [data-ai="on"] .practice{font-size:18px}
 }
-@keyframes turn{to{transform:rotate(360deg)}}
-
-/* ---------- 02 courses ---------- */
-.courses-intro{margin-top:44px}
-.courses{margin-top:88px}
-.course{display:grid;grid-template-columns:var(--a) minmax(0,var(--b));column-gap:var(--cg);border-top:1px solid var(--rule);padding:40px 0 64px}
-.course-head{grid-column:1}
-.course-body{grid-column:2}
-.work-title{font-family:var(--serif);font-style:italic;font-weight:400;font-size:30px;line-height:1.12;letter-spacing:-.01em;font-variation-settings:"SOFT" 0,"WONK" 0;margin-bottom:16px}
-.license{margin-top:14px;font-size:18px;color:var(--ink-2)}
-.course-feature{grid-template-columns:minmax(0,1fr) minmax(0,540px);column-gap:44px;align-items:start;padding:48px 0 88px}
-.course-feature .framed{grid-column:1;grid-row:1 / span 3}
-.course-feature .course-head,.course-feature .course-body,.course-feature .after-plate{grid-column:2}
-.course-feature .course-body{margin-top:26px}
-.course-feature .text{font-size:18px}
-
-/* ---------- 03 in practice ---------- */
-.practice-intro{margin-top:44px}
-.practice{width:100%;border-collapse:collapse;margin-top:80px;table-layout:fixed}
-.practice th,.practice td{text-align:left;vertical-align:top;font-size:18px;line-height:1.45;padding:22px 28px 26px 0}
-.practice thead th{font-weight:600;font-size:18px;line-height:1.35;padding-bottom:18px;border-bottom:2px solid var(--ink)}
-.practice thead td{border-bottom:2px solid var(--ink)}
-.practice tbody tr{border-bottom:1px solid var(--rule)}
-.practice td,.practice th{text-wrap:balance}
-.practice tbody th{font-family:var(--serif);font-style:italic;font-weight:400;font-size:25px;line-height:1.18;letter-spacing:-.005em;font-variation-settings:"SOFT" 0,"WONK" 0}
-.practice tr.without{border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
-.practice-note{margin-top:36px}
-
-/* ---------- 04 the study ---------- */
-.study-intro{margin-top:80px}
-.part{display:grid;grid-template-columns:var(--a) minmax(0,var(--b));column-gap:var(--cg);margin-top:120px}
-.part > h3{grid-column:1;padding-top:26px;border-top:2px solid var(--ink)}
-.part > .part-body{grid-column:2}
-.item{border-top:1px solid var(--rule);padding:26px 0 30px}
-.item:first-child{border-top:2px solid var(--ink)}
-.item p{margin-top:8px;text-wrap:pretty}
-.bet{border-top:2px solid var(--ink);padding-top:26px;font-size:22px;line-height:1.55;text-wrap:pretty}
-.timeline li{display:grid;grid-template-columns:190px minmax(0,1fr);column-gap:24px;border-top:1px solid var(--rule);padding:18px 0 20px}
-.timeline li:first-child{border-top:2px solid var(--ink)}
-.when{font-family:var(--serif);font-style:italic;font-weight:400;font-size:23px;line-height:1.3;font-variation-settings:"SOFT" 0,"WONK" 0}
-.ethics{grid-column:2;margin-top:48px;font-size:18px;color:var(--ink-2)}
-
-/* ---------- 05 people: portrait wall ---------- */
-.people-plate{margin-top:72px}
-.people-plate .framed{border-width:12px;padding:32px 32px 46px}
-.person{display:grid;grid-template-columns:var(--a) minmax(0,var(--b));column-gap:var(--cg);border-top:1px solid var(--rule);padding:40px 0 56px}
-.person:first-of-type{margin-top:88px}
-.person-head{grid-column:1}
-.person-body{grid-column:2}
-
-/* ---------- colophon ---------- */
-.colophon{display:grid;grid-template-columns:var(--spine) minmax(0,1fr);column-gap:var(--sgap);padding:0 var(--mr) 0 var(--ml);background:var(--paper);--ground:var(--paper)}
-.colophon-spine{border-right:1px solid #cfd0cc}
-.colophon-body{position:relative;padding:72px 0 88px;display:grid;grid-template-columns:var(--a) minmax(0,var(--b));column-gap:var(--cg);max-width:calc(var(--a) + var(--cg) + var(--b))}
-.colophon .links{grid-column:2;margin-top:0}
-.colophon .copy{grid-column:1;grid-row:1;font-size:18px;color:var(--ink-2)}
-
-/* ---------- narrower desktops keep the plan, with a slimmer spine ---------- */
-@media (min-width:1280px) and (max-width:1439px){
-  :root{--ml:32px;--mr:32px;--spine:152px;--sgap:40px;--a:344px;--cg:40px}
-  .plan{width:132px}
+@media (prefers-reduced-motion:reduce){
+  .sec-in,.title-box,.g,.mnote,.links-svg g{transition:none!important}
 }
 
-/* ---------- below desktop: tabs return, spine folds away ---------- */
-@media (max-width:1279px){
-  :root{--ml:32px;--mr:32px;--a:280px;--cg:40px;--art:clamp(260px, 30vw, 360px);--door-w:220px;--door-h:270px;--door1-w:150px;--door1-h:180px}
-  .masthead{position:static;width:auto;padding:14px var(--mr) 0 var(--ml);flex-direction:column;align-items:stretch;gap:0}
-  .site-name{max-width:none;align-self:flex-start;padding:4px 0}
-  .index{display:flex;margin-top:12px}
-  .index li{flex:1 1 0;min-width:0}
-  .index a{height:100%}
-  .plan{display:none}
-  .cover,.sec,.colophon{grid-template-columns:minmax(0,1fr);column-gap:0}
-  .cover-spine,.spine,.colophon-spine{display:none}
-  .cover-main{padding-top:56px;padding-bottom:150px}
-  .title{font-size:96px;font-size:min(140px,calc(100cqw / 7.6))}
-  .display{font-size:clamp(44px,6.2vw,84px)}
-  .ex-n{font-size:112px}
+@media (max-width:1240px){
+  :root{--pad:36px}
+  .bar-in{flex-wrap:wrap;column-gap:20px}
+  .menu{order:3;margin:0 calc(var(--pad) * -1);padding:0 calc(var(--pad) - 12px) 4px;width:calc(100% + var(--pad) * 2);overflow-x:auto;scrollbar-width:none}
+  .menu::-webkit-scrollbar{display:none}
+  .switch{margin-left:auto}
 }
-@media (min-width:1100px) and (max-width:1279px){
-  :root{--a:344px}
+@media (max-width:1100px){
+  .sec-in,[data-ai="off"] .sec-in{max-width:var(--col);margin-left:max(0px, calc((100% - var(--col)) / 2))}
+  [data-ai="on"] .title-box{max-width:var(--col)}
 }
-@media (max-width:980px){
-  .grid2,.exhibit,.exhibit:nth-child(even),.course,.course-feature,.part,.person,.cover-lower,.colophon-body{grid-template-columns:minmax(0,1fr)}
-  .colA,.colB,.course-head,.course-body,.course .after-plate,.course-feature .framed,.course-feature .course-head,.course-feature .course-body,.course-feature .after-plate,.part > h3,.part > .part-body,.person-head,.person-body,.ethics,.colophon .links,.colophon .copy{grid-column:1;grid-row:auto}
-  .colophon .copy{margin-top:20px}
-  .exhibit:nth-child(even) .ex-art{order:0}
-  .ex-art{max-width:420px}
-  .ex-body{margin-top:36px}
-  .course-body,.person-body{margin-top:24px}
-  .course-feature .framed{order:-1;max-width:640px}
-  .course-feature .course-head{margin-top:36px}
-  .cover-main{padding-bottom:calc(var(--door1-h) + 64px)}
-  .part > .part-body{margin-top:8px}
-  .item:first-child,.timeline li:first-child{border-top:0}
-  .bet{border-top:0;padding-top:18px}
-  .ethics{max-width:var(--b)}
-  .prose,.intro,.ex-body,.course-body,.part-body,.person-body,.practice-note,.lede,.cover-text{max-width:var(--b)}
-  .cover-text{margin-top:32px}
-}
-
-/* ---------- table stacks by principle ---------- */
-@media (max-width:900px){
-  .practice{margin-top:48px}
-  .practice,.practice tbody,.practice tr,.practice th,.practice td{display:block;width:auto}
-  .practice thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
-  .practice tbody tr{padding:26px 0 10px}
-  .practice tbody tr:first-child{border-top:2px solid var(--ink)}
-  .practice tbody th{font-size:25px;padding:0 0 10px}
-  .practice td{padding:10px 0 16px;max-width:var(--measure);text-wrap:pretty}
-  .practice td::before{content:attr(data-label);display:block;font-family:var(--sans);font-weight:600;font-size:14px;line-height:1.35;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
-}
-
-/* ---------- phone ---------- */
 @media (max-width:760px){
-  :root{--ml:20px;--mr:20px;--door-w:120px;--door-h:150px;--door1-w:96px;--door1-h:120px}
-  body{font-size:18px}
-  .index{flex-wrap:wrap}
-  .index li{flex:1 1 30%}
-  .index a{min-height:64px;padding:10px 12px 11px}
-  .tab-n{font-size:19px}
-  .tab-name{font-size:15px}
-  .cover-main{padding-top:36px;padding-bottom:156px}
-  .kicker{font-size:14px;letter-spacing:.16em}
-  .title{margin-top:18px;font-size:38px;font-size:calc(100cqw / 8.9);line-height:1;letter-spacing:-.02em}
-  .cover-lower{margin-top:36px}
-  .subtitle{font-size:24px}
+  :root{--pad:20px}
+  body{font-size:19px}
+  .bar-in{flex-wrap:wrap;gap:0 12px;padding-top:10px;padding-bottom:10px}
+  .mark{font-size:19px}
+  .switch button{font-size:14px;padding:10px 10px;min-height:40px}
+  .switch .dot{margin-right:6px}
+  .hero{padding-top:56px}
+  main .sec{padding-top:80px}
+  .subtitle{font-size:23px}
   .lede{font-size:20px}
-  .byline{font-size:16px}
-  .byline .pl{white-space:normal}
-  .sec-body{padding-top:56px;padding-bottom:calc(var(--door-h) + 72px)}
-  .room-sign{gap:16px;margin-bottom:36px}
-  .room-n{font-size:56px}
-  .room-name{font-size:14px}
-  h2{font-size:34px}
-  h3{font-size:26px}
-  h4{font-size:21px}
-  .display{font-size:clamp(34px,9.6vw,48px);line-height:1.08;margin-top:32px}
-  .intro{font-size:19px}
-  .idea-prose,.study-intro{margin-top:44px}
-  .sub-head{margin-top:80px}
-  .exhibits{margin-top:40px;row-gap:72px}
-  .ex-body{margin-top:28px}
-  .ex-n{font-size:88px}
-  .ex-name,.work-title{font-size:28px}
-  .courses{margin-top:56px}
-  .course{padding:32px 0 48px}
-  .framed{border-width:10px;padding:16px 16px 24px}
-  .people-plate .framed{border-width:10px;padding:16px 16px 24px}
-  .part{margin-top:80px}
+  .sec-head h2{font-size:34px}
+  [data-ai="on"] .num{font-size:64px}
+  .statement{font-size:24px}
+  .question{font-size:27px}
   .bet{font-size:21px}
-  .timeline li{grid-template-columns:minmax(0,1fr)}
-  .people-plate{margin-top:44px}
-  .person:first-of-type{margin-top:56px}
-  .colophon-body{padding:48px 0 64px}
-  .links{gap:10px 24px}
+  .pr-n{font-size:48px;width:44px}
+  .pr-text{padding-left:0}
+  .timeline li{grid-template-columns:1fr;gap:0}
+  .practice,.practice tbody,.practice tr,.practice th,.practice td{display:block;width:100%}
+  .practice thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .practice colgroup{display:none}
+  .practice tbody tr{padding:14px 0}
+  .practice tbody tr + tr{border-top:1px solid var(--rule)}
+  .practice tbody tr + tr > *{border-top:0}
+  .practice tr.without{border-top:2px solid var(--ink)!important}
+  .practice tbody th{padding:0 0 6px;font-size:21px}
+  .practice td{padding:4px 0}
+  .practice td::before{content:attr(data-label);display:block;font-family:var(--sans);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+  .foot-in{flex-direction:column}
 }
 </style>
 </head>
-<body id="top">
+<body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header>
-  <div class="masthead">
-    <a class="site-name" href="#top">Cognitive Partnership</a>
-    <nav>
-      <ul class="index">
-        <li><a href="#the-idea" style="--tab:var(--mint)"><span class="tab-n">01</span><span class="tab-name">The idea</span></a></li>
-        <li><a href="#courses" style="--tab:var(--lilac)"><span class="tab-n">02</span><span class="tab-name">Courses</span></a></li>
-        <li><a href="#in-practice" style="--tab:var(--sand)"><span class="tab-n">03</span><span class="tab-name">In practice</span></a></li>
-        <li><a href="#the-study" style="--tab:var(--sky)"><span class="tab-n">04</span><span class="tab-name">The study</span></a></li>
-        <li><a href="#people" style="--tab:var(--rose)"><span class="tab-n">05</span><span class="tab-name">People</span></a></li>
-      </ul>
-      <svg class="plan" viewBox="-3 -3 138 204" width="138" height="204">
-        <a href="#the-idea" aria-label="01 The idea" style="--room:var(--mint)"><rect class="room" x="0" y="0" width="66" height="66"/><text x="9" y="25">01</text></a>
-        <a href="#courses" aria-label="02 Courses" style="--room:var(--lilac)"><rect class="room" x="66" y="0" width="66" height="66"/><text x="75" y="25">02</text></a>
-        <a href="#in-practice" aria-label="03 In practice" style="--room:var(--sand)"><rect class="room" x="66" y="66" width="66" height="66"/><text x="75" y="91">03</text></a>
-        <a href="#the-study" aria-label="04 The study" style="--room:var(--sky)"><rect class="room" x="0" y="66" width="66" height="66"/><text x="9" y="91">04</text></a>
-        <a href="#people" aria-label="05 People" style="--room:var(--rose)"><rect class="room" x="0" y="132" width="132" height="66"/><text x="9" y="157">05</text></a>
-        <path class="walls" d="M0 0H20M46 0H132V198H112M86 198H0V0M66 0V20M66 46V66M0 66H66M66 66H86M112 66H132M66 66V86M66 112V132M0 132H20M46 132H66M66 132H132"/>
-      </svg>
-    </nav>
-  </div>
-
-  <div class="cover">
-    <div class="cover-spine"></div>
-    <div class="cover-main">
-      <p class="kicker">Nazarbayev University · 2026</p>
-      <h1 class="title"><span class="l1">Cognitive</span> <span class="l2">Partnership</span></h1>
-      <div class="cover-lower">
-        <p class="subtitle">Teaching students to think with AI, and without it.</p>
-        <div class="cover-text">
-          <p class="lede">Students already work with AI. The open question is what kind of work leaves them knowing more once the AI is gone. Cognitive partnership is my answer. I teach it in four courses and test it in a preregistered study.</p>
-          <p class="byline"><span class="pl"><span class="nw">Dina Pisareva,</span> <span class="nw">Nazarbayev University</span></span>&nbsp;· <span class="pl"><span class="nw">Denis de Crombrugghe,</span> <span class="nw">Coventry University Kazakhstan</span></span></p>
-        </div>
-      </div>
+<nav class="bar" aria-label="Sections">
+  <div class="bar-in">
+    <a class="mark" href="#top">Cognitive Partnership</a>
+    <ul class="menu">
+      <li><a href="#the-idea">The idea</a></li>
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="#in-practice">In practice</a></li>
+      <li><a href="#the-study">The study</a></li>
+      <li><a href="#people">People</a></li>
+    </ul>
+    <div class="switch" role="group" aria-label="Page version">
+      <button type="button" data-set="on" aria-pressed="true"><span class="dot" aria-hidden="true"></span>With AI</button>
+      <button type="button" data-set="off" aria-pressed="false">Without AI</button>
     </div>
+  </div>
+</nav>
+
+<header class="hero sec" id="top">
+  <div class="sec-in">
+    <p class="kicker">Nazarbayev University · 2026</p>
+    <div class="title-box"><h1 class="title">Cognitive Partnership</h1></div>
+    
+    <p class="subtitle card" id="c-sub" data-c="sub">Teaching students to think with AI, and without it.</p>
+    <p class="lede card" id="c-lede" data-c="lede">Students already work with AI. The open question is what kind of work leaves them knowing more once the AI is gone. <span class="g" data-g="answer">Cognitive partnership is my answer.</span> I teach it in four courses and test it in a preregistered study.</p>
+    <p class="byline card" id="c-by" data-c="by"><span class="nw">Dina Pisareva,</span> <span class="nw">Nazarbayev University</span> · <span class="nw">Denis de Crombrugghe,</span> <span class="nw">Coventry University Kazakhstan</span></p>
   </div>
 </header>
 
-<main>
+<main id="main">
 
-  <section id="the-idea" class="sec" style="--ground:var(--mint)" aria-labelledby="h-idea">
-    <div class="spine"></div>
-    <div class="sec-body door-l">
-      <p class="room-sign"><span class="room-n">01</span> <span class="room-name">The idea</span></p>
-      <h2 id="h-idea">What is cognitive partnership?</h2>
-      <p class="display">Cognitive partnership is sustained intellectual work with AI as a genuine partner in a shared system of thinking.</p>
-      <div class="grid2 idea-prose">
-        <div class="colB prose">
-          <p>Thinking does not stay inside one head. It spreads across people, tools and settings. When a student and an AI work well together, the thinking happens in the exchange between them.</p>
-          <p>Two things matter afterward. One is what the student can do with the AI. The other is what stays with the student when the AI is gone. That second thing is cognitive residue, and it is the outcome I care about most as a teacher.</p>
-          <p>Handing AI the parts that do not matter is fine, even smart. Handing it the understanding itself is <span class="nw">over-reliance</span>. The only way to tell the two apart is to take the AI away and see what the student can still do.</p>
-        </div>
-      </div>
-
-      <h3 class="sub-head">Four principles</h3>
-      <ol class="exhibits">
-        <li class="exhibit">
-          <svg class="ex-art" viewBox="0 0 400 400" width="400" height="400" aria-hidden="true" focusable="false">
-            <rect width="400" height="400" fill="#2a4bcc"/>
-            <circle cx="206" cy="194" r="70" fill="#d3cdf0"/>
-            <g class="turn">
-              <path d="M326.06 177.77A128 128 0 1 1 222.23 73.94" fill="none" stroke="#f9f9f7" stroke-width="40"/>
-              <circle cx="290.51" cy="109.49" r="30" fill="#ef6b55"/>
-            </g>
-          </svg>
-          <div class="ex-body">
-            <span class="ex-n" aria-hidden="true">1</span>
-            <h4 class="ex-name">Stay open about what AI is</h4>
-            <p class="label">Ontological openness</p>
-            <p>What AI is remains an open question, and students argue about it instead of settling it early. A student who sees AI as just a tool gives it little effort. This principle makes the other three possible.</p>
-          </div>
-        </li>
-        <li class="exhibit">
-          <svg class="ex-art" viewBox="0 0 400 400" width="400" height="400" aria-hidden="true" focusable="false">
-            <rect width="400" height="400" fill="#f9f9f7"/>
-            <rect x="60" y="72" width="200" height="256" fill="#b9cfe9"/>
-            <rect x="60" y="72" width="200" height="256" fill="none" stroke="#15181d" stroke-width="6"/>
-            <path d="M112 262L400 176" fill="none" stroke="#2a4bcc" stroke-width="18"/>
-            <circle cx="112" cy="262" r="22" fill="#ef6b55"/>
-          </svg>
-          <div class="ex-body">
-            <span class="ex-n" aria-hidden="true">2</span>
-            <h4 class="ex-name">Think further, not faster</h4>
-            <p class="label">Purpose</p>
-            <p>The goal is thinking that goes further than it would alone, not saved time. Students may hand over routine parts and keep the main argument in their own heads.</p>
-          </div>
-        </li>
-        <li class="exhibit">
-          <svg class="ex-art" viewBox="0 0 400 400" width="400" height="400" aria-hidden="true" focusable="false">
-            <rect width="400" height="400" fill="#d3cdf0"/>
-            <g fill="none" stroke="#15181d" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M200 400V270"/>
-              <path d="M200 270C200 214 128 206 124 130"/>
-              <path d="M200 270C200 204 246 180 250 104"/>
-              <path d="M200 270C262 270 318 262 318 318"/>
-              <path d="M164 208C140 200 108 216 88 240"/>
-              <path d="M224 191C254 184 286 172 298 138"/>
-            </g>
-            <circle cx="124" cy="126" r="24" fill="#2a4bcc"/>
-            <circle cx="250" cy="98" r="17" fill="#f9f9f7"/>
-            <circle cx="300" cy="132" r="13" fill="#2a4bcc"/>
-            <circle cx="86" cy="242" r="14" fill="#f9f9f7"/>
-            <circle cx="318" cy="324" r="30" fill="#ef6b55"/>
-          </svg>
-          <div class="ex-body">
-            <span class="ex-n" aria-hidden="true">3</span>
-            <h4 class="ex-name">Follow your curiosity</h4>
-            <p class="label">Engagement</p>
-            <p>Curiosity and imagination turn an odd answer into a new direction. Without them, the work shrinks to ask, receive, submit.</p>
-          </div>
-        </li>
-        <li class="exhibit">
-          <svg class="ex-art" viewBox="0 0 400 400" width="400" height="400" aria-hidden="true" focusable="false">
-            <rect width="400" height="400" fill="#ef6b55"/>
-            <g class="turn-slow">
-              <path d="M200.0 188.0 L201.1 187.5 L202.3 187.1 L203.5 186.8 L204.8 186.7 L206.2 186.7 L207.6 186.8 L209.1 187.1 L210.5 187.5 L211.9 188.1 L213.3 188.8 L214.7 189.7 L216.0 190.8 L217.3 192.0 L218.4 193.3 L219.4 194.8 L220.4 196.4 L221.1 198.2 L221.8 200.0 L222.2 201.9 L222.5 204.0 L222.6 206.0 L222.5 208.2 L222.2 210.3 L221.7 212.5 L220.9 214.7 L220.0 216.8 L218.8 218.8 L217.5 220.8 L215.9 222.7 L214.1 224.5 L212.2 226.1 L210.0 227.6 L207.7 228.9 L205.3 230.0 L202.7 230.8 L200.0 231.5 L197.2 231.9 L194.3 232.1 L191.4 232.0 L188.5 231.6 L185.5 231.0 L182.6 230.1 L179.8 228.9 L177.0 227.4 L174.3 225.7 L171.7 223.7 L169.3 221.5 L167.1 219.0 L165.1 216.3 L163.3 213.4 L161.7 210.3 L160.4 207.0 L159.4 203.5 L158.8 200.0 L158.4 196.4 L158.3 192.6 L158.6 188.9 L159.2 185.2 L160.2 181.4 L161.5 177.8 L163.1 174.2 L165.1 170.7 L167.4 167.4 L170.0 164.3 L172.9 161.3 L176.1 158.6 L179.6 156.2 L183.3 154.1 L187.2 152.3 L191.3 150.8 L195.6 149.7 L200.0 149.0 L204.5 148.7 L209.0 148.7 L213.6 149.2 L218.2 150.0 L222.7 151.3 L227.1 153.0 L231.4 155.1 L235.6 157.6 L239.5 160.5 L243.2 163.7 L246.7 167.3 L249.8 171.3 L252.6 175.5 L255.1 180.0 L257.1 184.7 L258.8 189.6 L260.0 194.8 L260.8 200.0 L261.1 205.3 L260.9 210.7 L260.2 216.1 L259.1 221.5 L257.5 226.8 L255.4 232.0 L252.9 237.0 L249.9 241.8 L246.4 246.4 L242.5 250.7 L238.3 254.6 L233.6 258.2 L228.6 261.4 L223.4 264.2 L217.8 266.5 L212.1 268.4 L206.1 269.7 L200.0 270.5 L193.8 270.8 L187.6 270.5 L181.3 269.7 L175.1 268.3 L169.1 266.3 L163.1 263.9 L157.4 260.9 L151.9 257.3 L146.7 253.3 L141.8 248.8 L137.4 243.9 L133.3 238.5 L129.7 232.8 L126.6 226.7 L124.1 220.3 L122.0 213.7 L120.6 206.9 L119.8 200.0 L119.5 193.0 L119.9 185.9 L120.9 178.8 L122.6 171.8 L124.8 164.9 L127.7 158.3 L131.2 151.8 L135.2 145.6 L139.8 139.8 L144.9 134.4 L150.6 129.4 L156.6 124.9 L163.1 120.9 L170.0 117.5 L177.1 114.6 L184.6 112.4 L192.2 110.9 L200.0 110.0 L207.9 109.8 L215.8 110.3 L223.7 111.5 L231.5 113.4 L239.2 116.0 L246.6 119.2 L253.8 123.2 L260.6 127.7 L267.1 132.9 L273.1 138.7 L278.6 145.0 L283.6 151.8 L287.9 159.0 L291.7 166.6 L294.8 174.6 L297.2 182.9 L298.8 191.4 L299.8 200.0 L299.9 208.7 L299.3 217.5 L297.9 226.2 L295.8 234.9 L292.9 243.3 L289.2 251.5 L284.8 259.4 L279.7 266.9 L274.0 274.0 L267.6 280.6 L260.6 286.6 L253.1 292.0 L245.1 296.8 L236.7 300.9 L227.9 304.2 L218.8 306.8 L209.5 308.5 L200.0 309.5 L190.4 309.6 L180.8 308.9 L171.2 307.3 L161.8 304.9 L152.6 301.7 L143.6 297.6 L135.0 292.8 L126.8 287.2 L119.1 280.9 L112.0 273.9 L105.4 266.2 L99.5 258.0 L94.4 249.3 L90.0 240.0 L86.4 230.4 L83.6 220.5 L81.7 210.3 L80.8 200.0 L80.7 189.6 L81.5 179.1 L83.2 168.7 L85.9 158.5 L89.5 148.5 L93.9 138.8 L99.2 129.4 L105.3 120.6 L112.2 112.2 L119.9 104.5 L128.2 97.4 L137.1 91.1 L146.6 85.5 L156.6 80.8 L167.0 77.0 L177.8 74.0 L188.8 72.0 L200.0 71.0 L211.3 71.0 L222.6 71.9 L233.8 73.8 L244.9 76.7 L255.7 80.6 L266.1 85.5 L276.2 91.2 L285.7 97.9 L294.7 105.3 L303.0 113.6 L310.6 122.6 L317.3 132.2 L323.3 142.5 L328.3 153.3 L332.5 164.5 L335.6 176.1 L337.7 188.0 L338.8 200.0 L338.8 212.1 L337.7 224.3 L335.6 236.3 L332.4 248.2 L328.2 259.8 L323.0 271.0 L316.8 281.8 L309.6 292.0 L301.6 301.6 L292.7 310.4 L283.0 318.5 L272.6 325.8 L261.6 332.1 L250.0 337.5 L238.0 341.9 L225.6 345.2 L212.9 347.4 L200.0 348.5" fill="none" stroke="#f9f9f7" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="200" cy="348.5" r="20" fill="#2a4bcc"/>
-              <circle cx="200" cy="188" r="14" fill="#15181d"/>
-            </g>
-          </svg>
-          <div class="ex-body">
-            <span class="ex-n" aria-hidden="true">4</span>
-            <h4 class="ex-name">Work in rounds</h4>
-            <p class="label">Iteration</p>
-            <p>One exchange with AI is retrieval. Partnership happens in the <span class="nw">back-and-forth</span>, where students push back, redirect and build, and the work stays theirs.</p>
-          </div>
-        </li>
+  <section id="the-idea" class="sec" aria-labelledby="h-idea">
+    <div class="sec-in">
+      <div class="sec-head card" id="c-head1" data-c="head1"><span class="num" aria-hidden="true">01</span><p class="sec-name">The idea</p><h2 id="h-idea">What is cognitive partnership?</h2></div>
+      <p class="statement card" id="c-def" data-c="def">Cognitive partnership is sustained intellectual work with AI as a genuine partner in <span class="hl">a shared system of thinking.</span></p>
+      
+      <p class="para card" id="c-p1" data-c="p1">Thinking does not stay inside one head. It spreads across people, tools and settings. When a student and an AI work well together, <span class="g" data-g="exchange">the thinking happens in the exchange between them</span>.</p>
+      <p class="para card" id="c-p2" data-c="p2">Two things matter afterward. One is what the student can do with the AI. The other is what stays with the student when the AI is gone. That second thing is <span class="g hl" data-g="residue">cognitive residue</span>, and it is the outcome I care about most as a teacher.</p>
+      <p class="para card" id="c-p3" data-c="p3">Handing AI the parts that do not matter is fine, even smart. Handing it the understanding itself is <span class="nw">over-reliance</span>. The only way to tell the two apart is to <span class="g" data-g="away">take the AI away and see what the student can still do</span>.</p>
+      <h3 class="sub-head card" id="c-prh" data-c="prh">Four principles</h3>
+      <ol class="principles">
+        <li class="pr card" id="c-pr1" data-c="pr1"><span class="pr-n" aria-hidden="true">1</span><h4>Stay open about what AI is</h4><p class="label">Ontological openness</p><p class="pr-text">What AI is remains an open question, and <span class="g" data-g="argue">students argue about it</span> instead of settling it early. A student who sees AI as just a tool gives it little effort. This principle makes the other three possible.</p></li>
+        <li class="pr card" id="c-pr2" data-c="pr2"><span class="pr-n" aria-hidden="true">2</span><h4>Think further, not faster</h4><p class="label">Purpose</p><p class="pr-text">The goal is thinking that goes further than it would alone, not saved time. Students may hand over routine parts and <span class="g" data-g="own">keep the main argument in their own heads</span>.</p></li>
+        <li class="pr card" id="c-pr3" data-c="pr3"><span class="pr-n" aria-hidden="true">3</span><h4>Follow your curiosity</h4><p class="label">Engagement</p><p class="pr-text">Curiosity and imagination turn an odd answer into <span class="g" data-g="direction">a new direction</span>. Without them, the work shrinks to ask, receive, submit.</p></li>
+        <li class="pr card" id="c-pr4" data-c="pr4"><span class="pr-n" aria-hidden="true">4</span><h4>Work in rounds</h4><p class="label">Iteration</p><p class="pr-text">One exchange with AI is retrieval. Partnership happens in the <span class="g nw" data-g="rounds">back-and-forth</span>, where students push back, redirect and build, and the work stays theirs.</p></li>
       </ol>
     </div>
   </section>
 
-  <section id="courses" class="sec" style="--ground:var(--lilac)" aria-labelledby="h-courses">
-    <div class="spine"></div>
-    <div class="sec-body door-r">
-      <p class="room-sign"><span class="room-n">02</span> <span class="room-name">Courses</span></p>
-      <h2 id="h-courses">Where I teach it</h2>
-      <div class="grid2 courses-intro">
-        <p class="colB intro">I teach cognitive partnership in four courses at Nazarbayev University, from undergraduates to graduate students.</p>
-      </div>
-
-      <div class="courses">
-        <article class="course course-feature">
-          <div class="course-head">
-            <h3>Advanced Research Methods</h3>
-            <p class="meta">Master's students&nbsp;· <span class="nw">Spring 2026, again in Spring 2027</span></p>
-          </div>
-          <div class="course-body">
-            <h4 class="work-title">The Convergence exam</h4>
-            <p class="text">Claude and I built a personalized final exam for each of 15 students. Each student did fieldwork in the year 2100 with <span class="nw">non-human</span> participants: sperm whales, beavers, forest fungal networks or an alien species. Each story turned on the methods problem that student expected to find hardest in their own thesis, and each student's choices reappeared in two classmates' exams.</p>
-          </div>
-          <figure class="framed"><img src="assets/convergence-demo.png" width="1440" height="800" alt="The opening page of the Convergence exam demo"></figure>
-          <div class="after-plate">
-            <ul class="links">
-              <li><a href="https://doopsinthewind.github.io/fieldwork-convergence/demo/convergence_demo.html">Try the demo</a></li>
-              <li><a href="https://doi.org/10.35542/osf.io/4h2zc_v2">Read the preprint</a></li>
-              <li><a href="https://github.com/doopsinthewind/fieldwork-convergence">Exam materials on GitHub</a></li>
-            </ul>
-            <p class="license">Code under MIT, content under CC BY 4.0. Free to adapt.</p>
-          </div>
+  <section id="courses" class="sec" aria-labelledby="h-courses">
+    <div class="sec-in">
+      <div class="sec-head card" id="c-head2" data-c="head2"><span class="num" aria-hidden="true">02</span><p class="sec-name">Courses</p><h2 id="h-courses">Where I teach it</h2></div>
+      <p class="intro card" id="c-ci" data-c="ci">I teach cognitive partnership in four courses at Nazarbayev University, from undergraduates to graduate students.</p>
+      <article class="course feature card" id="c-c0" data-c="c0">
+        <figure class="shot"><span class="layer" aria-hidden="true"></span><img src="assets/convergence-demo.png" width="1440" height="800" alt="The opening page of the Convergence exam demo"></figure>
+        <div class="course-body">
+          <h3>Advanced Research Methods</h3>
+          <p class="meta">Master's students · <span class="nw">Spring 2026, again in Spring 2027</span></p>
+          <h4 class="work-title">The Convergence exam</h4>
+          <p class="text">Claude and I built a personalized final exam for each of 15 students. Each student did fieldwork in the year 2100 with <span class="nw">non-human</span> participants: sperm whales, beavers, forest fungal networks or an alien species. Each story turned on the methods problem that student expected to find hardest in their own thesis, and each student's choices reappeared in two classmates' exams.</p>
+          <ul class="links">
+            <li><a href="https://doopsinthewind.github.io/fieldwork-convergence/demo/convergence_demo.html">Try the demo</a></li>
+            <li><a href="https://doi.org/10.35542/osf.io/4h2zc_v2">Read the preprint</a></li>
+            <li><a href="https://github.com/doopsinthewind/fieldwork-convergence">Exam materials on GitHub</a></li>
+          </ul>
+          <p class="license">Code under MIT, content under CC BY 4.0. Free to adapt.</p>
+        </div>
+      </article>
+      <div class="trio">
+        <article class="course card" id="c-c1" data-c="c1">
+          <h3>Research Methods</h3>
+          <p class="meta">Undergraduates · <span class="nw">Fall 2026</span></p>
+          <p class="text">Students talk with AI about their research project every week and write a short summary of each conversation: where they pushed back and what changed. They build their research designs with AI and <span class="g" data-g="explain">must explain every choice in their own words</span>. They present their projects as web pages.</p>
+          <ul class="links"><li><a href="https://doopsinthewind.github.io/syllabus-research-methods.pdf">Syllabus (PDF)</a></li></ul>
         </article>
-
-        <article class="course">
-          <div class="course-head">
-            <h3>Research Methods</h3>
-            <p class="meta">Undergraduates&nbsp;· <span class="nw">Fall 2026</span></p>
-          </div>
-          <div class="course-body">
-            <p class="text">Students talk with AI about their research project every week and write a short summary of each conversation: where they pushed back and what changed. They build their research designs with AI and must explain every choice in their own words. They present their projects as web pages.</p>
-            <ul class="links">
-              <li><a href="https://doopsinthewind.github.io/syllabus-research-methods.pdf">Syllabus (PDF)</a></li>
-            </ul>
-          </div>
+        <article class="course card" id="c-c2" data-c="c2">
+          <h3>AI from a Social Science Perspective</h3>
+          <p class="meta"><span class="nw">Upper-level</span> undergraduates and MA students · <span class="nw">Fall 2026</span></p>
+          <p class="text">The course opens with three weeks on what AI is. Students write two <span class="nw">op-ed</span>s about AI, and some publish them in The Observatory, the course's outlet. Over the semester they build a public project with AI, then <span class="g" data-g="room">answer questions about it without AI in the room</span>.</p>
+          <ul class="links"><li><a href="https://course-hub.doopsinthewind.workers.dev/observatory/">The Observatory</a></li><li><a href="https://doopsinthewind.github.io/syllabus-ai-social-science.pdf">Syllabus (PDF)</a></li></ul>
         </article>
-
-        <article class="course">
-          <div class="course-head">
-            <h3>AI from a Social Science Perspective</h3>
-            <p class="meta"><span class="nw">Upper-level</span> undergraduates and MA students&nbsp;· <span class="nw">Fall 2026</span></p>
-          </div>
-          <div class="course-body">
-            <p class="text">The course opens with three weeks on what AI is. Students write two <span class="nw">op-ed</span>s about AI, and some publish them in The Observatory, the course's outlet. Over the semester they build a public project with AI, then answer questions about it without AI in the room.</p>
-            <ul class="links">
-              <li><a href="https://course-hub.doopsinthewind.workers.dev/observatory/">The Observatory</a></li>
-              <li><a href="https://doopsinthewind.github.io/syllabus-ai-social-science.pdf">Syllabus (PDF)</a></li>
-            </ul>
-          </div>
-        </article>
-
-        <article class="course">
-          <div class="course-head">
-            <h3>Qualitative Research Methods</h3>
-            <p class="meta">Graduate students&nbsp;· <span class="nw">Fall 2026</span></p>
-          </div>
-          <div class="course-body">
-            <p class="text">Students build three portfolios, in process tracing, grounded theory and reflexive thematic analysis. For each case they first analyze the material in class without AI, then analyze it again with AI, and compare the two readings. They also write an <span class="nw">op-ed</span>.</p>
-            <ul class="links">
-              <li><a href="https://doopsinthewind.github.io/syllabus-qualitative-methods.pdf">Syllabus (PDF)</a></li>
-            </ul>
-          </div>
+        <article class="course card" id="c-c3" data-c="c3">
+          <h3>Qualitative Research Methods</h3>
+          <p class="meta">Graduate students · <span class="nw">Fall 2026</span></p>
+          <p class="text">Students build three portfolios, in process tracing, grounded theory and reflexive thematic analysis. For each case they first analyze the material in class without AI, then analyze it again with AI, and <span class="g" data-g="readings">compare the two readings</span>. They also write an <span class="nw">op-ed</span>.</p>
+          <ul class="links"><li><a href="https://doopsinthewind.github.io/syllabus-qualitative-methods.pdf">Syllabus (PDF)</a></li></ul>
         </article>
       </div>
     </div>
   </section>
 
-  <section id="in-practice" class="sec" style="--ground:var(--sand)" aria-labelledby="h-practice">
-    <div class="spine"></div>
-    <div class="sec-body door-l">
-      <p class="room-sign"><span class="room-n">03</span> <span class="room-name">In practice</span></p>
-      <h2 id="h-practice">How each principle shows up in class</h2>
-      <div class="grid2 practice-intro">
-        <p class="colB intro">Every course opens in Week 1 with the same field guide to working with AI. Two rules hold for all AI work. Students must be able to explain every part of it, and they show how they made it in a process log.</p>
-      </div>
-
-      <table class="practice" role="table">
-        <thead role="rowgroup">
-          <tr role="row">
-            <td role="cell"></td>
-            <th scope="col" role="columnheader">Research Methods</th>
-            <th scope="col" role="columnheader">AI from a Social Science Perspective</th>
-            <th scope="col" role="columnheader">Qualitative Research Methods</th>
-          </tr>
+  <section id="in-practice" class="sec" aria-labelledby="h-practice">
+    <div class="sec-in">
+      <div class="sec-head card" id="c-head3" data-c="head3"><span class="num" aria-hidden="true">03</span><p class="sec-name">In practice</p><h2 id="h-practice">How each principle shows up in class</h2></div>
+      <p class="intro card" id="c-pi" data-c="pi">Every course opens in Week 1 with the same field guide to working with AI. Two rules hold for all AI work. Students must be able to explain every part of it, and they show how they made it in a process log.</p>
+      <div class="tablecard card" id="c-table" data-c="table">
+      <table class="practice">
+        <colgroup><col class="rowh"><col><col><col></colgroup>
+        <thead>
+          <tr><td></td><th scope="col">Research Methods</th><th scope="col">AI from a Social Science Perspective</th><th scope="col">Qualitative Research Methods</th></tr>
         </thead>
-        <tbody role="rowgroup">
-          <tr role="row">
-            <th scope="row" role="rowheader">Stay open about what AI is</th>
-            <td role="cell" data-label="Research Methods">Shown in class, not graded</td>
-            <td role="cell" data-label="AI from a Social Science Perspective">Three weeks on what AI is, and an <span class="nw">op-ed</span> arguing a position</td>
-            <td role="cell" data-label="Qualitative Research Methods">Debates on reflexivity, and an <span class="nw">op-ed</span></td>
+        <tbody>
+          <tr id="r1">
+            <th scope="row"><span class="hl">Stay open about what AI is</span></th>
+            <td data-label="Research Methods">Shown in class, not graded</td>
+            <td data-label="AI from a Social Science Perspective">Three weeks on what AI is, and an <span class="nw">op-ed</span> arguing a position</td>
+            <td data-label="Qualitative Research Methods">Debates on reflexivity, and an <span class="nw">op-ed</span></td>
           </tr>
-          <tr role="row">
-            <th scope="row" role="rowheader">Think further, not faster</th>
-            <td role="cell" data-label="Research Methods">Research designs built with AI and explained in the student's own words</td>
-            <td role="cell" data-label="AI from a Social Science Perspective">A semester project built with AI and defended without it</td>
-            <td role="cell" data-label="Qualitative Research Methods">Each case analyzed without AI first, then with AI</td>
+          <tr id="r2">
+            <th scope="row"><span class="hl">Think further, not faster</span></th>
+            <td data-label="Research Methods">Research designs built with AI and explained in the student's own words</td>
+            <td data-label="AI from a Social Science Perspective">A semester project built with AI and defended without it</td>
+            <td data-label="Qualitative Research Methods">Each case analyzed without AI first, then with AI</td>
           </tr>
-          <tr role="row">
-            <th scope="row" role="rowheader">Follow your curiosity</th>
-            <td role="cell" data-label="Research Methods">A research presentation built as a web page</td>
-            <td role="cell" data-label="AI from a Social Science Perspective">A public project site, graded partly on design</td>
-            <td role="cell" data-label="Qualitative Research Methods">A step in every portfolio where students question the AI</td>
+          <tr id="r3">
+            <th scope="row"><span class="hl">Follow your curiosity</span></th>
+            <td data-label="Research Methods">A research presentation built as a web page</td>
+            <td data-label="AI from a Social Science Perspective">A public project site, graded partly on design</td>
+            <td data-label="Qualitative Research Methods">A step in every portfolio where students question the AI</td>
           </tr>
-          <tr role="row">
-            <th scope="row" role="rowheader">Work in rounds</th>
-            <td role="cell" data-label="Research Methods">Eight weekly summaries of the rounds with AI</td>
-            <td role="cell" data-label="AI from a Social Science Perspective">Process logs for both <span class="nw">op-ed</span>s and the project</td>
-            <td role="cell" data-label="Qualitative Research Methods">A process log for each portfolio, graded on the rounds</td>
+          <tr id="r4">
+            <th scope="row"><span class="hl">Work in rounds</span></th>
+            <td data-label="Research Methods">Eight weekly summaries of the rounds with AI</td>
+            <td data-label="AI from a Social Science Perspective">Process logs for both <span class="nw">op-ed</span>s and the project</td>
+            <td data-label="Qualitative Research Methods">A process log for each portfolio, graded on the rounds</td>
           </tr>
-          <tr role="row" class="without">
-            <th scope="row" role="rowheader">Without AI</th>
-            <td role="cell" data-label="Research Methods">Short tasks in class without AI</td>
-            <td role="cell" data-label="AI from a Social Science Perspective">Checkpoints in class without AI</td>
-            <td role="cell" data-label="Qualitative Research Methods">Analysis in class without AI</td>
+          <tr class="without" id="r5">
+            <th scope="row">Without AI</th>
+            <td data-label="Research Methods">Short tasks in class without AI</td>
+            <td data-label="AI from a Social Science Perspective">Checkpoints in class without AI</td>
+            <td data-label="Qualitative Research Methods">Analysis in class without AI</td>
           </tr>
         </tbody>
       </table>
-
-      <div class="grid2 practice-note">
-        <p class="colB">In all three courses, students take a paper test without AI in Week 1 and Week 14.</p>
       </div>
+      <p class="note card" id="c-note" data-c="note">In all three courses, students take a paper test without AI in Week 1 and Week 14.</p>
     </div>
   </section>
 
-  <section id="the-study" class="sec" style="--ground:var(--sky)" aria-labelledby="h-study">
-    <div class="spine"></div>
-    <div class="sec-body door-r">
-      <p class="room-sign"><span class="room-n">04</span> <span class="room-name">The study</span></p>
-      <h2 id="h-study">The study</h2>
-      <p class="display">What kind of work with AI leaves students knowing more without AI?</p>
-      <div class="grid2 study-intro">
-        <p class="colB intro">In Fall 2026 Denis de Crombrugghe and I follow students in three of these courses through one semester. We measure the same things in Week 1 and again in Week 14, and compare each student with their own starting point.</p>
+  <section id="the-study" class="sec" aria-labelledby="h-study">
+    <div class="sec-in">
+      <div class="sec-head card" id="c-head4" data-c="head4"><span class="num" aria-hidden="true">04</span><p class="sec-name">The study</p><h2 id="h-study">The study</h2></div>
+      <p class="question card" id="c-q" data-c="q">What kind of work with AI leaves students knowing more without AI?</p>
+      <p class="intro card" id="c-si" data-c="si">In Fall 2026 Denis de Crombrugghe and I follow students in three of these courses through one semester. We measure the same things in Week 1 and again in Week 14, and <span class="g" data-g="start">compare each student with their own starting point</span>.</p>
+      
+      <h3 class="part-head card" id="c-mh" data-c="mh">What we measure</h3>
+      <div class="measures">
+        <div class="measure card" id="c-m1" data-c="m1"><h4>How students work with AI</h4><p>A survey of twelve questions on purpose, curiosity, rounds and openness about what AI is.</p></div>
+        <div class="measure card" id="c-m2" data-c="m2"><h4>What they know without AI</h4><p>A paper test in class, with no AI in the room. Sixteen questions each time, eight of them the same in both weeks. This is the outcome that matters most.</p></div>
+        <div class="measure card" id="c-m3" data-c="m3"><h4>How much they depend on AI</h4><p>Five questions on whether a student's own thinking has come to rely on AI.</p></div>
+        <div class="measure card" id="c-m4" data-c="m4"><h4>How well they understand AI</h4><p>A scale of 25 questions on AI literacy.</p></div>
       </div>
-
-      <div class="part">
-        <h3>What we measure</h3>
-        <div class="part-body">
-          <div class="item">
-            <h4>How students work with AI</h4>
-            <p>A survey of twelve questions on purpose, curiosity, rounds and openness about what AI is.</p>
-          </div>
-          <div class="item">
-            <h4>What they know without AI</h4>
-            <p>A paper test in class, with no AI in the room. Sixteen questions each time, eight of them the same in both weeks. This is the outcome that matters most.</p>
-          </div>
-          <div class="item">
-            <h4>How much they depend on AI</h4>
-            <p>Five questions on whether a student's own thinking has come to rely on AI.</p>
-          </div>
-          <div class="item">
-            <h4>How well they understand AI</h4>
-            <p>A scale of 25 questions on AI literacy.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="part">
+      <div class="bet-block card" id="c-bet" data-c="bet">
         <h3>Our bet</h3>
-        <div class="part-body">
-          <p class="bet">Students who work with AI more as partners will end the semester knowing more without AI, depending on it less and understanding it better. We fixed these three predictions before the semester began.</p>
-        </div>
+        <p class="bet">Students who work with AI more as partners will end the semester <span class="g" data-g="bet">knowing more without AI</span>, depending on it less and understanding it better. We fixed these three predictions before the semester began.</p>
       </div>
-
-      <div class="part">
-        <h3>How we keep it honest</h3>
-        <div class="part-body">
-          <div class="item">
-            <h4>Registered in advance</h4>
-            <p>We registered the questions, the measures and the full analysis plan on OSF before the first class.</p>
-            <ul class="links"><li><a href="https://osf.io/5kjmy">The preregistration</a></li></ul>
-          </div>
-          <div class="item">
-            <h4>Held by someone else</h4>
-            <p>Denis holds all consent forms and survey answers until grades are final, so I never know who takes part while I teach.</p>
-          </div>
-          <div class="item">
-            <h4>Scored twice</h4>
-            <p>Two raters score each open answer separately, against rubrics written before anyone read an answer.</p>
-          </div>
-        </div>
+      <h3 class="part-head card" id="c-hh" data-c="hh">How we keep it honest</h3>
+      <div class="honest">
+        <div class="item card" id="c-h1" data-c="h1"><h4>Registered in advance</h4><p>We registered the questions, the measures and the full analysis plan on OSF before the first class.</p><ul class="links"><li><a href="https://osf.io/5kjmy">The preregistration</a></li></ul></div>
+        <div class="item card" id="c-h2" data-c="h2"><h4>Held by someone else</h4><p><span class="g" data-g="held">Denis holds all consent forms and survey answers until grades are final</span>, so I never know who takes part while I teach.</p></div>
+        <div class="item card" id="c-h3" data-c="h3"><h4>Scored twice</h4><p>Two raters score each open answer separately, against rubrics written before anyone read an answer.</p></div>
       </div>
-
-      <div class="part">
-        <h3>Timeline</h3>
-        <ol class="part-body timeline">
-          <li><span class="when">August 2026</span><span class="what">Week 1 measures · done</span></li>
-          <li><span class="when">November 2026</span><span class="what">Week 14 measures</span></li>
-          <li><span class="when">December 2026</span><span class="what">Denis releases the anonymized data of students who consented</span></li>
-          <li><span class="when">January 2027</span><span class="what">Scoring and analysis</span></li>
-          <li><span class="when">2027</span><span class="what">Results</span></li>
-        </ol>
-        <p class="ethics">Approved by the Institutional Research Ethics Committee of Nazarbayev University. Taking part is voluntary and has no effect on grades.</p>
+      <h3 class="part-head card" id="c-th" data-c="th">Timeline</h3>
+      
+      <div class="tlcard card" id="c-tl" data-c="tl">
+      <ol class="timeline">
+        <li class="done" id="t1"><span class="when">August 2026</span><span class="what">Week 1 measures · done</span></li>
+        <li id="t2"><span class="when">November 2026</span><span class="what">Week 14 measures</span></li>
+        <li id="t3"><span class="when">December 2026</span><span class="what">Denis releases the anonymized data of students who consented</span></li>
+        <li id="t4"><span class="when">January 2027</span><span class="what">Scoring and analysis</span></li>
+        <li id="t5"><span class="when">2027</span><span class="what">Results</span></li>
+      </ol>
       </div>
+      <p class="ethics card" id="c-eth" data-c="eth">Approved by the Institutional Research Ethics Committee of Nazarbayev University. Taking part is voluntary and has no effect on grades.</p>
     </div>
   </section>
 
-  <section id="people" class="sec" style="--ground:var(--rose)" aria-labelledby="h-people">
-    <div class="spine"></div>
-    <div class="sec-body door-l">
-      <p class="room-sign"><span class="room-n">05</span> <span class="room-name">People</span></p>
-      <h2 id="h-people">Who we are</h2>
-      <div class="grid2 people-plate">
-        <figure class="colB framed"><img src="assets/dina-and-denis.jpg" width="1100" height="980" alt="Dina Pisareva and Denis de Crombrugghe"></figure>
-      </div>
-
-      <article class="person">
-        <div class="person-head">
-          <h3>Dina Pisareva</h3>
-          <p class="meta">Assistant Professor of Political Science, <span class="nw">Nazarbayev University</span>&nbsp;· <span class="nw">Principal investigator</span></p>
-        </div>
-        <div class="person-body">
-          <p class="text">Dina is an interdisciplinary social scientist. She studies how people make sense of power, gender and sexuality, and how crisis shelters for women work in Qazaqstan. She has worked with Claude on research and teaching since December 2025, and in 2026 she rebuilt her courses around cognitive partnership. She also leads <span class="nw">Choosing a Life</span>, a study of women's life histories across Qazaqstan.</p>
-          <ul class="links">
-            <li><a href="https://doopsinthewind.github.io/good-womans-life/">Choosing a Life</a></li>
-            <li><a href="https://doopsinthewind.github.io/">Dina's homepage</a></li>
-          </ul>
-        </div>
+  <section id="people" class="sec" aria-labelledby="h-people">
+    <div class="sec-in">
+      <div class="sec-head card" id="c-head5" data-c="head5"><span class="num" aria-hidden="true">05</span><p class="sec-name">People</p><h2 id="h-people">Who we are</h2></div>
+      <figure class="shot photo card" id="c-photo" data-c="photo"><span class="layer" aria-hidden="true"></span><img src="assets/dina-and-denis.jpg" width="1100" height="980" alt="Dina Pisareva and Denis de Crombrugghe"></figure>
+      <article class="person card" id="c-dina" data-c="dina">
+        <h3>Dina Pisareva</h3>
+        <p class="meta">Assistant Professor of Political Science, <span class="nw">Nazarbayev University</span> · <span class="nw">Principal investigator</span></p>
+        <p class="text">Dina is an interdisciplinary social scientist. She studies how people make sense of power, gender and sexuality, and how crisis shelters for women work in Qazaqstan. She has worked with Claude on research and teaching since December 2025, and in 2026 she <span class="g" data-g="rebuilt">rebuilt her courses around cognitive partnership</span>. She also leads <span class="nw">Choosing a Life</span>, a study of women's life histories across Qazaqstan.</p>
+        <ul class="links"><li><a href="https://doopsinthewind.github.io/good-womans-life/">Choosing a Life</a></li><li><a href="https://doopsinthewind.github.io/">Dina's homepage</a></li></ul>
       </article>
-
-      <article class="person">
-        <div class="person-head">
-          <h3>Denis de Crombrugghe</h3>
-          <p class="meta">Coventry University Kazakhstan&nbsp;· <span class="nw">Co-investigator</span></p>
-        </div>
-        <div class="person-body">
-          <p class="text">Denis built COMET III, a statistical model of Europe's economies used by the European Commission, then taught statistics and econometrics at Maastricht University until his retirement. He holds degrees from Leuven, Chicago and Maastricht. Other scholars have cited his research on state capacity and foreign investment more than a thousand times. For this study he reviewed the design, built the statistical side and holds the data during the semester.</p>
-        </div>
+      <article class="person card" id="c-denis" data-c="denis">
+        <h3>Denis de Crombrugghe</h3>
+        <p class="meta">Coventry University Kazakhstan · <span class="nw">Co-investigator</span></p>
+        <p class="text">Denis built COMET III, a statistical model of Europe's economies used by the European Commission, then taught statistics and econometrics at Maastricht University until his retirement. He holds degrees from Leuven, Chicago and Maastricht. Other scholars have cited his research on state capacity and foreign investment more than a thousand times. For this study he reviewed the design, built the statistical side and holds the data during the semester.</p>
       </article>
     </div>
   </section>
 
 </main>
 
-<footer class="colophon">
-  <div class="colophon-spine"></div>
-  <div class="colophon-body door-r">
+<footer class="foot">
+  <div class="foot-in">
     <ul class="links">
       <li><a href="https://doopsinthewind.github.io/">Dina's homepage</a></li>
       <li><a href="https://doi.org/10.35542/osf.io/4h2zc_v2">Preprint</a></li>
@@ -678,29 +441,136 @@ h4{font-weight:600;font-size:23px;line-height:1.3;letter-spacing:-.005em}
 
 <script>
 (function(){
-  var rooms = [];
-  document.querySelectorAll('.plan a').forEach(function(a){
-    var s = document.getElementById(a.getAttribute('href').slice(1));
-    if (s) rooms.push({a: a, s: s});
+  var root = document.documentElement;
+  var btns = [].slice.call(document.querySelectorAll('.switch button'));
+
+  /* Each note points from a phrase to the place on this page where the same idea is put to work. */
+  var NOTES = {/*QUOTES*/
+    answer:    ['#the-idea', "01 · The idea", "What is cognitive partnership?"],
+    exchange:  ['#c-pr4', "01 · The idea", "Work in rounds"],
+    residue:   ['#c-q', "04 · The study", "What kind of work with AI leaves students knowing more without AI?"],
+    away:      ['#c-note', "03 · In practice", "In all three courses, students take a paper test without AI in Week 1 and Week 14."],
+    argue:     ['#r1', "03 · In practice", "Three weeks on what AI is, and an op-ed arguing a position"],
+    own:       ['#c-c1', "02 · Courses", "They build their research designs with AI and must explain every choice in their own words."],
+    direction: ['#r3', "03 · In practice", "A step in every portfolio where students question the AI"],
+    rounds:    ['#r4', "03 · In practice", "Eight weekly summaries of the rounds with AI"],
+    explain:   ['#c-pi', "03 · In practice", "Students must be able to explain every part of it"],
+    room:      ['#r2', "03 · In practice", "A semester project built with AI and defended without it"],
+    readings:  ['#r2', "03 · In practice", "Each case analyzed without AI first, then with AI"],
+    start:     ['#c-tl', "04 · The study", "Week 14 measures"],
+    bet:       ['#c-m2', "04 · The study", "What they know without AI"],
+    held:      ['#t3', "04 · The study", "Denis releases the anonymized data of students who consented"],
+    rebuilt:   ['#courses', "02 · Courses", "Where I teach it"]
+  /*END*/};
+
+  var held = null;
+  var anchors = [].slice.call(document.querySelectorAll('.g[data-g]'));
+  var notes = anchors.map(function(g){
+    var d = NOTES[g.dataset.g]; if (!d) return null;
+    var a = document.createElement('a');
+    a.className = 'mnote'; a.href = d[0];
+    a.innerHTML = '<span class="to"></span><span class="q"></span>';
+    a.firstChild.textContent = d[1]; a.lastChild.textContent = d[2];
+    a._g = g; a._block = g.closest('p') || g.parentElement; a._sec = g.closest('.sec-in');
+    return a;
+  }).filter(Boolean);
+  /* the places the notes point to carry a mark in the left margin */
+  Object.keys(NOTES).forEach(function(k){
+    var t = document.querySelector(NOTES[k][0]); if (!t || t.tagName === 'SECTION') return;
+    if (t.tagName === 'TR') t = t.querySelector('th');
+    t.classList.add('hit');
   });
-  if (!rooms.length) return;
+  var svgs = [].slice.call(document.querySelectorAll('.sec-in')).map(function(s){
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'links-svg'); svg.setAttribute('aria-hidden', 'true');
+    s.appendChild(svg); s._svg = svg; return svg;
+  });
+
+  var wideMQ = window.matchMedia('(min-width:1101px)');
+  function place(){
+    var wide = wideMQ.matches, on = root.getAttribute('data-ai') === 'on';
+    notes.forEach(function(n){
+      if (wide) { n.className = 'mnote wide-mode'; if (n.parentNode !== n._sec) n._sec.appendChild(n); }
+      else { n.className = 'mnote inline'; n.style.top = ''; if (n.previousSibling !== n._block) n._block.after(n); }
+    });
+    svgs.forEach(function(s){ s.innerHTML = ''; });
+    if (!wide) return;
+    var last = new Map();
+    notes.forEach(function(n){
+      var sec = n._sec, sr = sec.getBoundingClientRect();
+      var rects = n._g.getClientRects(), ar = rects[rects.length - 1];
+      var y = ar.top - sr.top + ar.height * .62 - 12;
+      var prev = last.get(sec); if (prev != null) y = Math.max(y, prev + 22);
+      [].forEach.call(sec.querySelectorAll('.feature .shot, .tablecard'), function(ob){
+        var r = ob.getBoundingClientRect(); if (r.right <= sr.left + (sec.clientWidth * .6)) return;
+        var t = r.top - sr.top, b = r.bottom - sr.top, h = n.offsetHeight || 60;
+        if (y + h > t - 16 && y < b + 16) y = b + 24;
+      });
+      n.style.top = y + 'px';
+      last.set(sec, y + n.offsetHeight);
+    });
+    /* draw after the column reaches its final place */
+    var col = parseFloat(getComputedStyle(root).getPropertyValue('--col'));
+    var gap = parseFloat(getComputedStyle(root).getPropertyValue('--gap'));
+    notes.forEach(function(n){
+      var sec = n._sec, sr = sec.getBoundingClientRect();
+      var rects = n._g.getClientRects(), ar = rects[rects.length - 1];
+      var y1 = ar.top - sr.top + ar.height * .62, x1 = col + 18;
+      var x2 = col + gap - 2, y2 = parseFloat(n.style.top) + 12;
+      var mx = col + gap * .5;
+      var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', 'M' + x1 + ' ' + y1 + ' H' + mx + ' V' + y2 + ' H' + x2);
+      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', x1); c.setAttribute('cy', y1); c.setAttribute('r', 3.5);
+      g.appendChild(p); g.appendChild(c); sec._svg.appendChild(g);
+    });
+    /* one rail per section ties that section's notes into a single track */
+    svgs.forEach(function(svg){
+      var sec = svg.parentNode, ns = notes.filter(function(n){ return n._sec === sec; });
+      if (ns.length < 2) return;
+      var t = parseFloat(ns[0].style.top), last = ns[ns.length - 1], b = parseFloat(last.style.top) + last.offsetHeight;
+      var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', 'M' + (col + gap + 1) + ' ' + t + ' V' + b); p.setAttribute('class', 'rail');
+      g.appendChild(p); svg.appendChild(g);
+    });
+  }
+
+  function anchorEl(){
+    var barH = document.querySelector('.bar').getBoundingClientRect().bottom;
+    var els = document.querySelectorAll('.card, h2, .title');
+    for (var i = 0; i < els.length; i++) { var r = els[i].getBoundingClientRect(); if (r.bottom > barH + 4) return [els[i], r.top]; }
+    return null;
+  }
+  function set(state, save){
+    var keep = save ? anchorEl() : null; held = keep;
+    root.setAttribute('data-ai', state);
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.set === state ? 'true' : 'false'); });
+    if (save) { try { localStorage.setItem('cp-ai', state); } catch (e) {} }
+    if (keep) window.scrollBy(0, keep[0].getBoundingClientRect().top - keep[1]);
+  }
+  set(root.getAttribute('data-ai') === 'off' ? 'off' : 'on', false);
+  btns.forEach(function(b){ b.addEventListener('click', function(){ set(b.dataset.set, true); }); });
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function settle(){ place(); if (!reduce) setTimeout(function(){ place(); if (held) window.scrollBy(0, held[0].getBoundingClientRect().top - held[1]); }, 950); }
+  btns.forEach(function(b){ b.addEventListener('click', settle); });
+  window.addEventListener('resize', function(){ clearTimeout(settle._t); settle._t = setTimeout(place, 120); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  window.addEventListener('load', place);
+  place();
+
+  var links = [].slice.call(document.querySelectorAll('.menu a'));
+  var secs = links.map(function(a){ return document.getElementById(a.getAttribute('href').slice(1)); });
   var queued = false;
   function mark(){
     queued = false;
-    var line = window.innerHeight * 0.35, here = null;
-    rooms.forEach(function(r){
-      var b = r.s.getBoundingClientRect();
-      if (b.top <= line && b.bottom > line) here = r;
-    });
-    rooms.forEach(function(r){
-      var on = r === here;
-      r.a.classList.toggle('is-here', on);
-      if (on) r.a.setAttribute('aria-current', 'location'); else r.a.removeAttribute('aria-current');
-    });
+    var line = window.innerHeight * .3, here = -1;
+    secs.forEach(function(s, i){ var b = s.getBoundingClientRect(); if (b.top <= line && b.bottom > line) here = i; });
+    links.forEach(function(a, i){ if (i === here) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
   }
-  function queue(){ if (!queued) { queued = true; requestAnimationFrame(mark); } }
-  window.addEventListener('scroll', queue, {passive: true});
-  window.addEventListener('resize', queue);
+  window.addEventListener('scroll', function(){ if (!queued) { queued = true; requestAnimationFrame(mark); } }, {passive: true});
   mark();
 })();
 </script>
