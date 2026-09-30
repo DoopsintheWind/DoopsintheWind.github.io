@@ -349,6 +349,7 @@ main .sec{padding-top:112px}
 .sv-chart .n{font-family:var(--text);font-size:36px;fill:var(--ink)}
 .sv-chart .n0{font-family:var(--text);font-size:36px;fill:#8e897f}
 .sv-chart .pn{font-family:"Nothing You Could Do","Bradley Hand",cursive;font-size:20px;fill:#4f4c47}
+.sv-chart .pnn{font-size:38px}
 .sv-chart .bk{fill:var(--paper)}
 .sv-rec{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;align-items:center;margin-top:26px;padding-top:18px;border-top:1px solid var(--rule)}
 .sv-rec > p{font-style:italic;font-size:21px;line-height:1.35}
@@ -361,6 +362,19 @@ main .sec{padding-top:112px}
 .sv-counts{display:flex;gap:20px;margin-top:10px;font-family:var(--sans);font-size:16px;color:var(--ink-2)}
 .sv-counts b{font-family:var(--text);font-weight:400;font-size:24px;color:var(--ink);margin-right:3px}
 .survey figcaption{margin-top:18px;font-family:var(--sans);font-size:15px;line-height:1.5;color:var(--ink-2)}
+.survey{position:relative}
+.sv-doodle{display:none;position:absolute;top:30px;left:calc(100% + 12px);width:290px;height:auto;overflow:visible;pointer-events:none;transform:rotate(2deg)}
+.sv-doodle .k,.sv-doodle .o,.sv-doodle .p{fill:none;stroke:#1f1f1f;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.sv-doodle .p{fill:var(--paper)}
+.sv-doodle .o{stroke:var(--blue)}
+.sv-doodle .kf{fill:#1f1f1f}
+.sv-doodle .of{fill:var(--blue)}
+.sv-doodle text{font-family:"Nothing You Could Do","Bradley Hand",cursive;fill:#1f1f1f}
+.sv-doodle .sd-t{font-size:24px}
+.sv-doodle .sd-s{font-size:17px;fill:#4f4c47}
+@media (min-width:1257px){ [data-ai="on"] .sv-doodle{display:block} }
+@media (min-width:1440px){ [data-ai="off"] .sv-doodle{display:block} }
+@media print{ .sv-doodle{display:none!important} }
 @media (max-width:600px){
   .sv-key{font-size:14px;gap:6px 16px}
   .sv-chart .l,.sv-chart .lb{font-size:12.5px}
@@ -449,7 +463,7 @@ main .sec{padding-top:112px}
           <p>In my classes, students submit their AI process logs with their assignments, and an AI model checks each log for the degree of genuine articulation and intellectual investment. Assessing students' output alone will tell us nothing today about the quality of their learning. To understand whether a student actually learned something, we need to look into the black box of how the student and the AI worked together. AI process logs are one way in. Given the personal nature of AI chats, data privacy is built into the practice. Students receive specific instructions to use only pseudonyms in their <span class="nw">study-related</span> working chats, so that no personal information enters the logs they submit.</p>
         </div></li>
         <li class="pr card" id="c-pr4" data-c="pr4"><span class="pr-n" aria-hidden="true">4</span><div class="pr-body">
-          <p>One essential thing stands behind all three dispositions: <span class="g" data-g="att">the attitude toward AI itself</span>, which is a polarizing issue in academia today. Students can and should develop their own attitude toward AI during their courses. For that they need <span class="nw">up-to-date</span> information about AI as a technology and as a phenomenon, in its full complexity, from the philosophy of consciousness to the environmental, economic, and intellectual property costs of AI adoption. That is why I believe all <span class="nw">AI-integrated</span> courses should <span class="g" data-g="week1">spend their first week discussing the current state of understanding of AI</span> and various debates surrounding AI implementation. In my classes, I ask students to get closely acquainted with <a href="https://course-hub.doopsinthewind.workers.dev/coworking/"><em>A Field Guide to a Phenomenon in Motion</em></a>, which exposes them to the latest AI developments and discussions.</p>
+          <p>One essential thing stands behind all three dispositions: <span class="g" data-g="att">the attitude toward AI itself</span>, which is a polarizing issue in academia today. Students can and should develop their own attitude toward AI during their courses. For that they need <span class="nw">up-to-date</span> information about AI as a technology and as a phenomenon, in its full complexity, from the philosophy of consciousness to the environmental, economic, and intellectual property costs of AI adoption. That is why I believe all <span class="nw">AI-integrated</span> courses should <span class="g" data-g="week1">spend their first week discussing the current state of understanding of AI</span> and various debates surrounding AI implementation. In my classes, I ask students to get closely acquainted with <a href="https://course-hub.doopsinthewind.workers.dev/coworking/" target="_blank" rel="noopener"><em>A Field Guide to a Phenomenon in Motion</em></a>, which exposes them to the latest AI developments and discussions.</p>
         </div></li>
       </ol>
     </div>
@@ -468,9 +482,9 @@ main .sec{padding-top:112px}
           <h4 class="work-title">The Convergence exam</h4>
           <p class="text">Claude and I built a personalized final exam for each of 15 students who had to do fieldwork in the year 2100 with <span class="nw">non-human</span> participants: sperm whales, beavers, forest fungal networks or an alien species. Each story introduced the methods problem that student expected to find hardest in their own thesis work.</p>
           <ul class="links">
-            <li><a href="https://doopsinthewind.github.io/fieldwork-convergence/demo/convergence_demo.html">Try the demo</a></li>
-            <li><a href="https://doi.org/10.35542/osf.io/4h2zc_v2">Read the preprint</a></li>
-            <li><a href="https://github.com/doopsinthewind/fieldwork-convergence">Exam materials on GitHub</a></li>
+            <li><a href="https://doopsinthewind.github.io/fieldwork-convergence/demo/convergence_demo.html" target="_blank" rel="noopener">Try the demo</a></li>
+            <li><a href="https://doi.org/10.35542/osf.io/4h2zc_v2" target="_blank" rel="noopener">Read the preprint</a></li>
+            <li><a href="https://github.com/doopsinthewind/fieldwork-convergence" target="_blank" rel="noopener">Exam materials on GitHub</a></li>
           </ul>
           <p class="license">Code under MIT, content under CC BY 4.0. Free to adapt.</p>
         </div>
@@ -480,19 +494,19 @@ main .sec{padding-top:112px}
           <h3>Political Science Research Methods</h3>
           <p class="meta">Undergraduates · <span class="nw">Fall 2026</span></p>
           <p class="text">In this compulsory course, students are tasked with discussing the course's topics with their AI every week and submitting an <span class="nw">AI-generated</span> summary of each conversation: what they learned that week, <span class="g" data-g="explain">where they argued with AI and what changed in their understanding</span>. They also build and present their research designs with AI on GitHub.</p>
-          <ul class="links"><li><a href="https://doopsinthewind.github.io/syllabus-research-methods.pdf">Syllabus (PDF)</a></li></ul>
+          <ul class="links"><li><a href="https://doopsinthewind.github.io/syllabus-research-methods.pdf" target="_blank" rel="noopener">Syllabus (PDF)</a></li></ul>
         </article>
         <article class="course card" id="c-c2" data-c="c2">
           <h3>AI from a Social Science Perspective</h3>
           <p class="meta"><span class="nw">Upper-level</span> undergraduates and MA students · <span class="nw">Fall 2026</span></p>
           <p class="text">This is an <span class="nw">all-encompassing</span> course on AI where students write two <span class="nw">op-eds</span> and publish them in The Observatory, the course's outlet. Over the semester they also <span class="g" data-g="project">build a public project with AI</span> about how AI can help solve Kazakhstan's social problems.</p>
-          <ul class="links"><li><a href="https://course-hub.doopsinthewind.workers.dev/observatory/">The Observatory</a></li><li><a href="https://doopsinthewind.github.io/syllabus-ai-social-science.pdf">Syllabus (PDF)</a></li></ul>
+          <ul class="links"><li><a href="https://course-hub.doopsinthewind.workers.dev/observatory/" target="_blank" rel="noopener">The Observatory</a></li><li><a href="https://doopsinthewind.github.io/syllabus-ai-social-science.pdf" target="_blank" rel="noopener">Syllabus (PDF)</a></li></ul>
         </article>
         <article class="course card" id="c-c3" data-c="c3">
           <h3>Qualitative Research Methods</h3>
           <p class="meta">Graduate students · <span class="nw">Fall 2026</span></p>
           <p class="text">This is a <span class="nw">hands-on</span> course in which students complete three qualitative analysis portfolios, using process tracing, grounded theory and reflexive thematic analysis. For each case they use synthetic data to first analyze the material themselves, then let AI do the analysis, and finally <span class="g" data-g="readings">compare and discuss both interpretations</span>.</p>
-          <ul class="links"><li><a href="https://doopsinthewind.github.io/syllabus-qualitative-methods.pdf">Syllabus (PDF)</a></li></ul>
+          <ul class="links"><li><a href="https://doopsinthewind.github.io/syllabus-qualitative-methods.pdf" target="_blank" rel="noopener">Syllabus (PDF)</a></li></ul>
         </article>
       </div>
     </div>
@@ -502,7 +516,7 @@ main .sec{padding-top:112px}
   <div class="doodles" aria-hidden="true"><svg class="dd ai R" style="--y:6%;--r:-4deg" viewBox="0 0 210 190" focusable="false"><path class="p" d="M115.0,108.0 L114.8,111.8 L123.3,115.8 L121.1,124.0 L111.7,123.2 L109.1,128.0 L106.9,131.1 L111.9,139.1 L105.7,144.7 L98.2,139.0 L93.4,141.7 L89.8,143.1 L89.7,152.5 L81.4,153.9 L78.2,145.0 L72.7,144.6 L69.0,143.9 L63.8,151.7 L56.1,148.4 L58.2,139.2 L53.8,136.0 L51.0,133.3 L42.4,137.1 L37.7,130.2 L44.4,123.6 L42.5,118.4 L41.6,114.7 L32.3,113.2 L32.1,104.8 L41.3,102.9 L42.5,97.6 L43.8,94.0 L36.7,87.7 L41.1,80.5 L49.9,83.9 L53.8,80.0 L56.8,77.7 L54.2,68.6 L61.8,64.9 L67.4,72.6 L72.7,71.4 L76.5,71.0 L79.3,62.0 L87.6,63.0 L88.2,72.4 L93.4,74.3 L96.7,76.1 L104.0,70.0 L110.4,75.4 L105.8,83.6 L109.1,88.0 L111.0,91.3 L120.4,90.1 L122.9,98.1 L114.6,102.5 Z"/><circle class="k" cx="78" cy="108" r="13"/><path class="p o" d="M159.9,56.5 L158.9,59.7 L165.1,65.4 L160.6,72.0 L153.0,68.4 L149.2,71.4 L146.2,73.0 L146.6,81.4 L138.7,82.9 L135.9,75.0 L131.0,74.4 L127.8,73.4 L122.1,79.6 L115.5,75.1 L119.1,67.5 L116.1,63.7 L114.5,60.7 L106.1,61.1 L104.6,53.2 L112.5,50.4 L113.1,45.5 L114.1,42.3 L107.9,36.6 L112.4,30.0 L120.0,33.6 L123.8,30.6 L126.8,29.0 L126.4,20.6 L134.3,19.1 L137.1,27.0 L142.0,27.6 L145.2,28.6 L150.9,22.4 L157.5,26.9 L153.9,34.5 L156.9,38.3 L158.5,41.3 L166.9,40.9 L168.4,48.8 L160.5,51.6 Z"/><circle class="o" cx="136.5" cy="51" r="9"/><path class="k" d="M20,168 C34,184 60,190 80,186"/><path class="k" d="M72,180 L80,186 L72,192"/><path class="o" d="M180,30 C188,44 188,62 180,76"/><path class="o" d="M186,70 L180,76 L174,69"/></svg><svg class="dd ai L" style="--y:38%;--r:3deg" viewBox="0 0 210 190" focusable="false"><path class="d" d="M168,150 C214,118 206,44 150,30 C96,18 42,36 30,84"/><path class="k" d="M21,72 L30,87 L42,75"/><path class="p" d="M104,92 C84,98 62,120 48,142 C43,151 52,159 60,152 C76,136 92,122 106,118 C122,122 142,134 158,150 C166,157 175,149 170,140 C156,118 128,96 104,92 Z" style="fill:var(--o)"/><path class="kt" d="M62,172 L54,182 M80,176 L76,186 M98,178 L98,188"/></svg><svg class="dd ai R" style="--y:72%;--r:-5deg" viewBox="0 0 210 190" focusable="false"><path class="k" d="M62,96 L62,128 C62,142 144,142 144,128 L144,96"/><path class="p" d="M18,74 L103,42 L188,74 L103,106 Z"/><circle class="kf" cx="103" cy="74" r="4"/><path class="o" d="M103,74 L154,86 L154,124"/><path class="of" d="M148,122 L160,122 L164,150 L144,150 Z"/><path class="kt" d="M36,150 C50,160 70,166 88,164 M24,128 C30,138 40,146 52,150"/></svg><svg class="dd solo R" style="--y:6%;--r:3deg" viewBox="0 0 200 220" focusable="false"><g transform="rotate(-5 100 110)"><path class="p" d="M40,18 L144,18 L162,36 L162,196 L40,196 Z"/><path class="k" d="M144,18 L144,36 L162,36"/><path class="kt" d="M54,36 L84,36 M54,44 L124,44"/><rect class="k" x="54" y="62" width="12" height="12" rx="1"/><path class="k" d="M56,68 L60,72 L68,58"/><path class="kt" d="M76,68 L146,68"/><rect class="k" x="54" y="92" width="12" height="12" rx="1"/><path class="kt" d="M76,98 L136,98"/><rect class="k" x="54" y="122" width="12" height="12" rx="1"/><path class="k" d="M56,128 L60,132 L68,118"/><path class="kt" d="M76,128 L150,128"/><path class="kt" d="M54,154 L148,154 M54,166 L130,166 M54,178 L142,178"/></g><g transform="rotate(-48 150 170)"><path class="p" d="M112,162 L182,162 L182,176 L112,176 Z"/><path class="p" d="M182,162 L200,169 L182,176 Z"/><path class="kf" d="M194,167 L201,169 L194,171 Z"/><path class="p" d="M104,162 L112,162 L112,176 L104,176 C100,176 100,162 104,162 Z"/></g></svg><svg class="dd solo L" style="--y:38%;--r:-3deg" viewBox="0 0 230 170" focusable="false"><path class="kf" d="M48,136 C56,128 70,130 72,140 C74,150 62,156 54,152 C46,150 42,142 48,136 Z"/><circle class="kf" cx="80" cy="152" r="3"/><circle class="kf" cx="38" cy="150" r="2.2"/><path class="k" d="M70,124 C80,112 92,120 86,128 C80,136 72,128 82,118 C92,108 106,116 112,108"/><g transform="rotate(-32 130 90)"><path class="p" d="M70,78 L150,78 L150,102 L70,102 C62,102 58,96 58,90 C58,84 62,78 70,78 Z"/><path class="k" d="M84,78 L84,70 L124,70 L128,78"/><path class="p" d="M150,81 L172,81 L172,99 L150,99 Z"/><path class="p" d="M172,82 L208,90 L172,98 Z"/><path class="k" d="M186,90 L208,90"/><circle class="kf" cx="184" cy="90" r="2"/></g></svg><svg class="dd solo R" style="--y:72%;--r:-4deg" viewBox="0 0 230 170" focusable="false"><rect class="p" x="12" y="36" width="56" height="84" rx="10"/><circle class="k" cx="40" cy="78" r="20"/><circle class="kf" cx="33" cy="78" r="3.4"/><circle class="kf" cx="47" cy="78" r="3.4"/><path class="k" d="M112,70 L92,70 M112,88 L92,88" style="stroke-width:5"/><path class="p" d="M112,58 L140,58 C150,58 156,66 156,79 C156,92 150,100 140,100 L112,100 Z"/><path class="kt" d="M120,58 L120,100"/><path class="k" d="M156,79 C178,79 184,104 168,114 C152,124 156,146 178,146 C196,146 202,128 218,124"/><path class="kt" d="M76,56 L84,62 M74,79 L84,79 M76,102 L84,96"/></svg></div>
     <div class="sec-in">
       <div class="sec-head card" id="c-head3" data-c="head3"><span class="num" aria-hidden="true">03</span><p class="sec-name">In practice</p><h2 id="h-practice">How each principle shows up in class</h2></div>
-      <p class="intro card" id="c-pi" data-c="pi">Every course opens in Week 1 with the same <a href="https://course-hub.doopsinthewind.workers.dev/coworking/">field guide to working with AI</a>.</p>
+      <p class="intro card" id="c-pi" data-c="pi">Every course opens in Week 1 with the same <a href="https://course-hub.doopsinthewind.workers.dev/coworking/" target="_blank" rel="noopener">field guide to working with AI</a>.</p>
       <div class="tablecard card" id="c-table" data-c="table">
       <table class="practice">
         <colgroup><col class="rowh"><col><col><col></colgroup>
@@ -559,7 +573,7 @@ main .sec{padding-top:112px}
         <h3>Our bet</h3>
         <p class="bet">We expect that students who learn to primarily work with AI as a thinking (cognitive) partner end up (a) knowing more on tasks done without AI, and (b) depending on AI less.</p>
       </div>
-      <div class="item reg card" id="c-reg" data-c="reg"><h4>Registered in advance</h4><p>We registered the questions, the measures and the full analysis plan on OSF.</p><ul class="links"><li><a href="https://osf.io/5kjmy">The preregistration</a></li></ul></div>
+      <div class="item reg card" id="c-reg" data-c="reg"><h4>Registered in advance</h4><p>We registered the questions, the measures and the full analysis plan on OSF.</p><ul class="links"><li><a href="https://osf.io/5kjmy" target="_blank" rel="noopener">The preregistration</a></li></ul></div>
       <h3 class="part-head card" id="c-th" data-c="th">Timeline</h3>
 
       <div class="tlcard card" id="c-tl" data-c="tl">
@@ -572,10 +586,11 @@ main .sec{padding-top:112px}
       <h3 class="part-head card" id="c-fh" data-c="fh">First feedback from students</h3>
       <p class="para card" id="c-f" data-c="f">In the last week of September 2026, students in the three courses answered an anonymous course survey, and 27 of them allowed their answers to be used. Nineteen of the 27 now use AI mostly to test and argue with their ideas, up from four before the course. Fifteen say their own thinking and writing without AI has grown stronger, and none say it has grown weaker.</p>
       <figure class="survey card" id="c-sv" data-c="sv">
-        <div class="sv-key" aria-hidden="true"><span><i class="k-or"></i>one student who now mostly tests and argues</span><span><i class="k-gy"></i>one student, other uses</span><span><svg width="30" height="8" viewBox="0 0 30 8"><path d="M1 4 C9 2 19 6 29 4" stroke="#4f4c47" stroke-width="2" fill="none" filter="url(#graphite)"/></svg>without AI</span></div>
+        <div class="sv-key" aria-hidden="true"><span><i class="k-or"></i>one student who now mostly tests and argues</span><span><i class="k-gy"></i>one student, other uses</span><span><svg width="30" height="8" viewBox="0 0 30 8"><path d="M1 4 C9 2 19 6 29 4" stroke="#4f4c47" stroke-width="2" fill="none"/></svg>without AI</span></div>
+        <svg class="sv-doodle" viewBox="-40 0 270 250" aria-hidden="true" focusable="false"><g filter="url(#pencil)"><path class="o" d="M20,46 C2,42 -16,52 -32,70"/><path class="o" d="M-21,66 L-32,70 L-30,58"/><path class="p" d="M26,16 L212,10 L216,96 L30,100 Z"/><path class="of" d="M206,-2 C208.2,5.8 208.2,5.8 216,8 C208.2,10.2 208.2,10.2 206,18 C203.8,10.2 203.8,10.2 196,8 C203.8,5.8 203.8,5.8 206,-2 Z"/><path class="k" d="M28,222 L10,160 L32,100"/><path class="k" d="M170,222 L192,160 L210,98"/><g transform="translate(0,58)"><path class="k" d="M24,176 C26,152 40,142 56,142 C72,142 86,152 88,176"/><circle class="p" cx="56" cy="108" r="30"/><path class="k" d="M40,82 C44,70 58,68 64,78 C66,70 76,70 78,78"/><circle class="kf" cx="68" cy="104" r="3"/><path class="k" d="M62,120 C66,124 72,124 76,119"/><path class="k" d="M118,176 C120,156 130,146 146,146 C162,146 172,156 174,176"/><rect class="p" x="120" y="82" width="52" height="50" rx="10"/><path class="k" d="M146,82 L146,64"/><circle class="of" cx="146" cy="58" r="6"/><circle class="kf" cx="134" cy="104" r="3.4"/><circle class="kf" cx="150" cy="104" r="3.4"/><path class="k" d="M132,119 L150,119"/><path class="k" d="M114,100 L120,100 M172,100 L178,100"/></g></g><text class="sd-t" x="121" y="54" text-anchor="middle">first responses</text><text class="sd-s" x="121" y="84" text-anchor="middle">Sep 2026</text></svg>
         <svg class="sv-chart" role="img" aria-label="One line per student, from their main use of AI before the course, to their main use now, to their own rating of their thinking and writing without AI."></svg>
         <div class="sv-rec"><p>Would you recommend this way of <span class="nw">co-working</span> with AI to other NU courses?</p><div><div class="sv-marks" aria-hidden="true"></div><p class="sv-counts"><span><b>19</b> yes</span><span><b>7</b> not sure</span><span><b>1</b> no</span></p></div></div>
-        <figcaption>Anonymous course survey, 28 to 30 September 2026, in Political Science Research Methods, AI from a Social Science Perspective and Qualitative Research Methods. Of the 32 students who answered, 27 allowed their answers to be used, and the chart shows only theirs.</figcaption>
+        <figcaption>Anonymous course survey, 28 to 30 September 2026, in Political Science Research Methods, AI from a Social Science Perspective and Qualitative Research Methods. Of the 32 students who answered, 27 allowed their answers to be used.</figcaption>
       </figure>
     </div>
   </section>
@@ -589,7 +604,7 @@ main .sec{padding-top:112px}
         <h3>Dina Pisareva</h3>
         <p class="meta">Assistant Professor of Political Science, <span class="nw">Nazarbayev University</span> · <span class="nw">Principal investigator</span></p>
         <p class="text">Dina is an interdisciplinary social scientist. She is interested in questions that matter to her, whether it's how people make sense of sexuality, what type of communication helps people trust vaccines, how crisis shelters operate, or how to design a mode of working with AI in higher education to promote intellectual augmentation. She has worked with Claude on research and teaching since December 2025, and in 2026 she <span class="g" data-g="rebuilt">rebuilt her courses around cognitive partnership</span>. She also leads <span class="life">Choosing a Life</span>, a study of women's life histories across Qazaqstan.</p>
-        <ul class="links"><li><a href="https://doopsinthewind.github.io/good-womans-life/">Choosing a Life</a></li><li><a href="https://doopsinthewind.github.io/">Dina's homepage</a></li></ul>
+        <ul class="links"><li><a href="https://doopsinthewind.github.io/good-womans-life/" target="_blank" rel="noopener">Choosing a Life</a></li><li><a href="https://doopsinthewind.github.io/" target="_blank" rel="noopener">Dina's homepage</a></li></ul>
       </article>
       <article class="person card" id="c-denis" data-c="denis">
         <h3>Denis de Crombrugghe</h3>
@@ -604,10 +619,10 @@ main .sec{padding-top:112px}
 <footer class="foot">
   <div class="foot-in">
     <ul class="links">
-      <li><a href="https://doopsinthewind.github.io/">Dina's homepage</a></li>
-      <li><a href="https://doi.org/10.35542/osf.io/4h2zc_v2">Preprint</a></li>
-      <li><a href="https://doopsinthewind.github.io/fieldwork-convergence/demo/convergence_demo.html">Exam demo</a></li>
-      <li><a href="https://osf.io/5kjmy">Preregistration</a></li>
+      <li><a href="https://doopsinthewind.github.io/" target="_blank" rel="noopener">Dina's homepage</a></li>
+      <li><a href="https://doi.org/10.35542/osf.io/4h2zc_v2" target="_blank" rel="noopener">Preprint</a></li>
+      <li><a href="https://doopsinthewind.github.io/fieldwork-convergence/demo/convergence_demo.html" target="_blank" rel="noopener">Exam demo</a></li>
+      <li><a href="https://osf.io/5kjmy" target="_blank" rel="noopener">Preregistration</a></li>
     </ul>
     <p class="copy">© 2026 Dina Pisareva. Built with Claude.</p>
   </div>
@@ -762,6 +777,7 @@ main .sec{padding-top:112px}
   function el(t, a, p, x){ var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); if (x != null) e.textContent = x; if (p) p.appendChild(e); return e; }
   function lines(p, x, y, arr, cls, lh){ var t = el('text', {x: x, y: y, 'class': cls}, p); arr.forEach(function(s, i){ el('tspan', {x: x, dy: i ? lh : 0}, t, s); }); return t; }
   function count(f){ return R.filter(f).length; }
+  function noteN(y, n, color, first, rest){ var t = el('text', {x: 0, y: y, 'class': 'pn'}, svg); el('tspan', {'class': 'pnn', fill: color}, t, String(n)); el('tspan', {}, t, ' ' + first); rest.forEach(function(s){ el('tspan', {x: 0, dy: 21}, t, s); }); return t; }
   var moved = count(function(r){ return r.n === 3 && r.a !== 3; });
   var stronger = count(function(r){ return r.w >= 2; }), weaker = count(function(r){ return r.w === 0; });
   var drawn = 0;
@@ -798,10 +814,10 @@ main .sec{padding-top:112px}
     el('line', {x1: LW, y1: top, x2: W, y2: top, stroke: '#141414', 'stroke-width': .8}, svg);
 
     var gA = el('g', {fill: 'none', 'stroke-linecap': 'round'}, svg);
-    var gB = el('g', {fill: 'none', 'stroke-linecap': 'round', filter: 'url(#graphite)'}, svg);
+    var gB = el('g', {fill: 'none', 'stroke-linecap': 'round'}, svg);
     function curve(x1, y1, x2, y2){ var k = (y2 - y1) * .52; return 'M' + x1 + ' ' + y1 + ' C' + x1 + ' ' + (y1 + k) + ' ' + x2 + ' ' + (y2 - k) + ' ' + x2 + ' ' + y2; }
     R.slice().sort(function(p, q){ return (p.n === 3) - (q.n === 3); }).forEach(function(r){
-      el('path', {d: curve(S1.pos[r.i], Y[0] + 3, S2.pos[r.i], Y[1] - 3), stroke: r.n === 3 ? '#ff4a1c' : '#b9b3a8', 'stroke-width': nar ? (r.n === 3 ? 1.3 : 1.1) : (r.n === 3 ? 1.8 : 1.5)}, gA);
+      el('path', {d: curve(S1.pos[r.i], Y[0] + 3, S2.pos[r.i], Y[1] - 3), stroke: r.n === 3 ? '#ff4a1c' : '#b9b3a8', 'stroke-width': nar ? (r.n === 3 ? 1.3 : 1.1) : (r.n === 3 ? 2 : 1.7)}, gA);
     });
     R.forEach(function(r){ el('path', {d: curve(S2.pos[r.i], Y[1] + 3, S3.pos[r.i], Y[2] - 3), stroke: '#4f4c47', 'stroke-width': nar ? 1.3 : 1.8}, gB); });
 
@@ -833,8 +849,8 @@ main .sec{padding-top:112px}
     } else {
       var stn = [['Before', ['the course, I mostly', 'used AI in my studies']], ['Now', ['I mostly use AI', 'in my studies']], ['Without AI', ['my own thinking and', 'writing, compared with', 'the start of the semester']]];
       stn.forEach(function(s, k){ el('text', {x: 0, y: Y[k] + 8, 'class': 'st'}, svg, s[0]); lines(svg, 0, Y[k] + 30, s[1], 'ss', 18); });
-      lines(svg, 0, Y[0] + 112, [moved + ' moved to', 'testing and', 'arguing'], 'pn', 21);
-      lines(svg, 0, Y[1] + 118, [stronger + ' stronger,', weaker ? weaker + ' weaker' : 'none weaker'], 'pn', 21);
+      noteN(Y[0] + 112, moved, '#ff4a1c', 'moved to', ['testing and', 'arguing']);
+      noteN(Y[1] + 118, stronger, '#2d8a47', 'stronger,', [weaker ? weaker + ' weaker' : 'none weaker']);
     }
   }
   draw();
