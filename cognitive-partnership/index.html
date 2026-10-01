@@ -387,6 +387,27 @@ main .sec{padding-top:112px}
   .sv-counts{font-size:14px} .sv-counts b{font-size:21px}
   .survey figcaption{font-size:14px}
 }
+/* a note under its paragraph: it stays close to that paragraph, and the next block keeps its gap */
+.mnote.inline + .para,.pr-body .mnote.inline + p{margin-top:18px}
+.intro:has(+ .mnote.inline){margin-bottom:0}
+/* phones: wrapping, the last table block, the recommend marks on one row */
+@media (max-width:760px){
+  .para .nw,.pr-body .nw,.text .nw{white-space:normal}
+  .lede,.para,.pr-body p,.intro,.text,.item p,.bet,.sv-rec > p,.survey figcaption{text-wrap:pretty}
+  .sec-head h2,.statement,.question,.course h3,.person h3{text-wrap:balance}
+  [data-ai="off"] .byline{justify-content:center}
+  [data-ai="off"] .sig{align-items:center}
+  .practice tr.without > *{border-top:0}
+  .practice tr.without th{padding-top:0}
+  .foot{margin-top:88px}
+}
+@media (max-width:600px){
+  .sv-chart .l,.sv-chart .lb{font-size:13.5px}
+  .sv-chart .ss{font-size:13px}
+  .sv-marks{flex-wrap:nowrap;gap:3px}
+  .sv-marks i{flex:1 1 0;width:auto;height:auto;max-width:12px;aspect-ratio:1}
+  .sv-marks .no::before,.sv-marks .no::after{left:calc(50% - 1px);top:-10%;height:120%}
+}
 </style>
 </head>
 <body>
