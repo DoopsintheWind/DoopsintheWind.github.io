@@ -397,10 +397,11 @@ html[data-lang="kk"] .t-hand--top,html[data-lang="ru"] .t-hand--top{font-size:12
   .wall__tulips{flex-direction:column;align-items:flex-start;order:9}
   .entry__tulips{height:auto;width:60%;max-height:none}
   .fromroad--block{height:auto}
+  /* phones: no section numbers in the bar, the three languages share its full width */
   .nav{padding:0}
-  .tab{height:50px}
-  .tab i{font-size:19px}
-  .lang{padding:0 10px;min-width:42px}
+  .nav__tabs{display:none}
+  .nav__langs{flex:1 1 auto;border-left:0}
+  .lang{flex:1 1 0;height:50px;padding:0;min-width:0;text-align:center}
   /* labels drawn inside the map and the cloud would shrink to 8 to 11px; set them in screen terms */
   html[data-lang] .t-map{font-size:40px;letter-spacing:2}
   svg[data-alt="cloud"] text[font-size="11"]{font-size:14px;letter-spacing:.5}
