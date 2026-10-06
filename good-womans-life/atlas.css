@@ -261,7 +261,8 @@ html[data-lang="ru"] .lang[data-setlang="ru"]{background:var(--red);color:#fff;b
 
 /* ---------- the road ---------- */
 .road{align-items:end;margin-bottom:clamp(36px,4vw,56px)}
-.road__art{grid-column:1/8}
+.road__tulips{grid-column:1/2;justify-self:start;height:clamp(110px,12vw,180px);width:auto;max-width:100%}
+.road__art{grid-column:2/8}
 .road__text{grid-column:9/13}
 .road__text p{font-size:clamp(20px,1.5vw,23px);line-height:1.5;font-weight:500}
 
@@ -323,7 +324,10 @@ html[data-lang="kk"] .t-hand--top,html[data-lang="ru"] .t-hand--top{font-size:12
   .twocol__text{grid-column:1/8}
   .chart{grid-column:8/13}
   .note__wrap{grid-column:1/-1}
-  .road__art{grid-column:1/-1}
+  /* the road on phones: the tulip and the road drawing share one ground line, the text under both */
+  .g.road{display:grid;grid-template-columns:14% minmax(0,1fr);column-gap:14px;align-items:end}
+  .road__tulips{grid-column:1;height:auto;width:100%}
+  .road__art{grid-column:2}
   .road__text{grid-column:1/-1;margin-top:24px}
   .team__m{grid-column:span 6}
   .fig:nth-child(1){grid-column:1/-1;border-bottom:1px solid var(--rule)}
