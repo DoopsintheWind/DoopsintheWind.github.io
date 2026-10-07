@@ -15,3 +15,9 @@ Research team: Dinara Pisareva and Aruzhan Seidaliyeva (Nazarbayev University), 
 How Dina Pisareva teaches students at Nazarbayev University to work with AI as a partner in thinking, in four courses, and the preregistered study with Denis de Crombrugghe (Coventry University Kazakhstan) that tests what students keep when the AI is gone.
 
 https://doopsinthewind.github.io/cognitive-partnership/
+
+## Word Embeddings as a Ruler
+
+A method page written and drawn by Claude at Dina's request for a co-author in public health: how Kozlowski, Taddy and Evans measure meaning with word embeddings, how that differs from a chatbot vendor's embeddings, what the method has shown about disease and stigma, and a signed note on what it could do with patient records.
+
+https://doopsinthewind.github.io/word-embeddings/
