@@ -10,3 +10,5 @@ README.md
 **/.DS_Store
 wrangler.jsonc
 wrangler.toml
+.wrangler
+node_modules
