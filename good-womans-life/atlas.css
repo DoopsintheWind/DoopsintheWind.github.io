@@ -497,7 +497,7 @@ html[data-lang="kk"] .tab,html[data-lang="ru"] .tab{font-size:14.5px}
 
   /* wide plates: the heading beside its drawing */
   .plate--pano{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);align-items:end}
-  .plate--pano .plate__head{grid-column:1;grid-row:1;align-self:start;padding-left:max(var(--side),calc((100vw - 1440px) / 2))}
+  .plate--pano .plate__head{grid-column:1;grid-row:1;align-self:start;padding-left:var(--side)}
   .plate--pano .h2,html[data-lang] .plate--pano .h2{font-size:clamp(36px,min(3.8vw,6.6svh),64px)}
   .plate--pano>.plate__scene{grid-column:2;grid-row:1;justify-self:end;height:auto;margin:0;overflow:visible;--sh:clamp(180px,36svh,340px)}
   .plate__scene--pano{width:min(100%,calc(var(--sh) * 4))}
@@ -527,4 +527,23 @@ html[data-lang="kk"] .tab,html[data-lang="ru"] .tab{font-size:14.5px}
 }
 @media (min-width:1300px) and (max-width:1699px){
   .t-town,.t-zreg{font-size:10.6px}
+}
+
+/* ---------- a wide screen: the page is a column on a marigold field, a pencil line down each edge ---------- */
+@media (min-width:1441px){
+  html{background:var(--gold)}
+  body{max-width:1440px;margin:0 auto;box-shadow:-2px 0 0 var(--ink),2px 0 0 var(--ink)}
+}
+/* the nine tabs fit the bar in all three languages down to 1181px, where the bar takes two rows */
+@media (min-width:1181px){
+  .tab{padding:9px 8px 8px}
+}
+@media (min-width:1181px) and (max-width:1360px){
+  .nav{column-gap:14px}
+  .tab{padding:9px 5px 8px;font-size:14px}
+  html[data-lang="kk"] .tab,html[data-lang="ru"] .tab{font-size:13.5px}
+  .tab i{font-size:12px}
+}
+@media (min-width:1181px) and (max-width:1300px){
+  .nav__brand span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 }
