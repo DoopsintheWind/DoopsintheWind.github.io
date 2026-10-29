@@ -1399,7 +1399,20 @@ function onLines(){
   });
   return moved;
 }
-function rhythm(){
+/* whatever re-runs the layout, the words at the top of the screen stay where the reader left them: the browser's own
+   anchoring gives up when a section's height is reset, so the page used to jump down a little more with every re-run */
+function holdPlace(fn){
+  const y=document.querySelector('.bar').getBoundingClientRect().bottom+12, x=innerWidth/2;
+  let r=null; const c=document.caretRangeFromPoint&&document.caretRangeFromPoint(x,y);
+  if(c&&c.startContainer.nodeType===3&&c.startContainer.length){r=c; r.setEnd(c.startContainer,Math.min(c.startOffset+1,c.startContainer.length)); if(r.startOffset===r.endOffset) r.setStart(c.startContainer,Math.max(0,r.endOffset-1))}
+  const el=document.elementFromPoint(x,y), chain=[]; for(let e=el;e&&e!==document.body;e=e.parentElement) chain.push([e,e.id]);
+  const where=()=>{ if(r&&r.startContainer.isConnected){const q=r.getClientRects()[0]; if(q) return q.top}
+    for(const [e,id] of chain){const f=e.isConnected?e:(id&&document.getElementById(id)); if(f) return f.getBoundingClientRect().top} return null };
+  const before=scrollY>0?where():null; fn(); if(before==null) return;
+  const after=where(); if(after!=null&&Math.abs(after-before)>.5) scrollTo({top:scrollY+after-before,behavior:'instant'});
+}
+function rhythm(){holdPlace(layout)}
+function layout(){
   offLines();
   document.querySelectorAll('.book > .spread').forEach(s=>{s.classList.remove('d1','d2','d3','d4'); s.style.minHeight=''});
   document.querySelectorAll('.txt').forEach(snapTxt);
@@ -1481,8 +1494,8 @@ function setLang(v,redraw){
   L=['en','kk','ru'].includes(v)?v:'en';
   document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.l===L));
   try{localStorage.setItem('gwl-lang',L)}catch(e){}
-  applyText();
-  if(redraw){buildDiary(); drawMaps(); drawStrips(); drawAxes(); drawEmb(); liveText(); rhythm()}
+  if(!redraw){applyText(); return}
+  holdPlace(()=>{applyText(); buildDiary(); drawMaps(); drawStrips(); drawAxes(); drawEmb(); liveText(); layout()});
 }
 function lang(){
   let v='en'; try{ v=new URLSearchParams(location.search).get('lang')||localStorage.getItem('gwl-lang')||'en' }catch(e){}
@@ -1518,9 +1531,10 @@ rhythm();
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(rhythm);
 if(document.fonts&&document.fonts.addEventListener) document.fonts.addEventListener('loadingdone',reRhythm);   // a Qazaq subset can arrive after a language switch
 addEventListener('load',rhythm);
-addEventListener('resize',reRhythm);
+let lastW=innerWidth;   // on a phone the address bar coming and going changes only the height, and nothing there depends on it
+addEventListener('resize',()=>{if(!SCREEN.matches&&innerWidth===lastW) return; lastW=innerWidth; reRhythm()});
 SCREEN.addEventListener('change',reRhythm);
-document.querySelectorAll('img').forEach(i=>{if(!i.complete) i.addEventListener('load',reRhythm,{once:true})});
+document.querySelectorAll('img').forEach(i=>{if(!i.complete) i.addEventListener('load',()=>{if(SCREEN.matches) reRhythm()},{once:true})});   // every print has its shape set, so a phone needs no re-run
 </script>
 </body>
 </html>
