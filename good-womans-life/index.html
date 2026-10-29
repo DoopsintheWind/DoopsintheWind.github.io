@@ -1360,10 +1360,51 @@ function alignUs(){
   const ub=document.querySelector('#us .L .bio'), ur=document.querySelector('#us .R .txt');
   if(ub&&ur){ur.style.paddingTop=''; if(innerWidth>980) ur.style.paddingTop=ub.offsetTop+'px'}
 }
+/* phones and narrow windows: every line of text stands on a rule. Each block that holds text takes a line height
+   of whole rules (two for big handwriting), then moves onto the nearest rule: a nudge up when it sits up to two fifths of a rule low,
+   otherwise padding down to the next rule. Blocks are measured in page order, so each one sees where the last one put it; a second pass settles
+   items that sit side by side and move each other. */
+const RULED=new Map(), RPROPS=['lineHeight','paddingTop','marginTop','position','top','verticalAlign'];
+function offLines(){ RULED.forEach((v,e)=>RPROPS.forEach((p,i)=>e.style[p]=v[i])); RULED.clear() }
+function onLines(){
+  const keep=e=>{if(!RULED.has(e)) RULED.set(e,RPROPS.map(p=>e.style[p]))};
+  const AC={}, asc=el=>{const cs=getComputedStyle(el), k=[cs.fontStyle,cs.fontWeight,cs.fontSize,cs.fontFamily].join('|'); if(AC[k]!=null) return AC[k];
+    const s=document.createElement('span'), i=document.createElement('i'); s.style.cssText=`font:${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize}/normal ${cs.fontFamily};position:absolute;left:-999px;top:0;white-space:nowrap`;
+    s.append('Hg',i); i.style.cssText='display:inline-block;width:0;height:0;vertical-align:baseline'; document.body.appendChild(s);
+    const r=document.createRange(); r.selectNodeContents(s.firstChild); const v=i.getBoundingClientRect().top-r.getBoundingClientRect().top; s.remove(); return AC[k]=v};
+  const texts=o=>{const w=document.createTreeWalker(o,NodeFilter.SHOW_TEXT), a=[]; for(let n;n=w.nextNode();) if(n.nodeValue.trim()&&!n.parentElement.closest('svg,figure,.tmap,.lm,[hidden]')) a.push(n); return a};
+  const owners=[]; texts(document.querySelector('.book')).forEach(n=>{let o=n.parentElement; if(!o.closest('.L .txt')) return;
+    while(getComputedStyle(o).display==='inline') o=o.parentElement; if(!owners.includes(o)) owners.push(o)});
+  let moved=0, prevL=null, prevBase=-1e9, prevLH=0;
+  const base=(t,last)=>{const r=document.createRange(); r.selectNodeContents(t); const rs=[...r.getClientRects()].filter(x=>x.width>1); const x=last?rs[rs.length-1]:rs[0]; return x?x.top+asc(t.parentElement):null};
+  owners.forEach(o=>{
+    const L=o.closest('.L'), cs=getComputedStyle(L), u=parseFloat(cs.getPropertyValue('--u')), ro=parseFloat(cs.getPropertyValue('--roff'));
+    if(L!==prevL){prevL=L; prevBase=-1e9; prevLH=0}
+    const inl=[...o.querySelectorAll('*')].filter(e=>getComputedStyle(e).display==='inline');
+    const fs=Math.max(...[o,...inl].map(e=>parseFloat(getComputedStyle(e).fontSize)));
+    const lhn=Math.max(1,Math.ceil((fs+2)/u))*u;
+    [o,...inl].forEach(e=>{keep(e); e.style.lineHeight=lhn+'px'});
+    if(getComputedStyle(o).display==='table-cell') o.style.verticalAlign='top';
+    const ts=texts(o); if(!ts.length) return; const b=base(ts[0]); if(b==null) return;
+    const d=((b-L.getBoundingClientRect().top-ro)%u+u)%u;
+    if(d>=.75&&d<=u-.75){
+      const oc=getComputedStyle(o); moved++;
+      // up onto the rule above, unless that brings it closer than a full line to the block above it (a cell beside it does not count)
+      const room=prevBase<b-u*.5 ? b-d-prevBase >= Math.max(prevLH,lhn)-1 : true;
+      if(d<=u*.4&&room){ if(oc.display!=='table-cell') o.style.marginTop=((parseFloat(oc.marginTop)||0)-d)+'px';
+        else { if(oc.position==='static') o.style.position='relative'; o.style.top=((parseFloat(oc.top)||0)-d)+'px' } }
+      else o.style.paddingTop=(parseFloat(oc.paddingTop)+u-d)+'px';
+    }
+    const e=base(ts[ts.length-1],true); if(e!=null&&e>=prevBase){prevBase=e; prevLH=lhn}
+  });
+  return moved;
+}
 function rhythm(){
+  offLines();
   document.querySelectorAll('.book > .spread').forEach(s=>{s.classList.remove('d1','d2','d3','d4'); s.style.minHeight=''});
   document.querySelectorAll('.txt').forEach(snapTxt);
   alignUs();
+  if(!SCREEN.matches) for(let i=0;i<3&&onLines();i++);
   if(!SCREEN.matches) document.querySelectorAll('.spread').forEach(s=>{const u=unit(s), h=s.getBoundingClientRect().height; s.style.minHeight=Math.ceil(h/u-0.03)*u+'px'});
   fit();
 }
@@ -1475,6 +1516,7 @@ drawSteppe(); budDoodle(); drawPencils(); drawActors(); drawTea(); drawMaps(); d
 lightbox(); live();
 rhythm();
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(rhythm);
+if(document.fonts&&document.fonts.addEventListener) document.fonts.addEventListener('loadingdone',reRhythm);   // a Qazaq subset can arrive after a language switch
 addEventListener('load',rhythm);
 addEventListener('resize',reRhythm);
 SCREEN.addEventListener('change',reRhythm);
