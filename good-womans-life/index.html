@@ -273,12 +273,13 @@ html.still{scroll-behavior:auto}
 
 /* measures */
 .measures{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.7fr);gap:clamp(22px,3vw,56px);align-items:center}
-.src{font-size:17px;line-height:1.5;margin-top:1.4svh;color:var(--ink2)}
+.src{font-size:12px;line-height:1.45;margin-top:1.6em;color:var(--ink2)}
+/* laptops: sources small under the intro in the left column; phones: at the very bottom, under the strips */
+.measures{row-gap:0}
+.measures>div:first-child{grid-column:1;grid-row:1;align-self:end}
+.measures>.strips{grid-column:2;grid-row:1 / span 2;align-self:center}
+.measures>.src{grid-column:1;grid-row:2;align-self:start}
 .strips{display:grid;gap:.4svh}
-.msrc{display:grid;align-content:center}
-.msrc[hidden]{display:none}
-.msrc .wrap{max-width:46em}
-.msrc .src{margin-top:1.2em}
 .strip h4{margin-bottom:2px}
 .track{position:relative;height:clamp(64px,10.4svh,92px)}
 .track svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
@@ -611,12 +612,10 @@ dialog#lb::backdrop{background:rgba(9,63,50,.6)}
   <div>
     <h2 data-t="measures.h2">Life across the regions</h2>
     <p data-t="measures.intro">Women's lives, opportunities, constraints and choices differ across the country.</p>
-    <p class="src" data-t="measures.src">Bureau of National Statistics of Kazakhstan. Births per woman and age at first marriage from the <a href="https://stat.gov.kz/upload/iblock/40f/zejwj3bggzww1203egdkbhetikacw9bd/Е-10-Г%20(рус).pdf">Demographic Yearbook 2019–2023</a>, tables 6.8 and 5.3. Divorces from <a href="https://stat.gov.kz/ru/news/braki-i-razvody-v-2025-godu/">Marriages and divorces in 2025</a>, updated 30 April 2026. Household size and Qazaq in daily use from the 2021 census: <a href="https://stat.gov.kz/api/iblock/element/104705/file/ru/">Households of the Republic of Kazakhstan</a>, table 3, and <a href="https://stat.gov.kz/upload/medialibrary/e62/b1e0sokkht34a1iyu2qdmu30dayt6sz1/Краткие%20итоги%20Переписи%20населения.pdf">Brief Results of the 2021 Census</a>, section 5.2. Regional figures are population-weighted from the oblasts in each region; Astana, Almaty and Shymkent, which are administered apart from the oblasts, are not included.</p>
   </div>
   <div class="strips" id="strips"></div>
+  <p class="src" data-t="measures.src">Bureau of National Statistics of Kazakhstan. Births per woman and age at first marriage from the <a href="https://stat.gov.kz/upload/iblock/40f/zejwj3bggzww1203egdkbhetikacw9bd/Е-10-Г%20(рус).pdf">Demographic Yearbook 2019–2023</a>, tables 6.8 and 5.3. Divorces from <a href="https://stat.gov.kz/ru/news/braki-i-razvody-v-2025-godu/">Marriages and divorces in 2025</a>, updated 30 April 2026. Household size and Qazaq in daily use from the 2021 census: <a href="https://stat.gov.kz/api/iblock/element/104705/file/ru/">Households of the Republic of Kazakhstan</a>, table 3, and <a href="https://stat.gov.kz/upload/medialibrary/e62/b1e0sokkht34a1iyu2qdmu30dayt6sz1/Краткие%20итоги%20Переписи%20населения.pdf">Brief Results of the 2021 Census</a>, section 5.2. Regional figures are population-weighted from the oblasts in each region; Astana, Almaty and Shymkent, which are administered apart from the oblasts, are not included.</p>
 </section>
-<!-- the sources move here when a language runs too long for one screen -->
-<section class="scr msrc white" id="measures-2" data-nav="measures" hidden><div class="wrap"><p class="kick" data-t="measures.sources">Sources</p></div></section>
 
 <!-- 4. What we ask -->
 <section class="scr two" id="ask" data-nav="ask">
@@ -1162,19 +1161,20 @@ function drawStrips(){
     tk.innerHTML=SVG(`0 0 ${W} ${Ht}`,s,' preserveAspectRatio="none"');
     // labels: above or below, pushed apart when they would touch
     const items=Object.entries(vals).map(([n,v])=>({t:`${tx('regions.'+n)}<b>${f(v)}</b>`,x:pos(v)*W,kz:false})).concat([{t:`${tx('measures.country')}<b>${f(kz)}</b>`,x:pos(kz)*W,kz:true}]).sort((a,b)=>a.x-b.x);
-    const lanes={up:[],dn:[]};
-    items.forEach((it,j)=>{const sp=document.createElement('span');sp.className='pt'+(it.kz?' kz':'');sp.innerHTML=it.t;tk.appendChild(sp);it.el=sp;it.w=sp.offsetWidth+10;});
+    items.forEach(it=>{const sp=document.createElement('span');sp.className='pt'+(it.kz?' kz':'');sp.innerHTML=it.t;tk.appendChild(sp);it.el=sp;it.w=sp.offsetWidth+10;it.cx=Math.max(it.w/2-5,Math.min(W-it.w/2+5,it.x))});
+    const lh=items[0].el.offsetHeight||16, LH=lh+5, rows={up:[],dn:[]};
+    const free=(sd,r,it)=>(rows[sd][r]||[]).every(o=>Math.abs(o.cx-it.cx)>=(o.w+it.w)/2);
     items.forEach((it,j)=>{
-      let side=it.kz?'dn':(j%2?'dn':'up');
-      const fits=s2=>lanes[s2].every(o=>Math.abs(o.x-it.x)>(o.w+it.w)/2);
-      if(!fits(side)){const other=side==='up'?'dn':'up'; if(fits(other)) side=other;}
-      let row=0; if(!fits(side)) row=1;
-      lanes[side].push(it);
-      let left=Math.max(it.w/2-5,Math.min(W-it.w/2+5,it.x));
-      it.el.style.left=left+'px';
-      const off=row?22:0;
-      if(side==='up') it.el.style.bottom=(Ht-ym+13+off)+'px'; else it.el.style.top=(ym+13+off)+'px';
+      const pref=it.kz?'dn':(j%2?'dn':'up'), oth=pref==='up'?'dn':'up';
+      let side=null,row=0;
+      for(;!side;row++) for(const sd of [pref,oth]) if(free(sd,row,it)){side=sd;break}
+      row--; (rows[side][row]=rows[side][row]||[]).push(it);
+      it.el.style.left=it.cx+'px';
+      if(side==='up') it.el.style.bottom=(Ht-ym+13+row*LH)+'px'; else it.el.style.top=(ym+13+row*LH)+'px';
     });
+    const need=n=>n?13+(n-1)*LH+lh+2:0;
+    tk.style.marginTop=Math.max(0,need(rows.up.length)-ym)+'px';
+    tk.style.marginBottom=Math.max(0,need(rows.dn.length)-(Ht-ym))+'px';
   });
 }
 
@@ -1467,23 +1467,11 @@ function steps(s){
   }
   return -1;
 }
-/* the sources line sits under the measures heading; when no step fits (a long language on a short
-   screen), it moves to a second snapped screen rather than going under 17px */
-function splitMeasures(on){
-  const p=$('#measures .src')||$('#measures-2 .src'), m2=$('#measures-2'); if(!p||!m2)return;
-  (on?$('#measures-2 .wrap'):$('#measures > div')).appendChild(p); m2.hidden=!on;
-}
-function fitOne(s){
-  if(s.id==='measures-2')return 0;
-  if(s.id!=='measures')return steps(s);
-  splitMeasures(false); let r=steps(s);
-  if(r<0){splitMeasures(true); r=steps(s); steps($('#measures-2'))}
-  return r;
-}
+function fitOne(s){return steps(s)}
 function fitAll(){
   const on=SNAPQ.matches;
   screens().forEach(s=>{if(on)fitOne(s);else{s.style.removeProperty('--k');s.classList.remove('fs17','alt','alt2');delete s.dataset.fit}});
-  if(!on){splitMeasures(false);drawField();drawStrips()}
+  if(!on){drawField();drawStrips()}
 }
 
 /* ================= go ================= */
