@@ -358,6 +358,8 @@ html.still{scroll-behavior:auto}
   .card.wide .bio p{break-inside:auto}
   .card.row{grid-template-columns:92px minmax(0,auto) minmax(0,1fr);gap:6px 24px;align-items:center}
   .card.row .bio{grid-column:auto;margin-top:0;max-width:36em}
+  #us-3 .team.t2{grid-template-columns:minmax(0,40em) minmax(14em,1fr);column-gap:clamp(22px,2.4vw,40px);max-width:none}
+  #us-3 .card+.card{max-width:24em}
   .claude2{display:flex;flex-direction:column;justify-content:center}
   .claude2 .cols{columns:2;column-gap:clamp(24px,3.4vw,60px);max-width:78em}
 }
@@ -400,7 +402,7 @@ dialog#lb::backdrop{background:rgba(9,63,50,.6)}
   .hero-txt{min-height:0;padding-bottom:10px}
   .count{display:block;padding-top:16px}
   #field120{margin-top:10px}
-  .hero h1{font-size:44px}
+  .hero h1{font-size:min(44px,11vw)}
   h2{font-size:40px} h3{font-size:32px}
   .mapcol{margin-top:26px}
   .mapwrap{width:100%}
@@ -745,13 +747,13 @@ dialog#lb::backdrop{background:rgba(9,63,50,.6)}
   </div>
 </section>
 <section class="scr us white" id="us-3" data-nav="us">
-  <div class="team t3">
-    <article class="card wide">
+  <div class="team t2">
+    <article class="card">
       <div class="cface"><div class="face"><img src="https://site-deploy.doopsinthewind.workers.dev/good-womans-life/team-maiya.jpg" alt="" loading="lazy" style="object-position:50% 34%"></div><svg class="ring" data-ring="4" viewBox="0 0 104 104" aria-hidden="true"></svg></div>
       <div class="who"><h4 data-t="team.maiya_name">Maiya Talipova</h4><p class="role" data-t="team.maiya_role">Independent researcher · Master's in Political Science and International Relations, KIMEP University</p></div>
       <div class="bio" data-t="team.maiya_bio"><p>For the last three years I have worked on human rights in Qazaqstan and on how relations between different groups of people take shape. I studied how protest movements, including the events of January 2022, affect citizens' rights and how activists build their relations with the authorities. I took part in research on how society treats minorities and on how crisis centers for women work. For me this project is a chance to see how social pressure shapes the everyday decisions of women.</p><p>I also have a personal interest in this topic. Since childhood my choices have not always been mine alone: we often made decisions together with my parents, and I do not think that is a bad thing. But after I married there were many more opinions around me: acquaintances, passers-by and even taxi drivers give advice. So it matters to me to understand how women in Qazaqstan make their choices and whom they listen to.</p></div>
     </article>
-    <article class="card row">
+    <article class="card">
       <div class="cface"><div class="face" style="background:#fff" id="claude-face" role="img" data-ta="aria-label:team.claude_alt" aria-label="Claude, drawn in pencil as an icosahedron wearing a knitted orange-red scarf"></div><svg class="ring" data-ring="5" viewBox="0 0 104 104" aria-hidden="true"></svg></div>
       <div class="who"><h4 data-t="team.claude_name">Claude</h4><p class="role" data-t="team.claude_role">Anthropic's AI model</p></div>
       <div class="bio"><div class="bt" data-t="team.claude_bio"><p>Plans the trips, takes part in the research design, advises on data collection and methods, monitors sampling, finds villages and auls to visit, and draws the website doodles.</p></div></div>
